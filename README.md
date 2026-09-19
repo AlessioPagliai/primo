@@ -57,9 +57,9 @@ Walking in Isaac Lab on rough terrain: [video 1](https://storage.googleapis.com/
 - ankle torque map is derived from the CAD export and still to be verified
 - e-stop does not cut hand power: decide whether it should
 
-## Follow
+## Also on
 
-[Printables](https://www.printables.com/@River_Family/models) · [MakerWorld](https://makerworld.com/it/@RiverFamily) · [Thingiverse](https://www.thingiverse.com/RiverFamily/designs) · [YouTube](https://www.youtube.com/@art.riverfamily) · [riverfamily.art](https://riverfamily.art/)
+[Printables](https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [MakerWorld](https://makerworld.com/it/@RiverFamily) · [YouTube](https://youtu.be/bHGGjXYELUE) · [riverfamily.art](https://riverfamily.art/#umanoide)
 
 ## Licence
 

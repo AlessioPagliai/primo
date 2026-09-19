@@ -1,6 +1,16 @@
 # Publishing texts
 
-Same short text everywhere, lowercase name, no marketing. Replace `IMG` with the Onshape screenshots and the GIF.
+Same short text everywhere, lowercase name, no marketing.
+
+## Published 2026-09-19
+
+- GitHub https://github.com/AlessioPagliai/umanoide
+- Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design
+- Thingiverse https://www.thingiverse.com/thing:7411626
+- MakerWorld https://makerworld.com/it/@RiverFamily — model submitted, in review; swap in the model link once approved
+- YouTube https://youtu.be/bHGGjXYELUE
+- riverfamily.art https://riverfamily.art/#umanoide
+- Files https://storage.googleapis.com/riverfamily/umanoide/
 
 ## Name
 
@@ -44,7 +54,8 @@ Open source humanoid in design: 3D printed, 30 RobStride actuators, Jetson AGX T
 
 CAD https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
 Files https://github.com/AlessioPagliai/umanoide
-Printables https://www.printables.com/@River_Family/models
+Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design
+Thingiverse https://www.thingiverse.com/thing:7411626
 https://riverfamily.art/
 
 CC0
@@ -90,7 +101,7 @@ CC0
 
 **Files and published pages**
 
-[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](PRINTABLES_LINK) · [MakerWorld](MAKERWORLD_LINK) · [Thingiverse](THINGIVERSE_LINK) · [YouTube](https://youtu.be/bHGGjXYELUE)
+[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [MakerWorld](https://makerworld.com/it/@RiverFamily) · [YouTube](https://youtu.be/bHGGjXYELUE)
 
 Not built yet. The GitHub repository has the bill of materials with every supplier link, the electrical scheme, the simulation pipeline and the design notes.
 
