@@ -7,7 +7,7 @@ Same short text everywhere, lowercase name, no marketing.
 - GitHub https://github.com/AlessioPagliai/umanoide
 - Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design
 - Thingiverse https://www.thingiverse.com/thing:7411626
-- MakerWorld https://makerworld.com/it/@RiverFamily — model submitted, in review; swap in the model link once approved
+- MakerWorld https://makerworld.com/it/@RiverFamily — draft 9686078 complete and submitted, rejected by the automatic check ("no real photo detected"): add a photo of a printed part and resubmit from Modelli 3D › Fallito › Modifica, then swap in the model link
 - YouTube https://youtu.be/bHGGjXYELUE
 - riverfamily.art https://riverfamily.art/#umanoide
 - Files https://storage.googleapis.com/riverfamily/umanoide/
