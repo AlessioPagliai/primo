@@ -1,119 +1,57 @@
 # Publishing texts
 
-Same short text everywhere, lowercase name, no marketing.
+Same short text everywhere, no marketing, no AI labels. Commits and uploads are authored only as Alessio Pagliai: no co-author lines. Name: `primo` (lowercase on the site and on MakerOnline, `Primo` elsewhere).
 
 ## Published 2026-09-19
 
-- GitHub https://github.com/AlessioPagliai/umanoide
-- Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design
+- GitHub https://github.com/AlessioPagliai/primo
+- YouTube https://youtu.be/6nTcHpFmKbQ (4K60, H.264, closed GOP; an HEVC open-GOP upload looped on YouTube and was deleted)
+- riverfamily.art https://riverfamily.art/#primo — more = video, make = primo.zip
+- Printables https://www.printables.com/model/1846831
 - Thingiverse https://www.thingiverse.com/thing:7411626
-- MakerWorld https://makerworld.com/it/@RiverFamily — draft 9686078 complete and submitted, rejected by the automatic check ("no real photo detected"): add a photo of a printed part and resubmit from Modelli 3D › Fallito › Modifica, then swap in the model link
-- YouTube https://youtu.be/bHGGjXYELUE
-- riverfamily.art https://riverfamily.art/#umanoide
-- Files https://storage.googleapis.com/riverfamily/umanoide/
+- Cults https://cults3d.com/en/3d-model/gadget/primo-open-source-humanoid
+- Creality Cloud https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96
+- MakerOnline https://www.makeronline.com/en/model/primo%20open%20source%20humanoid/331171.html
+- MakerWorld https://makerworld.com/it/@RiverFamily — needs a real photo of a printed part to pass the automatic check
+- Whole folder https://storage.googleapis.com/riverfamily/primo/primo.zip · STL pack https://storage.googleapis.com/riverfamily/primo/primo-stl.zip
+- Videos https://storage.googleapis.com/riverfamily/primo/videos/ (primo-4k60.mp4, primo-30s.mp4, walk-*.mp4) · site video https://storage.googleapis.com/riverfamily/videos/Primo_720p.mp4
 
-## Name
+## Title
 
-`umanoide`
+`Primo open source humanoid robot`
 
-## One line (site, catalogue, video subtitle)
+## One line
 
 Open source humanoid, 3D printed, 30 RobStride actuators, Jetson Thor. In design.
 
-## Printables · MakerWorld · Thingiverse
+## Description
 
-**Title:** umanoide — open source humanoid (in design)
+Primo is an open source humanoid. 3D printed structure in PA-CF, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Height ≈ 1.40 m, ≈ 45 kg.
 
-**Description:**
+Video, CAD tour and walking in Isaac Lab: https://youtu.be/6nTcHpFmKbQ
 
-Open source humanoid. 3D printed structure in PA-CF, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Height ≈ 1.40 m, ≈ 45 kg.
+Still in design, not built yet. Everything is shared to build it together: CAD, printable STL of the structure, bill of materials with links, electrical scheme, URDF, simulation files, walking policies in Isaac Lab and the handoff to continue the project, also with an AI.
 
-Still in design, not built yet. Everything is shared to build it together: CAD, bill of materials with links, electrical scheme, simulation files and walking policies in Isaac Lab.
-
-These are the first printed parts: the ankle offset gimbal and a leg test plate (femur, hip bracket, tibia). More parts follow as the design is frozen.
+Files here: the printed structure as STL (20 parts, left and right, millimetres, design state) and the first print projects as 3MF, the ankle offset gimbal and a leg test plate (femur, hip bracket, tibia). What is bought, motors, hands, battery, computer, screws, is in the bill of materials.
 
 CAD: https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
-Everything else: https://github.com/AlessioPagliai/umanoide
-Video: https://youtu.be/bHGGjXYELUE
+Everything else: https://github.com/AlessioPagliai/primo
+Whole folder: https://storage.googleapis.com/riverfamily/primo/primo.zip
 
-Print: ankle gimbal in Bambu PPA-CF, 0.2 mm, 0.4 nozzle, Bambu Lab H2C, 1 wall, 90 % grid infill; leg test plate in PLA on an H2S. Settings are in the 3MF.
+Print: PA-CF or PPA-CF, 0.4 nozzle, Bambu Lab H2C. Ankle gimbal 3MF: Bambu PPA-CF, 0.2 mm, 1 wall, 90 % grid infill. Leg test plate 3MF: PLA on an H2S, fit test only.
 
 Licence: CC0, public domain.
 
-**Files:** `ankle-gimbal.3mf`, `leg-test-plate.3mf`, `electrical/scheme.png`, screenshots
+## Tags
 
-**Category:** Robotics · **Tags:** humanoid, robot, open source, robstride, jetson thor, isaac lab, ppa-cf, bambu h2c
+humanoid, humanoid robot, robot, robotics, open source, open hardware, biped, walking robot, 3d printed robot, diy robot, android, actuator, robstride, jetson, nvidia, isaac sim, reinforcement learning, unitree g1, onshape, urdf
 
-## YouTube
+Extra where there is room: quasi direct drive, jetson thor, isaac lab, mechatronics, engineering, pa-cf, ppa-cf, river family, primo
 
-**Title:** umanoide — open source humanoid, walking in Isaac Lab
+## YouTube chapters
 
-**Description:**
+0:00 Overview · 0:36 Ankle · 0:58 Arm, hand and hip · 1:14 Poses · 1:42 Inside the torso · 2:06 Walking in Isaac Lab
 
-Open source humanoid in design: 3D printed, 30 RobStride actuators, Jetson AGX Thor. Walking policy trained in Isaac Lab on rough terrain. Not built yet — shared to build it together.
+## Images
 
-CAD https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
-Files https://github.com/AlessioPagliai/umanoide
-Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design
-Thingiverse https://www.thingiverse.com/thing:7411626
-https://riverfamily.art/
-
-CC0
-
-**Video:** `walk-kneehard.mp4` (20 s, 1280×720, 50 fps) — or both clips back to back, then the Onshape GIF.
-
-## riverfamily.art — catalogue.json entry
-
-```json
-{
-  "slug": "umanoide",
-  "name": "umanoide",
-  "category": "Robots",
-  "description": "Open source humanoid, 3D printed, 30 RobStride actuators, Jetson Thor. In design.",
-  "image": "https://riverfamily.art/static/images/umanoide.webp?v=20260919",
-  "downloads": [
-    {
-      "url": "https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip",
-      "size": 11792994,
-      "updated": "2026-09-19T08:46:05.000Z"
-    }
-  ],
-  "source_files": [],
-  "readmes": [],
-  "links": {
-    "github": "https://github.com/AlessioPagliai/umanoide",
-    "onshape": "https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409"
-  }
-}
-```
-
-(`links` is a new key: add it to the template or put the two URLs in the description.)
-
-## RiverFamily README — new section before "About this catalogue"
-
-```markdown
-### Robots
-
-<details id="umanoide">
-<summary><strong>umanoide</strong> — Open source humanoid, 3D printed, 30 RobStride actuators, Jetson Thor. In design.</summary>
-
-<img src="images/umanoide.webp" alt="umanoide by River Family" width="520">
-
-**Files and published pages**
-
-[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [MakerWorld](https://makerworld.com/it/@RiverFamily) · [YouTube](https://youtu.be/bHGGjXYELUE)
-
-Not built yet. The GitHub repository has the bill of materials with every supplier link, the electrical scheme, the simulation pipeline and the design notes.
-
-</details>
-```
-
-## Image list to produce (Onshape)
-
-1. `hero` — full robot, front three-quarter, white background
-2. `side` — full robot, side
-3. `ankle` — shin with the two motors, pushrods and gimbal
-4. `torso` — torso open with battery, Thor, converter, contactor
-5. `gif` — a joint sweep or a full-body pose change, 5–8 s
-
-Export at 1600 px wide or more, save as `images/<name>.webp` in the repo, `hero.webp` also in the RiverFamily `images/` folder.
+`publishing/images/` — hero, pose, ankle, cad-page, each white-padded to 4:3, 16:9 and 1:1. Cults wants 1:1, YouTube 16:9, the others 4:3 (MakerWorld and Creality also take a 3:4 app cover).

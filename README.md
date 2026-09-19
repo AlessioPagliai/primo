@@ -1,6 +1,6 @@
 # primo
 
-Open source humanoid. 3D printed structure, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Still in design, not built yet: shared now so it can be built together.
+Open source humanoid robot. 3D printed structure, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Still in design, not built yet: shared now so it can be built together.
 
 [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Printable STL](cad/stl/) · [URDF](sim/urdf/primo.urdf) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
 
@@ -63,7 +63,7 @@ Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be
 
 ## Also on
 
-[Printables](https://www.printables.com/model/1846831) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [YouTube](https://youtu.be/6nTcHpFmKbQ) · [riverfamily.art](https://riverfamily.art/#primo)
+[Printables](https://www.printables.com/model/1846831) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [Cults](https://cults3d.com/en/3d-model/gadget/primo-open-source-humanoid) · [Creality Cloud](https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96) · [MakerOnline](https://www.makeronline.com/en/model/primo%20open%20source%20humanoid/331171.html) · [YouTube](https://youtu.be/6nTcHpFmKbQ) · [riverfamily.art](https://riverfamily.art/#primo)
 
 ## Licence
 
