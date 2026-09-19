@@ -10,9 +10,9 @@ Same short text everywhere, no marketing, no AI labels. Commits and uploads are 
 - Printables https://www.printables.com/model/1846831
 - Thingiverse https://www.thingiverse.com/thing:7411626
 - Cults https://cults3d.com/en/3d-model/gadget/primo-open-source-humanoid
-- Creality Cloud https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96
+- Creality Cloud https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96 — listing complete (CC0, 20 tags, 37 files, docs) but rejected by moderation: the cover must be a real photo of the print. Edit it from the profile (Modello 3D › ⋯ › Modifica), add the photo as cover, set the name to "Primo open source humanoid robot", resubmit. Not linked publicly until approved
 - MakerOnline https://www.makeronline.com/en/model/primo%20open%20source%20humanoid/331171.html
-- MakerWorld https://makerworld.com/it/@RiverFamily — needs a real photo of a printed part to pass the automatic check
+- MakerWorld https://makerworld.com/it/@RiverFamily — draft complete (title, Robotica, 13 tags, covers 4:3 and 3:4, 4 images, STL pack as raw files, ankle-gimbal print profile, CC0) but rejected by the automatic check: no real photo. From Modelli 3D › Fallito › Modifica add a photo of a printed part to the model images and to the print profile, drag `primo-30s.mp4` into "Video modelli" (the slot refuses scripted uploads), publish
 - Whole folder https://storage.googleapis.com/riverfamily/primo/primo.zip · STL pack https://storage.googleapis.com/riverfamily/primo/primo-stl.zip
 - Videos https://storage.googleapis.com/riverfamily/primo/videos/ (primo-4k60.mp4, primo-30s.mp4, walk-*.mp4) · site video https://storage.googleapis.com/riverfamily/videos/Primo_720p.mp4
 
