@@ -1,0 +1,38 @@
+name,type,parent,child,rel_x_mm,rel_y_mm,rel_z_mm,abs_x_mm,abs_y_mm,abs_z_mm,abs_x_semplif_mm,axis_preciso,axis_semplificato,lower,upper,effort
+left_hip_pitch_joint,revolute,pelvis,left_hip_pitch_link,0.0,64.452,-102.7,0.0,64.452,-102.7,0.0,0.00000 1.00000 0.00000,Y,-2.5307,2.8798,139
+left_hip_roll_joint,revolute,left_hip_pitch_link,left_hip_roll_link,0.0,52.0,-30.465,0.0,116.452,-133.165,0.0,0.98474 0.00000 0.17401,X,-0.5236,2.9671,139
+left_hip_yaw_joint,revolute,left_hip_roll_link,left_hip_yaw_link,25.001,0.0,-124.12,46.218,116.452,-251.041,0.0,-0.17401 0.00000 0.98474,Z,-2.7576,2.7576,88
+left_knee_joint,revolute,left_hip_yaw_link,left_knee_link,-78.273,2.149,-177.34,-0.002,118.601,-439.296,-0.002,0.00000 1.00000 0.00000,Y,-0.087267,2.8798,139
+left_ankle_pitch_joint,revolute,left_knee_link,left_ankle_pitch_link,0.0,-0.094,-300.01,-0.002,118.506,-739.306,-0.002,0.00000 1.00000 0.00000,Y,-0.87267,0.5236,35
+left_ankle_roll_joint,revolute,left_ankle_pitch_link,left_ankle_roll_link,0.0,0.0,-17.558,-0.002,118.506,-756.864,-0.002,1.00000 0.00000 0.00000,X,-0.2618,0.2618,35
+right_hip_pitch_joint,revolute,pelvis,right_hip_pitch_link,0.0,-64.452,-102.7,0.0,-64.452,-102.7,0.0,0.00000 1.00000 0.00000,Y,-2.5307,2.8798,139
+right_hip_roll_joint,revolute,right_hip_pitch_link,right_hip_roll_link,0.0,-52.0,-30.465,0.0,-116.452,-133.165,0.0,0.98474 0.00000 0.17401,X,-2.9671,0.5236,139
+right_hip_yaw_joint,revolute,right_hip_roll_link,right_hip_yaw_link,25.001,0.0,-124.12,46.218,-116.452,-251.041,0.0,-0.17401 0.00000 0.98474,Z,-2.7576,2.7576,88
+right_knee_joint,revolute,right_hip_yaw_link,right_knee_link,-78.273,-2.149,-177.34,-0.002,-118.601,-439.296,-0.002,0.00000 1.00000 0.00000,Y,-0.087267,2.8798,139
+right_ankle_pitch_joint,revolute,right_knee_link,right_ankle_pitch_link,0.0,0.094,-300.01,-0.002,-118.506,-739.306,-0.002,0.00000 1.00000 0.00000,Y,-0.87267,0.5236,35
+right_ankle_roll_joint,revolute,right_ankle_pitch_link,right_ankle_roll_link,0.0,0.0,-17.558,-0.002,-118.506,-756.864,-0.002,1.00000 0.00000 0.00000,X,-0.2618,0.2618,35
+waist_yaw_joint,revolute,pelvis,waist_yaw_link,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.00000 0.00000 1.00000,Z,-2.618,2.618,88
+waist_roll_joint,revolute,waist_yaw_link,waist_roll_link,-3.963,0.0,44.0,-3.963,0.0,44.0,-3.963,1.00000 0.00000 0.00000,X,-0.52,0.52,35
+waist_pitch_joint,revolute,waist_roll_link,torso_link,0.0,0.0,0.0,-3.963,0.0,44.0,-3.963,0.00000 1.00000 0.00000,Y,-0.52,0.52,35
+logo_joint,fixed,torso_link,logo_link,3.963,0.0,-44.0,0.0,0.0,0.0,0.0,,,,,
+head_joint,fixed,torso_link,head_link,3.963,0.0,-44.0,0.0,0.0,0.0,0.0,,,,,
+imu_in_torso_joint,fixed,torso_link,imu_in_torso,-39.59,-2.24,147.92,-43.553,-2.24,191.92,-43.553,,,,,
+imu_in_pelvis_joint,fixed,pelvis,imu_in_pelvis,45.25,0.0,-83.39,45.25,0.0,-83.39,45.25,,,,,
+d435_joint,fixed,torso_link,d435_link,57.623,17.53,429.87,53.66,17.53,473.87,53.66,,,,,
+mid360_joint,fixed,torso_link,mid360_link,0.284,0.03,416.18,-3.68,0.03,460.18,-3.68,,,,,
+left_shoulder_pitch_joint,revolute,torso_link,left_shoulder_pitch_link,3.956,100.22,247.78,-0.007,100.22,291.78,-0.007,0.00020 0.96125 0.27569,Y,-3.0892,2.6704,25
+left_shoulder_roll_joint,revolute,left_shoulder_pitch_link,left_shoulder_roll_link,0.0,38.0,-13.831,0.0,140.56,288.961,0.0,1.00000 -0.00019 -0.00005,X,-1.5882,2.2515,25
+left_shoulder_yaw_joint,revolute,left_shoulder_roll_link,left_shoulder_yaw_link,0.0,6.24,-103.2,-0.004,146.807,185.762,-0.004,0.00005 -0.00006 1.00000,Z,-2.618,2.618,25
+left_elbow_joint,revolute,left_shoulder_yaw_link,left_elbow_link,15.783,0.0,-80.518,15.774,146.808,105.243,15.774,0.00019 1.00000 0.00006,Y,-1.0472,2.0944,25
+left_wrist_roll_joint,revolute,left_elbow_link,left_wrist_roll_link,100.0,1.888,-10.0,115.774,148.678,95.237,115.774,1.00000 -0.00019 -0.00005,X,-1.972222054,1.972222054,25
+left_wrist_pitch_joint,revolute,left_wrist_roll_link,left_wrist_pitch_link,38.0,0.0,0.0,153.774,148.671,95.235,153.774,0.00019 1.00000 0.00006,Y,-1.614429558,1.614429558,5
+left_wrist_yaw_joint,revolute,left_wrist_pitch_link,left_wrist_yaw_link,46.0,0.0,0.0,199.774,148.662,95.233,199.774,0.00005 -0.00006 1.00000,Z,-1.614429558,1.614429558,5
+left_hand_palm_joint,fixed,left_wrist_yaw_link,left_rubber_hand,41.5,3.0,0.0,241.275,151.654,95.231,241.275,,,,,
+right_shoulder_pitch_joint,revolute,torso_link,right_shoulder_pitch_link,3.956,-100.21,247.78,-0.007,-100.21,291.78,-0.007,-0.00020 0.96125 -0.27569,Y,-3.0892,2.6704,25
+right_shoulder_roll_joint,revolute,right_shoulder_pitch_link,right_shoulder_roll_link,0.0,-38.0,-13.831,0.0,-140.55,288.961,0.0,1.00000 0.00019 -0.00005,X,-2.2515,1.5882,25
+right_shoulder_yaw_joint,revolute,right_shoulder_roll_link,right_shoulder_yaw_link,0.0,-6.24,-103.2,-0.004,-146.797,185.762,-0.004,0.00005 0.00006 1.00000,Z,-2.618,2.618,25
+right_elbow_joint,revolute,right_shoulder_yaw_link,right_elbow_link,15.783,0.0,-80.518,15.774,-146.798,105.243,15.774,-0.00019 1.00000 -0.00006,Y,-1.0472,2.0944,25
+right_wrist_roll_joint,revolute,right_elbow_link,right_wrist_roll_link,100.0,-1.888,-10.0,115.774,-148.668,95.237,115.774,1.00000 0.00019 -0.00005,X,-1.972222054,1.972222054,25
+right_wrist_pitch_joint,revolute,right_wrist_roll_link,right_wrist_pitch_link,38.0,0.0,0.0,153.774,-148.661,95.235,153.774,-0.00019 1.00000 -0.00006,Y,-1.614429558,1.614429558,5
+right_wrist_yaw_joint,revolute,right_wrist_pitch_link,right_wrist_yaw_link,46.0,0.0,0.0,199.774,-148.652,95.233,199.774,0.00005 0.00006 1.00000,Z,-1.614429558,1.614429558,5
+right_hand_palm_joint,fixed,right_wrist_yaw_link,right_rubber_hand,41.5,-3.0,0.0,241.275,-151.644,95.231,241.275,,,,,
