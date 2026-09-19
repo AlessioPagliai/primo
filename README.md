@@ -4,9 +4,9 @@ Open source humanoid. 3D printed structure, 30 RobStride quasi-direct-drive actu
 
 [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Printable STL](cad/stl/) · [URDF](sim/urdf/primo.urdf) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
 
-[![primo, CAD tour and walking in Isaac Lab](images/preview.gif)](https://youtu.be/QdLxUgaU2rU)
+[![primo, CAD tour and walking in Isaac Lab](images/preview.gif)](https://youtu.be/6nTcHpFmKbQ)
 
-[▶ Video in 4K](https://youtu.be/QdLxUgaU2rU) · [Download the whole folder](https://storage.googleapis.com/riverfamily/primo/primo.zip) · [Start here to continue the project, also with an AI](AGENTS.md)
+[▶ Video in 4K](https://youtu.be/6nTcHpFmKbQ) · [Download the whole folder](https://storage.googleapis.com/riverfamily/primo/primo.zip) · [Start here to continue the project, also with an AI](AGENTS.md)
 
 <img src="images/hero.webp" alt="primo" width="640">
 
@@ -51,7 +51,7 @@ What is printed is in `cad/stl/`. What is bought — motors, hands, battery, com
 
 The right side and the centre are modelled in Onshape; `sim/mirror_urdf.py` mirrors them into the full 30-joint URDF with masses, limits and collisions: [sim/urdf/primo.urdf](sim/urdf/primo.urdf).
 
-Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be/QdLxUgaU2rU). Clips: [policy 1](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [policy 2](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4). The training code is not here yet: [sim/isaaclab/](sim/isaaclab/).
+Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be/6nTcHpFmKbQ). Clips: [policy 1](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [policy 2](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4). The training code is not here yet: [sim/isaaclab/](sim/isaaclab/).
 
 ## Open points
 
@@ -63,7 +63,7 @@ Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be
 
 ## Also on
 
-[Printables](https://www.printables.com/model/1846831) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [YouTube](https://youtu.be/QdLxUgaU2rU) · [riverfamily.art](https://riverfamily.art/#primo)
+[Printables](https://www.printables.com/model/1846831) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [YouTube](https://youtu.be/6nTcHpFmKbQ) · [riverfamily.art](https://riverfamily.art/#primo)
 
 ## Licence
 

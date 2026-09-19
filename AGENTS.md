@@ -36,7 +36,7 @@ For AI agents and for people. primo is an open source humanoid robot by River Fa
 - repository https://github.com/AlessioPagliai/primo
 - this folder zipped https://storage.googleapis.com/riverfamily/primo/primo.zip
 - CAD https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
-- video https://youtu.be/QdLxUgaU2rU
+- video https://youtu.be/6nTcHpFmKbQ
 - not redistributed: vendor CAD and manuals, papers. Links in [docs/references.md](docs/references.md).
 
 ## When you finish a work session

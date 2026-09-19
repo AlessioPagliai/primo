@@ -20,4 +20,4 @@ The script identifies the 17 exported joints by position, renames them (`right_h
 
 Notes for the import, gains, acceptance tests and the walking policy setup: [docs/handoffs/isaac.md](../docs/handoffs/isaac.md). Legs run the RL policy; arms, hands and neck are teleoperated ([docs/handoffs/teleop.md](../docs/handoffs/teleop.md)). Training code: [isaaclab/](isaaclab/), still to be added from the workstation.
 
-Walking on rough terrain: [video at 2:06](https://youtu.be/QdLxUgaU2rU) · [walk-kneehard.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [walk-kneetorque.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4)
+Walking on rough terrain: [video at 2:06](https://youtu.be/6nTcHpFmKbQ) · [walk-kneehard.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [walk-kneetorque.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4)
