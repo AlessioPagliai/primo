@@ -22,7 +22,7 @@ Still in design, not built yet. Everything is shared to build it together: CAD, 
 
 These are the first printed parts: the ankle offset gimbal and a leg test plate (femur, hip bracket, tibia). More parts follow as the design is frozen.
 
-CAD: https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193
+CAD: https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
 Everything else: https://github.com/AlessioPagliai/umanoide
 Video: YOUTUBE_LINK
 
@@ -42,7 +42,7 @@ Licence: CC0, public domain.
 
 Open source humanoid in design: 3D printed, 30 RobStride actuators, Jetson AGX Thor. Walking policy trained in Isaac Lab on rough terrain. Not built yet — shared to build it together.
 
-CAD https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193
+CAD https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
 Files https://github.com/AlessioPagliai/umanoide
 Printables https://www.printables.com/@River_Family/models
 https://riverfamily.art/
@@ -71,7 +71,7 @@ CC0
   "readmes": [],
   "links": {
     "github": "https://github.com/AlessioPagliai/umanoide",
-    "onshape": "https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193"
+    "onshape": "https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409"
   }
 }
 ```
@@ -90,7 +90,7 @@ CC0
 
 **Files and published pages**
 
-[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](PRINTABLES_LINK) · [MakerWorld](MAKERWORLD_LINK) · [Thingiverse](THINGIVERSE_LINK) · [YouTube](YOUTUBE_LINK)
+[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](PRINTABLES_LINK) · [MakerWorld](MAKERWORLD_LINK) · [Thingiverse](THINGIVERSE_LINK) · [YouTube](YOUTUBE_LINK)
 
 Not built yet. The GitHub repository has the bill of materials with every supplier link, the electrical scheme, the simulation pipeline and the design notes.
 

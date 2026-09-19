@@ -1,6 +1,6 @@
 # CAD
 
-Onshape, public document: [umanoide](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193)
+Onshape, public document: [umanoide](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409)
 
 Only the right side and the centre are modelled. Onshape assembly mirror does not work for real components (a mirrored motor does not exist), so the left side is generated in the simulation pipeline; in CAD, reuse the same parts and mate them to the mirrored skeleton points. Joint positions come from the Unitree G1 `g1_29dof_mode_11` URDF ([sim/g1_joints_reference.csv](../sim/g1_joints_reference.csv)).
 

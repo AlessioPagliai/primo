@@ -2,7 +2,7 @@
 
 Open source humanoid. 3D printed structure, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Still in design, not built yet: shared now so it can be built together.
 
-[CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/59ae5f441832129ecb22c193) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
+[CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
 
 <img src="images/hero.webp" alt="umanoide" width="640">
 
