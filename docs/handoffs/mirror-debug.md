@@ -1,5 +1,7 @@
 # MIRROR_DEBUG_HANDOFF — trained policy is broken, suspect mirrored URDF
 
+> In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
+
 Written 2026-07-18 on the CAD Mac, for the AI instance on the Isaac Sim PC.
 User trained a policy on `rl_full.urdf` and it is "super broken" — cause not yet isolated.
 This doc hands over the mirroring pipeline plus a concrete debugging plan. Read this before
@@ -9,7 +11,7 @@ touching `mirror_urdf.py`.
 
 "Broken policy" has causes that have nothing to do with mirroring: reward shaping, PD gains,
 episode termination conditions, observation normalization, domain randomization ranges. Before
-assuming the URDF, run the four checks below (from `ISAAC_HANDOFF.md`) if you haven't already —
+assuming the URDF, run the four checks below (from `isaac.md`) if you haven't already —
 they take minutes and immediately tell you whether the asset is even the right layer to debug.
 
 1. Zero pose: robot stands upright, feet flat, no interpenetration explosion on spawn.
@@ -104,7 +106,7 @@ From `mirror_urdf.py`'s `CANON` dict, NOT yet validated against real hardware or
   build (2026-07-18 12:06, 32.25 kg, symmetry OK). If this is not what was imported into Isaac,
   get the exact file that was actually used for training first — a stale or hand-edited copy
   would explain everything without any bug in the pipeline.
-- `ISAAC_HANDOFF.md` — general import/PD/acceptance-test guidance, written same day.
+- `isaac.md` — general import/PD/acceptance-test guidance, written same day.
 
 ## Report back
 

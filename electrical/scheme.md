@@ -1,8 +1,8 @@
-# Electrical Connection Scheme — Open RobStride Humanoid
+# Electrical connection scheme — primo
 
-Written 2026-07-17, updated 2026-07-18 (hand connection verified from the official Inspire manuals now stored in `hands/`).
+Written 2026-07-17, updated 2026-07-18 (hand connection verified from the official Inspire manuals, linked in [docs/references.md](../docs/references.md)).
 Matches the BOM revision with hands on the WEHO rail and the hardware precharge chain
-(`BOM umanoide G1 - RobStride.xlsx`, total EUR 30,477.03). Drawing: [electrical_scheme.svg](electrical_scheme.svg).
+([bom/bom.xlsx](../bom/bom.xlsx), total EUR 30,477.03 all new). Drawing: [scheme.svg](scheme.svg) · [scheme.png](scheme.png).
 Negative returns are not drawn: every negative goes back to the Eaton PDU negative pole and the battery negative.
 The WEHO converter is non-isolated, so the 24 V negative is the same net as the battery negative.
 

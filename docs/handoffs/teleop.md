@@ -1,11 +1,13 @@
 # TELEOP_HANDOFF — Meta Quest teleop of the humanoid in Isaac Sim (Mode A)
 
+> In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
+
 Written 2026-07-19 on the CAD Mac, for the AI instance on the Isaac Sim workstation.
 Goal chosen by the user: **Mode A** — the Quest is a *tracking device only*; the operator watches
 the Isaac Sim viewport as a normal 2D window over AnyDesk. NOT immersive stereo-in-headset (that
 would be Mode B / CloudXR, explicitly rejected for now).
 
-Read `ISAAC_HANDOFF.md` first for the robot asset. This doc is the teleop layer on top of it.
+Read `isaac.md` first for the robot asset. This doc is the teleop layer on top of it.
 
 ## The one fact that shapes everything
 
@@ -168,4 +170,4 @@ over this link.
 ## Report back to the CAD Mac session (via the user)
 
 Once Phase 2 works, report: which network path you used, which teleop stack, and the IK approach —
-so it can be recorded in MEMORY.md as the project's teleop decision for the next agents.
+so it can be recorded in ai-memory.md as the project's teleop decision for the next agents.

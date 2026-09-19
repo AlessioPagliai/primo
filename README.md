@@ -1,12 +1,14 @@
-# umanoide
+# primo
 
 Open source humanoid. 3D printed structure, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Still in design, not built yet: shared now so it can be built together.
 
-[CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
+[CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [BOM](bom/bom.xlsx) · [Electrical scheme](electrical/scheme.md) · [Printable STL](cad/stl/) · [URDF](sim/urdf/primo.urdf) · [Simulation](sim/) · [Design notes](docs/) · [River Family](https://riverfamily.art/)
 
-<img src="images/hero.webp" alt="umanoide" width="640">
+[![primo, CAD tour and walking in Isaac Lab](images/preview.gif)](https://youtu.be/QdLxUgaU2rU)
 
-[▶ CAD tour on YouTube](https://youtu.be/bHGGjXYELUE)
+[▶ Video in 4K](https://youtu.be/QdLxUgaU2rU) · [Download the whole folder](https://storage.googleapis.com/riverfamily/primo/primo.zip) · [Start here to continue the project, also with an AI](AGENTS.md)
+
+<img src="images/hero.webp" alt="primo" width="640">
 
 ## Numbers
 
@@ -38,17 +40,18 @@ Filter the `Phase` column in [bom/bom.xlsx](bom/bom.xlsx). Every row has supplie
 |---|---|
 | [bom/](bom/) | `bom.xlsx` 108 active rows, `bom.csv`, `build_bom.py` generator |
 | [electrical/](electrical/) | connection scheme, written and drawn |
-| [cad/](cad/) | Onshape link, first 3MF files, RobStride FeatureScript |
-| [sim/](sim/) | URDF pipeline, ankle transmission map, Isaac Lab notes |
-| [docs/](docs/) | hand design, actuator tables, references, AI handoffs |
+| [cad/](cad/) | Onshape link, printable STL of the structure, first 3MF files, RobStride FeatureScript |
+| [sim/](sim/) | URDF with meshes, mirror pipeline, ankle transmission map, Isaac Lab notes |
+| [docs/](docs/) | hand design, actuator tables, references, AI handoffs and working memory |
+| [AGENTS.md](AGENTS.md) | entry point to continue the project, for people and AI agents |
+
+What is printed is in `cad/stl/`. What is bought — motors, hands, battery, computer, camera, pushrods, screws — is in the BOM.
 
 ## Simulation
 
-The right side and the centre are modelled in Onshape; `sim/mirror_urdf.py` mirrors them into the full 30-joint URDF with masses, limits and collisions. Ready package: [umanoide-urdf.zip](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) (12 MB, URDF + meshes + Isaac notes).
+The right side and the centre are modelled in Onshape; `sim/mirror_urdf.py` mirrors them into the full 30-joint URDF with masses, limits and collisions: [sim/urdf/primo.urdf](sim/urdf/primo.urdf).
 
-CAD tour: [YouTube](https://youtu.be/bHGGjXYELUE) · [full resolution](https://storage.googleapis.com/riverfamily/umanoide/videos/cad-tour.mov)
-
-Walking in Isaac Lab on rough terrain: [video 1](https://storage.googleapis.com/riverfamily/umanoide/videos/walk-kneehard.mp4) · [video 2](https://storage.googleapis.com/riverfamily/umanoide/videos/walk-kneetorque.mp4)
+Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be/QdLxUgaU2rU). Clips: [policy 1](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [policy 2](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4). The training code is not here yet: [sim/isaaclab/](sim/isaaclab/).
 
 ## Open points
 
@@ -56,11 +59,12 @@ Walking in Isaac Lab on rough terrain: [video 1](https://storage.googleapis.com/
 - before ordering: battery shipping to Italy and BMS limits, hip yaw motor, real ankle crank geometry
 - ankle torque map is derived from the CAD export and still to be verified
 - e-stop does not cut hand power: decide whether it should
+- STL are exported from the design state, not print-validated
 
 ## Also on
 
-[Printables](https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [MakerWorld](https://makerworld.com/it/@RiverFamily) · [YouTube](https://youtu.be/bHGGjXYELUE) · [riverfamily.art](https://riverfamily.art/#umanoide)
+[Printables](https://www.printables.com/model/1846831) · [Thingiverse](https://www.thingiverse.com/thing:7411626) · [YouTube](https://youtu.be/QdLxUgaU2rU) · [riverfamily.art](https://riverfamily.art/#primo)
 
 ## Licence
 
-[CC0 1.0](LICENSE.md). Vendor files are not redistributed: motor CAD and manuals, hand CAD, Unitree URDF are linked from [docs/references.md](docs/references.md).
+[CC0 1.0](LICENSE.md). Vendor files are not redistributed as CAD: motor and hand STEP files, manuals and the Unitree URDF are linked from [docs/references.md](docs/references.md).

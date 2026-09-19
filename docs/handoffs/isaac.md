@@ -1,10 +1,12 @@
 # ISAAC_HANDOFF — rl_full.urdf (generated 2026-07-18)
 
+> In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
+
 For the AI instance on the Isaac Sim PC. This folder is the **training-ready artifact**;
 it is generated on the CAD Mac by `mirror_urdf.py` from the raw Onshape export. **Do NOT clean or
 convert the raw `rl/rl.urdf` export — it is only the right half, with placeholder masses and no
 limits. Everything you flagged (dummy links, placeholder masses, no collisions/limits) is already
-fixed HERE.** Project source of truth: `MEMORY.md` in the `umanoide` repo on the CAD Mac.
+fixed HERE.** Project source of truth: [ai-memory.md](ai-memory.md) in this folder.
 
 ## What rl_full.urdf contains
 

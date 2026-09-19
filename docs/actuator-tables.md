@@ -1,4 +1,4 @@
-# MOTOR SPEC TABLES — umanoide G1 (scannable master reference)
+# MOTOR SPEC TABLES — primo (scannable master reference)
 
 > Quick-look spec tables for every motor we researched. Narrative/rationale lives in `MEMORY.md`.
 > Datasheet-confirmed numbers are exact; `~` = estimate. Backlash units matter: planetary in **arcmin (')**, harmonic in **arcsec (")** — harmonic has ~60× less backlash.
