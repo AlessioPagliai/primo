@@ -6,6 +6,8 @@ Open source humanoid. 3D printed structure, 30 RobStride quasi-direct-drive actu
 
 <img src="images/hero.webp" alt="umanoide" width="640">
 
+[▶ CAD tour on YouTube](https://youtu.be/bHGGjXYELUE)
+
 ## Numbers
 
 - height ≈ 1.40 m, purchased mass 33 kg, finished estimate ≈ 45 kg
@@ -43,6 +45,8 @@ Filter the `Phase` column in [bom/bom.xlsx](bom/bom.xlsx). Every row has supplie
 ## Simulation
 
 The right side and the centre are modelled in Onshape; `sim/mirror_urdf.py` mirrors them into the full 30-joint URDF with masses, limits and collisions. Ready package: [umanoide-urdf.zip](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) (12 MB, URDF + meshes + Isaac notes).
+
+CAD tour: [YouTube](https://youtu.be/bHGGjXYELUE) · [full resolution](https://storage.googleapis.com/riverfamily/umanoide/videos/cad-tour.mov)
 
 Walking in Isaac Lab on rough terrain: [video 1](https://storage.googleapis.com/riverfamily/umanoide/videos/walk-kneehard.mp4) · [video 2](https://storage.googleapis.com/riverfamily/umanoide/videos/walk-kneetorque.mp4)
 

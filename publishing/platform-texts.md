@@ -24,7 +24,7 @@ These are the first printed parts: the ankle offset gimbal and a leg test plate 
 
 CAD: https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409
 Everything else: https://github.com/AlessioPagliai/umanoide
-Video: YOUTUBE_LINK
+Video: https://youtu.be/bHGGjXYELUE
 
 Print: ankle gimbal in Bambu PPA-CF, 0.2 mm, 0.4 nozzle, Bambu Lab H2C, 1 wall, 90 % grid infill; leg test plate in PLA on an H2S. Settings are in the 3MF.
 
@@ -90,7 +90,7 @@ CC0
 
 **Files and published pages**
 
-[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](PRINTABLES_LINK) · [MakerWorld](MAKERWORLD_LINK) · [Thingiverse](THINGIVERSE_LINK) · [YouTube](YOUTUBE_LINK)
+[GitHub](https://github.com/AlessioPagliai/umanoide) · [CAD on Onshape](https://cad.onshape.com/documents/2a6d830c153f862229ff478f/w/82c50406ffe66995476ba0a1/e/6ac57dbaf03b523effa40409) · [URDF package](https://storage.googleapis.com/riverfamily/umanoide/umanoide-urdf.zip) · 11.8 MB · [Printables](PRINTABLES_LINK) · [MakerWorld](MAKERWORLD_LINK) · [Thingiverse](THINGIVERSE_LINK) · [YouTube](https://youtu.be/bHGGjXYELUE)
 
 Not built yet. The GitHub repository has the bill of materials with every supplier link, the electrical scheme, the simulation pipeline and the design notes.
 
