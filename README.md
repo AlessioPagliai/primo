@@ -1,4 +1,4 @@
-# primo humanoid robot
+# primo 
 
 Open source humanoid robot. 3D printed structure, 30 RobStride quasi-direct-drive actuators, NVIDIA Jetson AGX Thor, Unitree G1 kinematics as reference. Still in design, not built yet: shared now so it can be built together.
 
