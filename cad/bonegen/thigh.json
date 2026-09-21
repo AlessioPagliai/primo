@@ -1,0 +1,183 @@
+{
+ "name": "thigh_right",
+ "mesh_dir": "../../sim/meshes",
+ "bone_mesh": "Part_39_femur.stl",
+ "pitch_mm": 4,
+ "envelope_mm": [
+  [
+   -70,
+   70
+  ],
+  [
+   -160,
+   -77
+  ],
+  [
+   -505,
+   -270
+  ]
+ ],
+ "clearance_mm": 3,
+ "E_MPa": 6000,
+ "volume_ratio": 1.0,
+ "assumptions": "PILOT. Load cases are ASSUMED, not measured: replace them with the wrenches logged at the knee from the walking policy. Material is isotropic with an assumed modulus: results are a comparison with the current bone under the same loads, not safety factors. Knee keep-out uses 0..120 deg only: the CURRENT CAD femur already touches the shank assembly from about 123 deg (URDF limit is 165 deg, copied from the reference robot) - to be confirmed at fine resolution. Forces act on the leg line (hip-yaw axis, y = -127), not at the motor centre.",
+ "interfaces": [
+  {
+   "name": "hip_yaw_flange",
+   "type": "slab",
+   "axis": "z",
+   "range": [
+    -280,
+    -270
+   ]
+  },
+  {
+   "name": "knee_motor_seat",
+   "type": "near_mesh",
+   "mesh": "Part_1_rs04.stl",
+   "dist_mm": 6
+  }
+ ],
+ "fixed_interface": "hip_yaw_flange",
+ "load_interface": "knee_motor_seat",
+ "load_centre": [
+  0,
+  -127,
+  -439
+ ],
+ "keepout_static": [
+  "Part_1_rs04.stl"
+ ],
+ "sweeps": [
+  {
+   "name": "knee",
+   "axis_point": [
+    0,
+    -130,
+    -439
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "range": [
+    -0.09,
+    2.88
+   ],
+   "meshes": [
+    "Part_18_tibia.stl",
+    "Part_11_rs06.stl",
+    "Part_23_upper_motor_ankle_crank.stl",
+    "_2026_06_26_21_13_20_0957.stl",
+    "Part_24_shoulder_screw_short.stl"
+   ],
+   "use_range": [
+    -0.09,
+    2.1
+   ]
+  },
+  {
+   "name": "hip_yaw",
+   "axis_point": [
+    0,
+    -127,
+    -270
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "range": [
+    -2.76,
+    2.76
+   ],
+   "meshes": [
+    "Part_40_hip_roll_to_yaw.stl",
+    "Part_4_rs06.stl"
+   ]
+  }
+ ],
+ "screw_access": [
+  {
+   "name": "hip_yaw_flange_screws",
+   "axis": "z",
+   "range": [
+    -280,
+    -270
+   ],
+   "side": -1,
+   "length_mm": 70,
+   "head_clearance_mm": 3.5
+  }
+ ],
+ "load_cases": [
+  {
+   "name": "stance_2x_body_weight",
+   "F_N": [
+    0,
+    0,
+    880
+   ],
+   "M_Nmm": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "knee_motor_peak_120Nm",
+   "F_N": [
+    0,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    120000,
+    0
+   ]
+  },
+  {
+   "name": "lateral_200N_at_foot",
+   "F_N": [
+    0,
+    200,
+    0
+   ],
+   "M_Nmm": [
+    70000,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "fore_aft_300N_at_foot",
+   "F_N": [
+    300,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    -105000,
+    0
+   ]
+  },
+  {
+   "name": "hip_yaw_torque_60Nm",
+   "F_N": [
+    0,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    0,
+    60000
+   ]
+  }
+ ],
+ "filter_mm": 6.0
+}

@@ -9,10 +9,10 @@ For AI agents and for people. primo is an open source humanoid robot by River Fa
 3. The files of the area you work on:
    - electronics: [electrical/scheme.md](electrical/scheme.md) — every connection from the battery to each motor, safety chain, CAN buses
    - purchasing: [bom/bom.xlsx](bom/bom.xlsx), [bom/bom.csv](bom/bom.csv) — 108 active rows with supplier, link, price, mass, phase
-   - mechanics: [cad/README.md](cad/README.md) — Onshape document, printable STL, first 3MF files
+   - mechanics: [cad/README.md](cad/README.md) — Onshape document, printable STL, first 3MF files; [cad/bonegen/README.md](cad/bonegen/README.md) — bones generated from motors, screw holes, swept keep-outs and loads: pilot and plan for the whole robot
    - simulation: [sim/README.md](sim/README.md), [docs/handoffs/isaac.md](docs/handoffs/isaac.md), [docs/handoffs/mirror-debug.md](docs/handoffs/mirror-debug.md)
    - walking and training: [sim/isaaclab/README.md](sim/isaaclab/README.md), then `HANDOFF.md` (how the policy was reached), `LESSONS.md` (traps: read before changing a reward), `RESULTS.md`, `NEXT_STEPS.md`, `setup/INSTALL.md` in the same folder
-   - motors: [docs/motor-selection.md](docs/motor-selection.md) — why RobStride, what was compared (Encos as on Asimov, CubeMars and others), what is still open
+   - motors: [docs/motor-selection.md](docs/motor-selection.md) — why RobStride, what was compared (Encos as on Asimov, CubeMars and others), what is still open; [docs/actuator-integration.md](docs/actuator-integration.md) — standard modules against housing-as-bone actuators, what stays future proof
    - teleoperation: [docs/handoffs/teleop.md](docs/handoffs/teleop.md)
    - hands, actuators, literature: [docs/hand-design.md](docs/hand-design.md), [docs/actuator-tables.md](docs/actuator-tables.md), [docs/references.md](docs/references.md)
 
@@ -33,6 +33,7 @@ For AI agents and for people. primo is an open source humanoid robot by River Fa
 - Nothing is built yet.
 - CAD in Onshape, URDF with 30 joints in `sim/urdf/primo.urdf`, printable structure in `cad/stl/`.
 - A walking policy is trained in Isaac Lab on rough terrain with stairs (run "KneeHard", 12 leg joints + waist roll). Policy, task code, diagnostic scripts and the full record are in [sim/isaaclab/](sim/isaaclab/). Not in the folder: the converted USD, rebuilt from the URDF in two commands, and the checkpoints of the discarded runs.
+- Generated bones: thigh pilot done at 4 mm with assumed loads (`cad/bonegen/`). Goal set by the user: all the bones generated and the robot walking with them in Isaac Lab, loads taken from the simulation.
 - Next in simulation, in this order: hip-yaw torque gate, pushes by fine-tuning, more joints (waist yaw, arm swing: the arms have no collision bodies yet), domain randomisation, then sim-to-real.
 - Open before ordering: battery shipping and BMS limits, hip yaw motor (RS03 or RS06, decided by the torque gate in `sim/isaaclab/NEXT_STEPS.md`), measured ankle crank geometry, whether the e-stop also cuts hand power.
 

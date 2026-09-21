@@ -41,6 +41,7 @@ Filter the `Phase` column in [bom/bom.xlsx](bom/bom.xlsx). Every row has supplie
 | [bom/](bom/) | `bom.xlsx` 108 active rows, `bom.csv`, `build_bom.py` generator |
 | [electrical/](electrical/) | connection scheme, written and drawn |
 | [cad/](cad/) | Onshape link, printable STL of the structure, first 3MF files, RobStride FeatureScript |
+| [cad/bonegen/](cad/bonegen/) | generated bones: a bone is grown by topology optimisation between the screw holes of two motors, clear of everything that moves. Thigh pilot, plan for the whole robot |
 | [sim/](sim/) | URDF with meshes, mirror pipeline, ankle transmission map |
 | [sim/isaaclab/](sim/isaaclab/) | walking: trained policy, Isaac Lab task code, how it was reached round by round, traps, results, next steps |
 | [docs/](docs/) | why RobStride and not Encos or CubeMars, actuator tables, hand design, references, AI handoffs and working memory |
@@ -58,7 +59,7 @@ It is at 2:06 of the [video](https://youtu.be/6nTcHpFmKbQ). Clips: [KneeHard, th
 
 ## Motors
 
-All RobStride, after comparing Encos (the motors of the Asimov robot), CubeMars, Steadywin, MyActuator, ZeroErr and Dynamixel. Encos is smaller and lighter at the same torque, but its 25–36:1 reduction gives up backdrivability and force control for good, worst on the ankle, and it is sold on quotation without public CAD. The comparison and the reasons: [docs/motor-selection.md](docs/motor-selection.md), every number in [docs/actuator-tables.md](docs/actuator-tables.md).
+All RobStride, after comparing Encos (the motors of the Asimov robot), CubeMars, Steadywin, MyActuator, ZeroErr and Dynamixel. Encos is smaller and lighter at the same torque, but its 25–36:1 reduction gives up backdrivability and force control for good, worst on the ankle, and it is sold on quotation without public CAD. The comparison and the reasons: [docs/motor-selection.md](docs/motor-selection.md), every number in [docs/actuator-tables.md](docs/actuator-tables.md). Standard modules against custom actuators whose housing is the bone, and how a later version could get there: [docs/actuator-integration.md](docs/actuator-integration.md).
 
 ## Open points
 
@@ -68,6 +69,8 @@ All RobStride, after comparing Encos (the motors of the Asimov robot), CubeMars,
 - ankle torque map is derived from the CAD export and still to be verified
 - e-stop does not cut hand power: decide whether it should
 - STL are exported from the design state, not print-validated
+- the CAD femur touches the shank assembly from about 123° of knee flexion (URDF limit 165°): decide the real joint limits ([cad/bonegen/](cad/bonegen/))
+- generated bones are a pilot with assumed loads: next, loads logged from the walking policy and 2 mm resolution
 
 ## Also on
 

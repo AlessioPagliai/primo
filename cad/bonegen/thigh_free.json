@@ -1,0 +1,267 @@
+{
+ "name": "thigh_free",
+ "mesh_dir": "../../sim/meshes",
+ "pitch_mm": 4,
+ "envelope_mm": [
+  [
+   -70,
+   70
+  ],
+  [
+   -160,
+   -77
+  ],
+  [
+   -505,
+   -270
+  ]
+ ],
+ "clearance_mm": 3,
+ "E_MPa": 6000,
+ "volume_ratio": 1.0,
+ "assumptions": "PILOT. Load cases are ASSUMED, not measured: replace them with the wrenches logged at the knee from the walking policy. Material is isotropic with an assumed modulus: results are a comparison with the current bone under the same loads, not safety factors. Knee keep-out uses 0..120 deg only: the CURRENT CAD femur already touches the shank assembly from about 123 deg (URDF limit is 165 deg, copied from the reference robot) - to be confirmed at fine resolution. FREE MODE: no CAD bone as input. Only the motors, their screw holes (found in the motor meshes) and the keep-outs. Baseline numbers = current CAD femur at 4 mm. Forces act on the leg line (hip-yaw axis, y = -127), not at the motor centre. Knee: mounting face of the motor body at y = -129.4 and plate 10 mm thick as in the CAD; the shank plate starts 2.1 mm further out, so the M4 heads are counterbored 4.5 mm into the plate.",
+ "interfaces": [
+  {
+   "name": "hip_yaw_output",
+   "type": "pads",
+   "axis": "z",
+   "face": -270,
+   "side": -1,
+   "holes": [
+    [
+     -12.0,
+     -126.6
+    ],
+    [
+     -6.0,
+     -137.1
+    ],
+    [
+     -6.0,
+     -116.2
+    ],
+    [
+     6.0,
+     -137.1
+    ],
+    [
+     6.0,
+     -116.2
+    ],
+    [
+     12.0,
+     -126.6
+    ]
+   ],
+   "hole_d": 4.3,
+   "pad_d": 10,
+   "pad_t": 8,
+   "head_d": 8,
+   "access_len": 60,
+   "ring": [
+    0,
+    -126.6,
+    0,
+    19
+   ]
+  },
+  {
+   "name": "knee_body",
+   "type": "pads",
+   "axis": "y",
+   "face": -129.4,
+   "side": -1,
+   "holes": [
+    [
+     -50.4,
+     -455.7
+    ],
+    [
+     -50.4,
+     -422.9
+    ],
+    [
+     -31.1,
+     -482.2
+    ],
+    [
+     -31.1,
+     -396.4
+    ],
+    [
+     0.1,
+     -492.3
+    ],
+    [
+     0.1,
+     -386.3
+    ],
+    [
+     31.1,
+     -482.2
+    ],
+    [
+     31.1,
+     -396.3
+    ],
+    [
+     50.4,
+     -455.7
+    ],
+    [
+     50.4,
+     -422.9
+    ]
+   ],
+   "hole_d": 4.3,
+   "pad_d": 13,
+   "pad_t": 10,
+   "head_d": 8,
+   "access_len": 2,
+   "ring": [
+    0,
+    -439,
+    46,
+    60
+   ],
+   "head_depth": 4.5
+  }
+ ],
+ "fixed_interface": "hip_yaw_output",
+ "load_interface": "knee_body",
+ "load_centre": [
+  0,
+  -127,
+  -439
+ ],
+ "keepout_static": [
+  "Part_1_rs04.stl"
+ ],
+ "sweeps": [
+  {
+   "name": "knee",
+   "axis_point": [
+    0,
+    -130,
+    -439
+   ],
+   "axis": [
+    0,
+    1,
+    0
+   ],
+   "range": [
+    -0.09,
+    2.88
+   ],
+   "meshes": [
+    "Part_18_tibia.stl",
+    "Part_11_rs06.stl",
+    "Part_23_upper_motor_ankle_crank.stl",
+    "_2026_06_26_21_13_20_0957.stl",
+    "Part_24_shoulder_screw_short.stl"
+   ],
+   "use_range": [
+    -0.09,
+    2.1
+   ]
+  },
+  {
+   "name": "hip_yaw",
+   "axis_point": [
+    0,
+    -127,
+    -270
+   ],
+   "axis": [
+    0,
+    0,
+    1
+   ],
+   "range": [
+    -2.76,
+    2.76
+   ],
+   "meshes": [
+    "Part_40_hip_roll_to_yaw.stl",
+    "Part_4_rs06.stl"
+   ]
+  }
+ ],
+ "load_cases": [
+  {
+   "name": "stance_2x_body_weight",
+   "F_N": [
+    0,
+    0,
+    880
+   ],
+   "M_Nmm": [
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "knee_motor_peak_120Nm",
+   "F_N": [
+    0,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    120000,
+    0
+   ]
+  },
+  {
+   "name": "lateral_200N_at_foot",
+   "F_N": [
+    0,
+    200,
+    0
+   ],
+   "M_Nmm": [
+    70000,
+    0,
+    0
+   ]
+  },
+  {
+   "name": "fore_aft_300N_at_foot",
+   "F_N": [
+    300,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    -105000,
+    0
+   ]
+  },
+  {
+   "name": "hip_yaw_torque_60Nm",
+   "F_N": [
+    0,
+    0,
+    0
+   ],
+   "M_Nmm": [
+    0,
+    0,
+    60000
+   ]
+  }
+ ],
+ "filter_mm": 6.0,
+ "volume_cm3": 187.2,
+ "baseline_compliance_Nmm": [
+  62.7,
+  1349.37,
+  20663.87,
+  1876.91,
+  5981.89
+ ]
+}

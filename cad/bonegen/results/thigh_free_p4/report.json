@@ -1,0 +1,61 @@
+{
+ "name": "thigh_free",
+ "pitch_mm": 4.0,
+ "assumptions": "PILOT. Load cases are ASSUMED, not measured: replace them with the wrenches logged at the knee from the walking policy. Material is isotropic with an assumed modulus: results are a comparison with the current bone under the same loads, not safety factors. Knee keep-out uses 0..120 deg only: the CURRENT CAD femur already touches the shank assembly from about 123 deg (URDF limit is 165 deg, copied from the reference robot) - to be confirmed at fine resolution. FREE MODE: no CAD bone as input. Only the motors, their screw holes (found in the motor meshes) and the keep-outs. Baseline numbers = current CAD femur at 4 mm. Forces act on the leg line (hip-yaw axis, y = -127), not at the motor centre. Knee: mounting face of the motor body at y = -129.4 and plate 10 mm thick as in the CAD; the shank plate starts 2.1 mm further out, so the M4 heads are counterbored 4.5 mm into the plate.",
+ "rom_check_current_bone": {
+  "knee": {
+   "range_rad": [
+    -0.09,
+    2.88
+   ],
+   "current_bone_clash_angles_deg": [],
+   "max_clash_mm3": 0.0,
+   "interface_inside_swept_volume_mm3": 0.0
+  },
+  "hip_yaw": {
+   "range_rad": [
+    -2.76,
+    2.76
+   ],
+   "current_bone_clash_angles_deg": [],
+   "max_clash_mm3": 0.0,
+   "interface_inside_swept_volume_mm3": 0.0
+  }
+ },
+ "voxels": {
+  "design": 24651,
+  "solid_interface": 951,
+  "keepout": 17763
+ },
+ "load_cases": [
+  "stance_2x_body_weight",
+  "knee_motor_peak_120Nm",
+  "lateral_200N_at_foot",
+  "fore_aft_300N_at_foot",
+  "hip_yaw_torque_60Nm"
+ ],
+ "compliance_current_Nmm": [
+  62.7,
+  1349.37,
+  20663.87,
+  1876.91,
+  5981.89
+ ],
+ "compliance_optimized_Nmm": [
+  105.38767480645033,
+  1473.4650195192921,
+  11809.951366006337,
+  1969.7390426119096,
+  4070.6533767220535
+ ],
+ "stiffness_gain_per_case": [
+  0.5949462317595644,
+  0.9157801387373435,
+  1.7496998386867795,
+  0.9528724157851811,
+  1.4695159342741668
+ ],
+ "volume_current_cm3": 187.2,
+ "volume_optimized_cm3": 187.264,
+ "final_volume_cm3": 170.92026586508197
+}

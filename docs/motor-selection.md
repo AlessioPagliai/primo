@@ -87,6 +87,7 @@ Still open as an upgrade: AKE90-8 on hips and knees, +50 Nm and 13 mm thinner at
 
 ## Open
 
+- standard modules or housing as the bone, and what keeps the design future proof: [actuator-integration.md](actuator-integration.md)
 - hip yaw: RS03 in the BOM, RS06 in the CAD. Decided by the torque measured in simulation: [sim/isaaclab/NEXT_STEPS.md](../sim/isaaclab/NEXT_STEPS.md)
 - check simulated torques against the rated figures, not the peak ones: RS04 is 120 Nm peak and 40 Nm rated
 - leg upgrade to AKE90-8 only if those torques ask for it
