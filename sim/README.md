@@ -18,6 +18,8 @@ The script identifies the 17 exported joints by position, renames them (`right_h
 
 ## Isaac Lab
 
-Notes for the import, gains, acceptance tests and the walking policy setup: [docs/handoffs/isaac.md](../docs/handoffs/isaac.md). Legs run the RL policy; arms, hands and neck are teleoperated ([docs/handoffs/teleop.md](../docs/handoffs/teleop.md)). Training code: [isaaclab/](isaaclab/), still to be added from the workstation.
+[isaaclab/](isaaclab/) is the whole locomotion work: the trained policy `policy/kneehard_model_2999.pt` with the parameters it was trained with, the Isaac Lab task package (rewards, terminations, action spaces, every recipe tried), the RobStride articulation with gains and limits, left-right symmetry augmentation for a biped, the diagnostic scripts, and the written record — `HANDOFF.md` round by round, `LESSONS.md` symptom → cause → fix, `RESULTS.md`, `NEXT_STEPS.md`, `setup/INSTALL.md` with the version pins. Start from [isaaclab/README.md](isaaclab/README.md): it also says which paths to edit and how `rl_full.urdf` maps to `urdf/primo.urdf`.
+
+Earlier notes for the import, gains and acceptance tests: [docs/handoffs/isaac.md](../docs/handoffs/isaac.md). Legs run the RL policy; arms, hands and neck are teleoperated ([docs/handoffs/teleop.md](../docs/handoffs/teleop.md)).
 
 Walking on rough terrain: [video at 2:06](https://youtu.be/6nTcHpFmKbQ) · [walk-kneehard.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [walk-kneetorque.mp4](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4)

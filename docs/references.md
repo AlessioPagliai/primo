@@ -9,6 +9,17 @@
 - Intel RealSense D436 — [CAD and docs](https://dev.realsenseai.com/docs/stereo-depth-camera-d400#cad-files)
 - Phidgets MOT0110_0 IMU — [product](https://www.phidgets.com/?prodid=1205)
 - igus igubal KARM-08 CL / KALM-08 CL rod ends — [igus](https://www.igus.eu/)
+- NVIDIA Isaac Lab, base of the training code in `sim/isaaclab/code/` — [isaac-sim/IsaacLab](https://github.com/isaac-sim/IsaacLab) (BSD-3)
+
+## Motors compared and not chosen ([motor-selection.md](motor-selection.md))
+
+- Asimov v1, open source humanoid on Encos actuators — [asimovinc/asimov-1](https://github.com/asimovinc/asimov-1) (CAD, BOM, simulation model), [documentation](https://docs.menlo.ai/asimov/1), [BOM form](https://tally.so/r/jaG0va)
+- Encos (Nanjing Inks Intelligent Technology) EC-A series, datasheet V3.15EAP on request — resellers [Foxtech](https://store.foxtech.com/), [AIFITLAB](https://aifitlab.com/)
+- CubeMars AK and AKE series (same company as T-Motor) — [cubemars.com](https://www.cubemars.com/)
+- Steadywin GIM series, CAD and manuals — [steadywin-motor.com](https://www.steadywin-motor.com/)
+- MyActuator RMD-X — [myactuator.com](https://www.myactuator.com/), ROS 2 driver [2b-t/myactuator_rmd_ros](https://github.com/2b-t/myactuator_rmd_ros)
+- ZeroErr eRob — [zeroerr.cn](https://en.zeroerr.cn/)
+- ROBOTIS Dynamixel — [emanual.robotis.com](https://emanual.robotis.com/)
 
 ## Papers
 

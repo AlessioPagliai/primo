@@ -41,8 +41,9 @@ Filter the `Phase` column in [bom/bom.xlsx](bom/bom.xlsx). Every row has supplie
 | [bom/](bom/) | `bom.xlsx` 108 active rows, `bom.csv`, `build_bom.py` generator |
 | [electrical/](electrical/) | connection scheme, written and drawn |
 | [cad/](cad/) | Onshape link, printable STL of the structure, first 3MF files, RobStride FeatureScript |
-| [sim/](sim/) | URDF with meshes, mirror pipeline, ankle transmission map, Isaac Lab notes |
-| [docs/](docs/) | hand design, actuator tables, references, AI handoffs and working memory |
+| [sim/](sim/) | URDF with meshes, mirror pipeline, ankle transmission map |
+| [sim/isaaclab/](sim/isaaclab/) | walking: trained policy, Isaac Lab task code, how it was reached round by round, traps, results, next steps |
+| [docs/](docs/) | why RobStride and not Encos or CubeMars, actuator tables, hand design, references, AI handoffs and working memory |
 | [AGENTS.md](AGENTS.md) | entry point to continue the project, for people and AI agents |
 
 What is printed is in `cad/stl/`. What is bought — motors, hands, battery, computer, camera, pushrods, screws — is in the BOM.
@@ -51,12 +52,19 @@ What is printed is in `cad/stl/`. What is bought — motors, hands, battery, com
 
 The right side and the centre are modelled in Onshape; `sim/mirror_urdf.py` mirrors them into the full 30-joint URDF with masses, limits and collisions: [sim/urdf/primo.urdf](sim/urdf/primo.urdf).
 
-Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be/6nTcHpFmKbQ). Clips: [policy 1](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [policy 2](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4). The training code is not here yet: [sim/isaaclab/](sim/isaaclab/).
+Walking is trained in Isaac Sim 5.1 / Isaac Lab 2.3.2 with RSL-RL PPO, on rough terrain with stairs of 5–23 cm: 12 leg joints + waist roll, mean knee flexion 36°, about 87 % of a 1000-step episode survived. Everything is in [sim/isaaclab/](sim/isaaclab/): the policy `kneehard_model_2999.pt` with the exact parameters it was trained with, the task code, the diagnostic scripts, the [story round by round](sim/isaaclab/HANDOFF.md), the [traps](sim/isaaclab/LESSONS.md), the [measured results](sim/isaaclab/RESULTS.md) and the [next steps](sim/isaaclab/NEXT_STEPS.md).
+
+It is at 2:06 of the [video](https://youtu.be/6nTcHpFmKbQ). Clips: [KneeHard, the chosen policy](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneehard.mp4) · [KneeTorque](https://storage.googleapis.com/riverfamily/primo/videos/walk-kneetorque.mp4).
+
+## Motors
+
+All RobStride, after comparing Encos (the motors of the Asimov robot), CubeMars, Steadywin, MyActuator, ZeroErr and Dynamixel. Encos is smaller and lighter at the same torque, but its 25–36:1 reduction gives up backdrivability and force control for good, worst on the ankle, and it is sold on quotation without public CAD. The comparison and the reasons: [docs/motor-selection.md](docs/motor-selection.md), every number in [docs/actuator-tables.md](docs/actuator-tables.md).
 
 ## Open points
 
 - nothing built yet: phase 1 is the first bench
-- before ordering: battery shipping to Italy and BMS limits, hip yaw motor, real ankle crank geometry
+- before ordering: battery shipping to Italy and BMS limits, real ankle crank geometry, hip yaw motor — measure its torque while turning in simulation, RS06 36 Nm or RS03 60 Nm ([how](sim/isaaclab/NEXT_STEPS.md))
+- walking policy: no pushes, no domain randomisation and arms held still so far; not yet ready for the real robot
 - ankle torque map is derived from the CAD export and still to be verified
 - e-stop does not cut hand power: decide whether it should
 - STL are exported from the design state, not print-validated
@@ -67,4 +75,4 @@ Walking in Isaac Lab on rough terrain is at 2:06 of the [video](https://youtu.be
 
 ## Licence
 
-[CC0 1.0](LICENSE.md). Vendor files are not redistributed as CAD: motor and hand STEP files, manuals and the Unitree URDF are linked from [docs/references.md](docs/references.md).
+[CC0 1.0](LICENSE.md). One exception: the task code in `sim/isaaclab/code/` derives from Isaac Lab and keeps its [BSD-3-Clause licence](sim/isaaclab/code/LICENSE). Vendor files are not redistributed as CAD: motor and hand STEP files, manuals and the Unitree URDF are linked from [docs/references.md](docs/references.md).

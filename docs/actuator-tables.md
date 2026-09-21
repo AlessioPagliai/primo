@@ -1,12 +1,13 @@
 # MOTOR SPEC TABLES — primo (scannable master reference)
 
-> Quick-look spec tables for every motor we researched. Narrative/rationale lives in `MEMORY.md`.
+> Quick-look spec tables for every motor we researched. The short rationale is in [motor-selection.md](motor-selection.md), the dated record in [handoffs/ai-memory.md](handoffs/ai-memory.md).
 > Datasheet-confirmed numbers are exact; `~` = estimate. Backlash units matter: planetary in **arcmin (')**, harmonic in **arcsec (")** — harmonic has ~60× less backlash.
-> Last update: 2026-06-19.
+> **Status: the robot is all RobStride (section 4), decided 2026-06-20/21. Sections 1 and 3b record earlier choices and are superseded.**
+> Data last updated 2026-06-21; status labels corrected 2026-09-21.
 
 ---
 
-## 1. CHOSEN CONFIG — Encos, 3 sizes + ankle trial (34 bought = 30 in robot + 4 trial)
+## 1. SUPERSEDED 2026-06-20 — all-Encos list of 2026-06-19, 3 sizes + ankle trial (34 on the quote list = 30 in robot + 4 trial)
 
 | Model | Ø mod | Weight | Peak Nm | Cont Nm | Ratio | Cont/Peak RPM | Qty | Joints |
 |---|---|---|---|---|---|---|---|---|
@@ -45,13 +46,13 @@
 
 ---
 
-## 3b. CUBEMARS — QDD + high-reduction in ONE ecosystem (MIT-mode, dual-encoder) — **CHOSEN SUPPLIER**
+## 3b. CUBEMARS — QDD + high-reduction in ONE ecosystem (MIT-mode, dual-encoder) — evaluated, NOT chosen (briefly the chosen supplier before 2026-06-20, on wrong dimensions)
 
 | Model | Ratio | Peak Nm | Rated Nm | Size | Weight | Backdrivable | Our use |
 |---|---|---|---|---|---|---|---|
-| AK40-10 | 10:1 | 4.1 | ~1.5 | Ø46 | 200 g | ✅ QDD | neck |
+| ~~AK40-10~~ | 10:1 | 4.1 | ~1.5 | ~~Ø46~~ | ~~200 g~~ | ✅ QDD | WRONG SIZE, kept for the record. Real data in the last row |
 | AK45-10 | 10:1 | 7 | ~2 | Ø53×43 | 260 g | ✅ QDD | wrist |
-| AK70-9 V3.0 | 9:1 | 29 | 8.5 | Ø70 | ~720 g | ✅ QDD | shoulder, elbow, (ankle roll slim) |
+| ~~AK70-9 V3.0~~ | 9:1 | 29 | 8.5 | ~~Ø70~~ | ~~~720 g~~ | ✅ QDD | WRONG SIZE, the model name was read as the diameter: this error produced the CubeMars choice. Real data two rows below |
 | AK80-9 V3.0 | 9:1 | 22 | 9 | Ø80 | 485 g | ✅ QDD | (light mid) |
 | AK10-9 V3.0 | 9:1 | 53 | 18 | Ø98×61.7 | 940 g | ✅ QDD | ankle pitch, hip yaw, waist |
 | AK70-9 V3.0 | 9:1 | 29 | 8.5 | **Ø89×49** | 540 g | ✅ QDD | ankle roll, spalla, gomito (NB: Ø89 = come RS06 Ø88, NON Ø70!) |
@@ -63,9 +64,9 @@
 
 **DECISIONE 2026-06-21 (riapertura CubeMars chiusa): RESTA TUTTO QDD, niente 36:1.** L'utente ha riaperto per l'AK45-36 36:1 (Ø55 vs RS06 Ø88 = bracci/caviglia piu' snelli). VERDETTO ONESTO dopo 3 domande utente: (1) QDD e' piu' FUTUREPROOF - il 36:1 chiude PER SEMPRE force/impedance control + compliance + tolleranza impatti su quel giunto (ergastolo hardware, non aggiornabile via sw). (2) 36:1 PESSIMO sulla CAVIGLIA (giunto di contatto, vuole compliance al massimo) -> tenere caviglia QDD. (3) Sui BRACCI il 36:1 e' ok SOLO per manipolazione a posizione di OGGI (ACT/diffusion), ma uccide la manipolazione contact-rich/compliant futura. Siccome l'utente tiene al futureproofing/smart-control -> **TUTTO QDD, AK45-36 SCARTATO**. Bracci/caviglia chunky (Ø88) = prezzo cosmetico+~2.5kg, NON limita la capacita'; il 36:1 si'. Mappa RobStride bloccata da AI RESTA valida (o CubeMars-QDD AKE90 per gambe piu' forti 170 vs 120 Nm). NB: avevo sovra-venduto l'AK45-36 nel turno precedente, l'utente ha corretto giustamente.
 
-CubeMars (T-Motor / Sanrui, 17 yr, IPO 2026) spans QDD->high-reduction -> pick backdrivable where it matters. More mature + slimmer leg actuator (AKE90 Ø90 vs RS04 Ø110) than RobStride.
+CubeMars (T-Motor / Sanrui, 17 yr, IPO 2026) spans QDD->high-reduction -> pick backdrivable where it matters. More mature than RobStride. ~~Slimmer leg actuator (AKE90 Ø90 vs RS04 Ø110)~~ — correction: AKE90-8 is Ø107.5, the same diameter class as RS04; it is thinner (43.5 vs 56 mm) and stronger (170 vs 120 Nm), not slimmer.
 
-## 4. ROBSTRIDE — QDD alternative (~9:1, MIT-Cheetah lineage, torque from current, NO sensor)
+## 4. ROBSTRIDE — **CHOSEN** — QDD (~9:1, MIT-Cheetah lineage, torque from current, NO sensor)
 
 Specific torque is calculated on the complete actuator as `output torque / actuator mass`. The `>10 Nm/kg` target is
 normally quoted using peak torque, but rated specific torque is also shown because it is the more conservative thermal check.
@@ -104,7 +105,7 @@ Also: RS01 (**single encoder — avoid**). All QDD ~8–10:1, dual encoder, CAN 
 | Innfos/DAMIAO SCA | QDD | — | — | — | — | torque sensing | lighter (QDD) alternative |
 | CubeMars AK10-9 | QDD | Ø98 | ~50 | 940 g | fast | current only | gap at 36 Nm; ecosystem |
 | CubeMars AK70-10 | QDD | Ø89 | 25 | — | fast | current only | — |
-| CubeMars AK40-10 | QDD | Ø46 | 4 | — | fast | current only | — |
+| CubeMars AK40-10 | QDD | Ø53 | 4 | 185 g | fast | current only | — |
 | Steadywin GIM3510-8 | QDD | Ø46 | 6.3 | — | — | dual-enc | wrist option |
 | Steadywin GIM6010-36 | planet | Ø70 | 36 | — | slow | dual-enc | mid, 36:1 stiff |
 | Dynamixel PH54/PH42 | cycloidal >300:1 | — | ~25–44 | 340 g+ | 29–33 | position servo | wrong class (not backdrivable, costly) |
