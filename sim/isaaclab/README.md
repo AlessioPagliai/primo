@@ -10,7 +10,7 @@ wrong and why**, so the next person does not repeat five rounds of mistakes.
 
 ## In this repository
 
-The robot is called **primo**. This folder is the training package exactly as it left the simulation workstation; only this section was added.
+The robot is called **primo**. This folder is the training package as it left the simulation workstation. Added here: this section and `code/LICENSE`; in `reference/` the assistants are called "AI".
 
 - **URDF** — `rl_full.urdf` in these documents is [sim/urdf/primo.urdf](../urdf/primo.urdf), meshes in [sim/meshes/](../meshes/). Same export, robot name changed to `primo`. Checked: the foot mesh here has the extents the foot-collision script expects (sole at z = −0.7883 m, centre x 0.0333, y ∓0.1267).
 - **USD** — not included, it is built from the URDF: foot-collision fix, then `convert_urdf.py --merge-joints` ([setup/INSTALL.md](setup/INSTALL.md)). `primo.urdf` still has the mesh collision on the feet, so run `simplify_foot_collision.py` on a copy first.
@@ -51,7 +51,7 @@ The robot is called **primo**. This folder is the training package exactly as it
 | `LESSONS.md` | **The traps** — distilled, each with symptom → cause → fix |
 | `RESULTS.md` | Measured numbers for every experiment |
 | `NEXT_STEPS.md` | What to do next (push robustness, unlocking joints, the motor gate) with the traps mapped |
-| `reference/` | Raw project memory and the URDF-side handoff, kept verbatim |
+| `reference/` | Raw project memory and the URDF-side handoff, kept as written |
 
 ## The policy
 

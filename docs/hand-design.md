@@ -1,6 +1,6 @@
 # Custom Humanoid Hand Design
 
-Shared engineering handoff for the user, the AI sessions.
+Shared engineering handoff for the user and the AI sessions.
 
 Last updated: 2026-07-29
 

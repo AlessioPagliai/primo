@@ -2,7 +2,7 @@
 
 > In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
 
-Written 2026-07-18 on the CAD Mac, for the AI instance on the Isaac Sim PC.
+Written 2026-07-18 on the CAD Mac, for the AI session on the Isaac Sim PC.
 User trained a policy on `rl_full.urdf` and it is "super broken" — cause not yet isolated.
 This doc hands over the mirroring pipeline plus a concrete debugging plan. Read this before
 touching `mirror_urdf.py`.

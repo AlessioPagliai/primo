@@ -2,7 +2,7 @@
 
 > In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
 
-For the AI instance on the Isaac Sim PC. This folder is the **training-ready artifact**;
+For the AI session on the Isaac Sim PC. This folder is the **training-ready artifact**;
 it is generated on the CAD Mac by `mirror_urdf.py` from the raw Onshape export. **Do NOT clean or
 convert the raw `rl/rl.urdf` export — it is only the right half, with placeholder masses and no
 limits. Everything you flagged (dummy links, placeholder masses, no collisions/limits) is already

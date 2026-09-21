@@ -5,7 +5,7 @@ For AI agents and for people. primo is an open source humanoid robot by River Fa
 ## Read in this order
 
 1. [README.md](README.md) — what the robot is, numbers, build phases, open points.
-2. [docs/handoffs/ai-memory.md](docs/handoffs/ai-memory.md) — the working memory and source of truth: every decision with date, source and open doubts. Newest blocks at the top, superseded blocks are marked. Italian and English mixed. Read the top part fully before changing anything.
+2. [docs/handoffs/ai-memory.md](docs/handoffs/ai-memory.md) — the working memory and source of truth: every decision with date, source and open doubts. Newest blocks at the top, superseded blocks are marked. Read the top part fully before changing anything.
 3. The files of the area you work on:
    - electronics: [electrical/scheme.md](electrical/scheme.md) — every connection from the battery to each motor, safety chain, CAN buses
    - purchasing: [bom/bom.xlsx](bom/bom.xlsx), [bom/bom.csv](bom/bom.csv) — 108 active rows with supplier, link, price, mass, phase
@@ -46,4 +46,4 @@ For AI agents and for people. primo is an open source humanoid robot by River Fa
 
 ## When you finish a work session
 
-Add a dated block at the top of `docs/handoffs/ai-memory.md`: what changed, why, what is still open. That file is how the next agent continues.
+Add a dated block at the top of `docs/handoffs/ai-memory.md`: what changed, why, what is still open. Write in English and refer to assistants only as "AI", without product names. That file is how the next agent continues.

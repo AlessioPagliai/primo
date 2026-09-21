@@ -2,7 +2,7 @@
 
 > In this repository `rl_full.urdf` is [sim/urdf/primo.urdf](../../sim/urdf/primo.urdf) with its meshes in `sim/meshes/` (same file, robot name changed to `primo`).
 
-Written 2026-07-19 on the CAD Mac, for the AI instance on the Isaac Sim workstation.
+Written 2026-07-19 on the CAD Mac, for the AI session on the Isaac Sim workstation.
 Goal chosen by the user: **Mode A** — the Quest is a *tracking device only*; the operator watches
 the Isaac Sim viewport as a normal 2D window over AnyDesk. NOT immersive stereo-in-headset (that
 would be Mode B / CloudXR, explicitly rejected for now).

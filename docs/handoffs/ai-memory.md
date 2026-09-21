@@ -1,11 +1,12 @@
-# Umanoide G1 open hardware - memoria condivisa
+# primo — open hardware humanoid — shared working memory
 
-Ultimo aggiornamento: 2026-09-21.
+Last update: 2026-09-21.
 
-> **LOCOMOZIONE + SCELTA MOTORI ORA CONDIVISE — 2026-09-21 (AI + utente):** l'utente ha chiesto di condividere TUTTO il lavoro di locomozione ("the policy, the code, how we got there... everything") e il confronto motori. **(1) Locomozione:** la cartella `umanoide/humanoid_locomotion/` (48 file, 11 MB, arrivata dalla workstation Isaac: policy `kneehard_model_2999.pt`, video, `params_as_trained/env.yaml+agent.yaml`, `code/tasks` + `code/assets` + `code/symmetry` + 14 script diagnostici, `HANDOFF.md` round per round, `LESSONS.md`, `RESULTS.md`, `NEXT_STEPS.md`, `setup/INSTALL.md`, `reference/`) e' copiata BYTE-IDENTICA in `umanoide-release/sim/isaaclab/` (sostituisce il vecchio placeholder "not in this folder yet"). Unica aggiunta: sezione "In this repository" in `sim/isaaclab/README.md` (mapping `rl_full.urdf` = `sim/urdf/primo.urdf`; tabella dei path `C:\Users\WKS\...` da modificare; I/O della policy) + `sim/isaaclab/code/LICENSE`. **Fatti VERIFICATI oggi (non stime):** dal checkpoint (dimensioni dei tensori nello zip .pt) osservazione = **272** = lin vel 3 + ang vel 3 + gravita' 3 + comando 3 + pos giunti 30 + vel giunti 30 + ultima azione 13 + height scan 187; azione = **13** (12 gambe + waist roll), target = default + 0.5 x azione, **50 Hz** (dt 0.005 x decimation 4), MLP 512-256-128 ELU senza normalizzazione oss.; comandi allenati: avanti 0-1.0 m/s, NIENTE laterale, yaw +-1.0 rad/s via heading; ordine giunti = quello risolto da Isaac Lab (`preserve_order: false`), da leggere dall'env prima di ogni deploy. La mesh piede del repo (`sim/meshes/Part_22_foot.stl`) ha ESATTAMENTE le estensioni attese da `simplify_foot_collision.py` (suola z = -0.7883, centro x 0.0333, y -+0.1267, AABB 48.9 x 81.4 mm) -> `sim/urdf/primo.urdf` e' lo stesso export usato per il training; ha ancora la collisione mesh ai piedi, quindi prima di convertire in USD va eseguito lo script su una copia. **Licenza:** `code/assets`, `code/symmetry`, `code/tasks` hanno header Isaac Lab **BSD-3-Clause** (testo in `sim/isaaclab/code/LICENSE`); script, documenti e policy restano CC0. Nessuna credenziale/IP nei file: solo path della workstation. **NON nel pacchetto (solo sulla workstation, opzionali perche' riproducibili):** `rl_full_isaac/usd/rl_full.usd`, l'URDF gia' patchato ai piedi, i checkpoint degli altri run (KneeTorque ecc.), i log tensorboard. **(2) Motori:** nuovo `umanoide-release/docs/motor-selection.md` = versione breve e pubblica del perche' RobStride: requisiti, timeline 06-14 -> 06-23, mappa Encos di Asimov (5 modelli: A4310 x10, A4315 x4, A6416 x3, A5013-H x4, A3814-H x4), cosa Encos fa meglio (Ø56/382 g vs Ø88/621 g a 36 Nm; -3.7 kg sulle gambe) e perche' NON scelto (riduzione 25-36:1 e armonici 100:1 = inerzia riflessa 8x/16x/100x+, niente backdrivabilita'/force control e non aggiornabile via sw, peggio sulla caviglia; solo a preventivo senza CAD pubblici; ~3.5x il prezzo; obiettivo passato da tethered ~28-30 kg a 45 kg con batteria a bordo, classe G1), tabella RobStride vs CubeMars per classe di coppia, errore dimensionale CubeMars, altri candidati, punti aperti (hip yaw, AKE90-8 come upgrade gambe). Linkato da README (nuova sezione "Motors"), AGENTS.md, `docs/handoffs/README.md`, `docs/references.md` (nuova sezione con link Asimov/Encos/CubeMars/Steadywin/MyActuator/ZeroErr/Dynamixel). **CORREZIONE a `MOTORI_TABELLE.md` (e copia `docs/actuator-tables.md`):** aveva ancora i titoli "1. CHOSEN CONFIG — Encos" e "3b. CUBEMARS — CHOSEN SUPPLIER" e due righe CubeMars con le dimensioni SBAGLIATE (AK70-9 "Ø70", AK40-10 "Ø46") = fuorviante per chi scarica. Ora: sez. 1 e 3b marcate SUPERSEDED, sez. 4 RobStride = **CHOSEN**, righe errate barrate e spiegate, nota "AKE90 Ø90" corretta (Ø107.5: piu' sottile, non piu' snello). Backup del file precedente nello scratchpad di sessione. **Link Asimov:** `docs.menlo.ai/asimov/v1/bom` ora da' 404 -> usare `https://docs.menlo.ai/asimov/1`, `github.com/asimovinc/asimov-1`, `tally.so/r/jaG0va` (verificati 200 il 2026-09-21). `Asimov 1 BOM.xlsx` e i manuali vendor NON sono ridistribuiti. **Regola per le prossime sessioni:** se `humanoid_locomotion/` viene aggiornata dalla workstation, ricopiarla in `sim/isaaclab/` con `rsync -a` PRESERVANDO la sezione "In this repository" del README e `code/LICENSE`, poi ricostruire `primo.zip` (ora ~32 MB) e caricarlo su `gs://riverfamily/primo/`.
-> **NOME = "primo" — PUBBLICAZIONE COMPLETATA SU TUTTE LE PIATTAFORME — 2026-09-19 sera (AI + utente) [SUPERA i due bullet sotto]:** l'umanoide si chiama **primo** (scelto dall'utente tra 10 proposte nello stile River Family); titolo dei listing **"Primo open source humanoid robot"** (minuscolo su sito e MakerOnline). Repo GitHub rinominato `AlessioPagliai/primo` (il vecchio URL `umanoide` reindirizza); cartella locale del repo resta `~/Documents/artes/umanoide-release`. **REGOLA COMMIT:** autore SOLO `Alessio Pagliai <alessiopagliai.d@gmail.com>`, MAI trailer `Co-Authored-By: AI` ne' identita' di default del Mac (`utente1`); storia di `primo` e ultimi commit di `RiverFamily` riscritti e force-pushati il 2026-09-19; regola scritta in `~/Desktop/PUBLISH_GITHUB_AS_ALESSIO.md`. Niente etichette "AI made" sulle piattaforme. **URL:** YouTube https://youtu.be/6nTcHpFmKbQ (4K60 H.264 closed-GOP, capitoli; i due upload precedenti sono stati cancellati dall'utente: il master HEVC open-GOP veniva riprodotto da YouTube a blocchi di 4 s ripetuti); sito https://riverfamily.art/#primo (versione App Engine `gallery-primo-20260919`: "more" = solo video, mp4 GCS su desktop / iframe YouTube su mobile come gli altri design; "make" = scarica `primo.zip`); Printables https://www.printables.com/model/1846831 (video incorporato, 26 tag, 35 STL + 2 3MF); Thingiverse https://www.thingiverse.com/thing:7411626; Cults https://cults3d.com/en/3d-model/gadget/primo-open-source-humanoid (immagini 1:1, clip 30 s, CC0, gratis); Creality Cloud https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96 (scheda completa ma RESPINTA dalla moderazione: la cover deve essere una foto reale della stampa; non visibile al pubblico, quindi NON linkata nei doc; Creality non ha bozze: la scheda respinta resta privata e modificabile e fa da bozza (l'utente ha detto di lasciarla cosi'); quando ci sono le foto: profilo › Modello 3D › ⋯ › Modifica, foto come cover, nome "Primo open source humanoid robot", reinviare); MakerOnline https://www.makeronline.com/en/model/primo%20open%20source%20humanoid/331171.html; MakerWorld: bozza 9688828 reinviata, di nuovo RESPINTA in automatico (nessuna foto reale) e poi SALVATA COME BOZZA su richiesta dell'utente (Modelli 3D › Bozza; li' c'e' anche la vecchia bozza "umanoide" da cancellare a mano) — senza FOTO REALE di un pezzo stampato viene sempre respinta (l'utente fara' le foto tra qualche giorno); lo slot video MakerWorld non accetta upload programmatico: trascinare a mano `publishing-upload/video/primo-30s.mp4`. **Cartella condivisa autosufficiente:** `gs://riverfamily/primo/primo.zip` = intero repo (README, AGENTS.md come punto d'ingresso per una nuova sessione AI, questa memoria in `docs/handoffs/ai-memory.md`, BOM + generatore, schema elettrico, `cad/stl/` = SOLO i 20 pezzi da stampare in mm, dx+sx = 35 STL; i componenti comprati stanno nel BOM e le loro mesh solo in `sim/meshes/` per l'URDF `sim/urdf/primo.urdf`, pipeline mirror, handoff Isaac/teleop). MANCA nel repo: il codice di training Isaac Lab, che sta sulla workstation (segnaposto `sim/isaaclab/README.md`). Altri file GCS: `primo/primo-stl.zip`, `primo/videos/{primo-4k60,primo-30s,walk-kneehard,walk-kneetorque}.mp4`, `videos/Primo_720p.mp4` (sito). Testi, tag e lista URL: `umanoide-release/publishing/platform-texts.md`. Policy di camminata scelta: KneeHard. Repo RiverFamily: rimossa da `app.yaml` la riga `SECRET_KEY` (era un segnaposto non usato da `app.py`, diverso dalla chiave del sito live: nessun segreto reale esposto, nessuna riscrittura della storia necessaria); la `pk_live_` Stripe in `templates/index.html` e' una chiave pubblicabile per design. ATTENZIONE Printables: dopo ogni modifica controllare che la descrizione non sia vuota (l'editor ProseMirror sostituisce il nodo selezionato: inserire il video in un paragrafo vuoto tra due paragrafi, mai con tutto selezionato).
-> **PUBBLICAZIONE OPEN SOURCE — PACCHETTO RELEASE PREPARATO — 2026-09-19 (AI + user):** l'utente pubblica il progetto oggi su GitHub (account `AlessioPagliai`), Printables/MakerWorld/Thingiverse (@River_Family / @RiverFamily), riverfamily.art e YouTube (@art.riverfamily). Stile appreso dai suoi siti: **minimale estremo, nomi in minuscolo, inglese, descrizioni 0-15 parole, nessun marketing, licenza CC0, file grandi sul bucket GCS `gs://riverfamily/`, link a tutte le piattaforme**. Nome di lavoro: `umanoide`. Creata cartella pulita **`/Users/artes/Documents/artes/umanoide-release/`** (repo git locale, 1 commit, 1.6 MB): `README.md` (numeri, fasi/costi, file, sim, punti aperti, licenza), `bom/` (bom.xlsx + bom.csv 108 righe attive + build_bom.py), `electrical/` (scheme md/svg/png), `cad/` (README con link Onshape, `motor_proxy.fs`, `3mf/ankle-gimbal.3mf` = Bambu PPA-CF H2C 1 parete 90% griglia, `3mf/leg-test-plate.3mf` = femore+staffa anca+tibia in PLA su H2S), `sim/` (mirror_urdf.py, ankle_map.py + ankle-transmission.md CON AVVISO "geometria provvisoria da centroidi mesh", g1_joints_reference.csv), `docs/` (hand-design, actuator-tables, references.md con 27 paper arXiv + link vendor, `handoffs/` = isaac/teleop/mirror-debug + **ai-memory.md = copia di questo MEMORY.md**), `publishing/platform-texts.md` (testi pronti per ogni piattaforma, entry catalogue.json, blocco README RiverFamily, lista immagini da fare in Onshape), `LICENSE.md` CC0 (copiato da RiverFamily). **ESCLUSI deliberatamente:** `sources/` (paper, 400 MB: solo elenco), `motors/`+`hands/` (manuali/STEP vendor: solo link), `hydrogen/` e `noetix_manual/` (progetti non correlati), `Asimov 1 BOM`, `G1.blend`, `outputs/`. **Caricati su GCS (pubblici):** `gs://riverfamily/umanoide/umanoide-urdf.zip` (11.8 MB = rl_full: urdf+mesh+handoff) e `videos/walk-kneehard.mp4`, `walk-kneetorque.mp4`. Totali BOM al 2026-09-19 invariati: residuo 10.264,90 / F1 4.008,57 / F2 3.997,95 / F3 2.258,38; massa 33,24 kg. **DA FARE:** immagini/GIF Onshape dall'utente (`images/hero.webp` referenziata nel README), documento Onshape reso pubblico, creazione repo GitHub `AlessioPagliai/umanoide` + push (terminale NON autenticato: serve `gh auth login` o PAT, oppure upload via browser), upload 3MF su Printables/MakerWorld/Thingiverse, video YouTube, entry sito. Nota policy locomozione: `KneeHard.mp4` vs `KneeTorque.mp4` (compare_r5 = sweep KneeDefault/Soft/Hard + KneeTorque); config sul workstation Isaac, non qui.
-- **PUBBLICATO — 2026-09-19 (AI, sessione autonoma):** GitHub https://github.com/AlessioPagliai/umanoide (repo locale `umanoide-release/`, branch main); Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design (RC & Robotics, CC0, origine "original", flag AI = "AI-assisted" scelto per prudenza: cambiabile in Edit model); Thingiverse https://www.thingiverse.com/thing:7411626 (Hobby › Robotics, Work in Progress, CC0, 2 3MF + 5 immagini); MakerWorld: bozza 9686078 completa (testi, categoria Robotica, tag, cover 4:3+3:4, 4 immagini, profilo di stampa ankle-gimbal.3mf, CC0) INVIATA ma RESPINTA dal controllo automatico: "Il sistema non ha rilevato alcuna foto reale" → serve una FOTO VERA di un pezzo stampato (gimbal o leg test plate) nelle immagini modello e nel profilo di stampa, poi risottomettere da Modelli 3D › Fallito › Modifica (o "Ricorso"); nei doc per ora c'è il link profilo https://makerworld.com/it/@RiverFamily, DA SOSTITUIRE con il link modello appena approvato (README release "Also on", publishing/platform-texts.md, README + catalogue.json del repo RiverFamily, descrizione YouTube); il profilo di stampa MakerWorld ha solo render CAD, MakerWorld chiede una foto reale del pezzo stampato → aggiungerla appena stampato il gimbal, altrimenti può rimuovere il profilo; nome profilo rimasto quello automatico "0.2mm layer, 1 walls, 90% infill". YouTube https://youtu.be/bHGGjXYELUE (CAD tour, descrizione con tutti i link). Sito: versione App Engine `gallery-umanoide-20260919` promossa (slide `#umanoide`, sezione "more" con CAD · files · 3MF · video; il sito non linka le piattaforme per nessun modello, coerente). Repo catalogo RiverFamily (`/Users/artes/Documents/paths/Ben/riverfamily-github`) aggiornato e pushato. GCS: gs://riverfamily/umanoide/ (zip, urdf zip, immagini, video). Staging upload browser: `publishing-upload/` (jpg 4:3/16:9/1:1/3:4 con padding bianco). Policy camminata scelta: **KneeHard** (la più semplice; KneeTorque aggiunge un termine di penalità sulla coppia; i config stanno sulla workstation Isaac, in locale solo i video). Video walk su GCS: videos/walk-kneehard.mp4, videos/walk-kneetorque.mp4.
+> **WRITING RULE (2026-09-21, user):** this file is English only. Call assistants "AI" / "AI session": no product or company name of any AI tool in this file or in any shared material (repository and its history, download package, bucket, listings), and no agent-specific entry file in the repository: `AGENTS.md` is the only one. Today: the memory was translated line by line (numbers, links and code spans checked automatically; Italian original kept in `outputs/memory-backups/`), the last Italian rows of the BOM got English text in `ROW_OVERRIDES`, the repository history was rewritten without those names, `primo.zip` rebuilt. The public copy is `docs/handoffs/ai-memory.md`: copy this file unchanged. Check before every push: `python3 publishing-upload/check_public.py --history`.
+> **LOCOMOTION + MOTOR SELECTION NOW SHARED — 2026-09-21 (AI + user):** the user asked to share ALL the locomotion work ("the policy, the code, how we got there... everything") and the motor comparison. **(1) Locomotion:** the folder `umanoide/humanoid_locomotion/` (48 files, 11 MB, received from the Isaac workstation: policy `kneehard_model_2999.pt`, video, `params_as_trained/env.yaml+agent.yaml`, `code/tasks` + `code/assets` + `code/symmetry` + 14 diagnostic scripts, `HANDOFF.md` round by round, `LESSONS.md`, `RESULTS.md`, `NEXT_STEPS.md`, `setup/INSTALL.md`, `reference/`) has been copied BYTE-IDENTICAL into `umanoide-release/sim/isaaclab/` (it replaces the old placeholder "not in this folder yet"). Only addition: an "In this repository" section in `sim/isaaclab/README.md` (mapping `rl_full.urdf` = `sim/urdf/primo.urdf`; table of the `C:\Users\WKS\...` paths to be edited; policy I/O) + `sim/isaaclab/code/LICENSE`. **Facts VERIFIED today (not estimates):** from the checkpoint (tensor dimensions in the .pt zip) observation = **272** = lin vel 3 + ang vel 3 + gravity 3 + command 3 + joint pos 30 + joint vel 30 + last action 13 + height scan 187; action = **13** (12 legs + waist roll), target = default + 0.5 x action, **50 Hz** (dt 0.005 x decimation 4), MLP 512-256-128 ELU without obs. normalization; trained commands: forward 0-1.0 m/s, NO lateral, yaw +-1.0 rad/s via heading; joint order = the one resolved by Isaac Lab (`preserve_order: false`), to be read from the env before every deploy. The repo's foot mesh (`sim/meshes/Part_22_foot.stl`) has EXACTLY the extents expected by `simplify_foot_collision.py` (sole z = -0.7883, center x 0.0333, y -+0.1267, AABB 48.9 x 81.4 mm) -> `sim/urdf/primo.urdf` is the same export used for the training; it still has the mesh collision at the feet, so before converting to USD the script must be run on a copy. **License:** `code/assets`, `code/symmetry`, `code/tasks` have the Isaac Lab **BSD-3-Clause** header (text in `sim/isaaclab/code/LICENSE`); scripts, documents and policy remain CC0. No credentials/IPs in the files: only workstation paths. **NOT in the package (only on the workstation, optional because reproducible):** `rl_full_isaac/usd/rl_full.usd`, the URDF already patched at the feet, the checkpoints of the other runs (KneeTorque etc.), the tensorboard logs. **(2) Motors:** new `umanoide-release/docs/motor-selection.md` = short, public version of why RobStride: requirements, timeline 06-14 -> 06-23, Asimov's Encos map (5 models: A4310 x10, A4315 x4, A6416 x3, A5013-H x4, A3814-H x4), what Encos does better (Ø56/382 g vs Ø88/621 g at 36 Nm; -3.7 kg on the legs) and why it was NOT chosen (reduction 25-36:1 and harmonic drives 100:1 = reflected inertia 8x/16x/100x+, no backdrivability/force control and not upgradable via sw, worse on the ankle; quotation-only with no public CAD; ~3.5x the price; target moved from tethered ~28-30 kg to 45 kg with on-board battery, G1 class), RobStride vs CubeMars table by torque class, CubeMars dimensional error, other candidates, open points (hip yaw, AKE90-8 as a leg upgrade). Linked from the README (new "Motors" section), AGENTS.md, `docs/handoffs/README.md`, `docs/references.md` (new section with Asimov/Encos/CubeMars/Steadywin/MyActuator/ZeroErr/Dynamixel links). **CORRECTION to `MOTORI_TABELLE.md` (and its copy `docs/actuator-tables.md`):** it still had the headings "1. CHOSEN CONFIG — Encos" and "3b. CUBEMARS — CHOSEN SUPPLIER" and two CubeMars rows with the WRONG dimensions (AK70-9 "Ø70", AK40-10 "Ø46") = misleading for anyone who downloads it. Now: sect. 1 and 3b marked SUPERSEDED, sect. 4 RobStride = **CHOSEN**, wrong rows struck through and explained, "AKE90 Ø90" note corrected (Ø107.5: thinner, not slimmer). Backup of the previous file in the session scratchpad. **Asimov links:** `docs.menlo.ai/asimov/v1/bom` now returns 404 -> use `https://docs.menlo.ai/asimov/1`, `github.com/asimovinc/asimov-1`, `tally.so/r/jaG0va` (verified 200 on 2026-09-21). `Asimov 1 BOM.xlsx` and the vendor manuals are NOT redistributed. **Rule for the next sessions:** if `humanoid_locomotion/` gets updated from the workstation, copy it again into `sim/isaaclab/` with `rsync -a` while PRESERVING the "In this repository" section of the README and `code/LICENSE`, then rebuild `primo.zip` (now ~32 MB) and upload it to `gs://riverfamily/primo/`.
+> **NAME = "primo" — PUBLICATION COMPLETED ON ALL PLATFORMS — 2026-09-19 evening (AI + user) [SUPERSEDES the two bullets below]:** the humanoid is called **primo** (chosen by the user among 10 proposals in the River Family style); listing title **"Primo open source humanoid robot"** (lowercase on the website and MakerOnline). GitHub repo renamed `AlessioPagliai/primo` (the old `umanoide` URL redirects); the local repo folder remains `~/Documents/artes/umanoide-release`. **COMMIT RULE:** author ONLY `Alessio Pagliai <alessiopagliai.d@gmail.com>`, NEVER a `Co-Authored-By: <AI name>` trailer nor the Mac's default identity (`utente1`); history of `primo` and the latest commits of `RiverFamily` rewritten and force-pushed on 2026-09-19; rule written in `~/Desktop/PUBLISH_GITHUB_AS_ALESSIO.md`. No "AI made" labels on the platforms. **URLs:** YouTube https://youtu.be/6nTcHpFmKbQ (4K60 H.264 closed-GOP, chapters; the two previous uploads were deleted by the user: the HEVC open-GOP master was being played back by YouTube in repeated 4 s blocks); website https://riverfamily.art/#primo (App Engine version `gallery-primo-20260919`: "more" = video only, GCS mp4 on desktop / YouTube iframe on mobile like the other designs; "make" = downloads `primo.zip`); Printables https://www.printables.com/model/1846831 (embedded video, 26 tags, 35 STL + 2 3MF); Thingiverse https://www.thingiverse.com/thing:7411626; Cults https://cults3d.com/en/3d-model/gadget/primo-open-source-humanoid (1:1 images, 30 s clip, CC0, free); Creality Cloud https://www.crealitycloud.com/it/model-detail/6aae7192f052c066aeb8dd96 (listing complete but REJECTED by moderation: the cover must be a real photo of the print; not visible to the public, therefore NOT linked in the docs; Creality has no drafts: the rejected listing stays private and editable and serves as a draft (the user said to leave it like this); when the photos are available: profile › 3D Model › ⋯ › Edit, photo as cover, name "Primo open source humanoid robot", resubmit); MakerOnline https://www.makeronline.com/en/model/primo%20open%20source%20humanoid/331171.html; MakerWorld: draft 9688828 resubmitted, again automatically REJECTED (no real photo) and then SAVED AS DRAFT at the user's request (3D Models › Draft; the old "umanoide" draft is also there, to be deleted by hand) — without a REAL PHOTO of a printed part it always gets rejected (the user will take the photos in a few days); the MakerWorld video slot does not accept programmatic upload: drag `publishing-upload/video/primo-30s.mp4` in by hand. **Self-contained shared folder:** `gs://riverfamily/primo/primo.zip` = the whole repo (README, AGENTS.md as the entry point for a new AI session, this memory in `docs/handoffs/ai-memory.md`, BOM + generator, electrical schematic, `cad/stl/` = ONLY the 20 parts to be printed, in mm, right+left = 35 STL; the purchased components are in the BOM and their meshes only in `sim/meshes/` for the URDF `sim/urdf/primo.urdf`, mirror pipeline, Isaac/teleop handoffs). MISSING from the repo: the Isaac Lab training code, which is on the workstation (placeholder `sim/isaaclab/README.md`). Other GCS files: `primo/primo-stl.zip`, `primo/videos/{primo-4k60,primo-30s,walk-kneehard,walk-kneetorque}.mp4`, `videos/Primo_720p.mp4` (website). Texts, tags and URL list: `umanoide-release/publishing/platform-texts.md`. Walking policy chosen: KneeHard. RiverFamily repo: removed the `SECRET_KEY` line from `app.yaml` (it was a placeholder not used by `app.py`, different from the key of the live site: no real secret exposed, no history rewrite needed); the Stripe `pk_live_` in `templates/index.html` is a publishable key by design. WARNING Printables: after every edit check that the description is not empty (the ProseMirror editor replaces the selected node: insert the video in an empty paragraph between two paragraphs, never with everything selected).
+> **OPEN SOURCE PUBLICATION — RELEASE PACKAGE PREPARED — 2026-09-19 (AI + user):** the user is publishing the project today on GitHub (account `AlessioPagliai`), Printables/MakerWorld/Thingiverse (@River_Family / @RiverFamily), riverfamily.art and YouTube (@art.riverfamily). Style learned from his sites: **extreme minimalism, lowercase names, English, descriptions of 0-15 words, no marketing, CC0 license, large files on the GCS bucket `gs://riverfamily/`, links to all the platforms**. Working name: `umanoide`. Created a clean folder **`/Users/artes/Documents/artes/umanoide-release/`** (local git repo, 1 commit, 1.6 MB): `README.md` (numbers, phases/costs, files, sim, open points, license), `bom/` (bom.xlsx + bom.csv 108 active rows + build_bom.py), `electrical/` (scheme md/svg/png), `cad/` (README with Onshape link, `motor_proxy.fs`, `3mf/ankle-gimbal.3mf` = Bambu PPA-CF H2C 1 wall 90% grid, `3mf/leg-test-plate.3mf` = femur+hip bracket+tibia in PLA on H2S), `sim/` (mirror_urdf.py, ankle_map.py + ankle-transmission.md WITH WARNING "provisional geometry from mesh centroids", g1_joints_reference.csv), `docs/` (hand-design, actuator-tables, references.md with 27 arXiv papers + vendor links, `handoffs/` = isaac/teleop/mirror-debug + **ai-memory.md = copy of this MEMORY.md**), `publishing/platform-texts.md` (ready-made texts for each platform, catalogue.json entry, RiverFamily README block, list of images to be made in Onshape), `LICENSE.md` CC0 (copied from RiverFamily). **Deliberately EXCLUDED:** `sources/` (papers, 400 MB: list only), `motors/`+`hands/` (vendor manuals/STEP: links only), `hydrogen/` and `noetix_manual/` (unrelated projects), `Asimov 1 BOM`, `G1.blend`, `outputs/`. **Uploaded to GCS (public):** `gs://riverfamily/umanoide/umanoide-urdf.zip` (11.8 MB = rl_full: urdf+mesh+handoff) and `videos/walk-kneehard.mp4`, `walk-kneetorque.mp4`. BOM totals as of 2026-09-19 unchanged: remaining 10.264,90 / F1 4.008,57 / F2 3.997,95 / F3 2.258,38; mass 33,24 kg. **TO DO:** Onshape images/GIFs from the user (`images/hero.webp` referenced in the README), Onshape document made public, creation of the GitHub repo `AlessioPagliai/umanoide` + push (terminal NOT authenticated: `gh auth login` or a PAT is needed, or else upload via browser), 3MF upload to Printables/MakerWorld/Thingiverse, YouTube video, website entry. Locomotion policy note: `KneeHard.mp4` vs `KneeTorque.mp4` (compare_r5 = sweep KneeDefault/Soft/Hard + KneeTorque); config on the Isaac workstation, not here.
+- **PUBLISHED — 2026-09-19 (AI, autonomous session):** GitHub https://github.com/AlessioPagliai/umanoide (local repo `umanoide-release/`, branch main); Printables https://www.printables.com/model/1846831-umanoide-open-source-humanoid-in-design (RC & Robotics, CC0, origin "original", AI flag = "AI-assisted" chosen out of caution: can be changed in Edit model); Thingiverse https://www.thingiverse.com/thing:7411626 (Hobby › Robotics, Work in Progress, CC0, 2 3MF + 5 images); MakerWorld: draft 9686078 complete (texts, Robotics category, tags, cover 4:3+3:4, 4 images, print profile ankle-gimbal.3mf, CC0) SUBMITTED but REJECTED by the automatic check: "The system did not detect any real photo" → a REAL PHOTO of a printed part (gimbal or leg test plate) is needed in the model images and in the print profile, then resubmit from 3D Models › Failed › Edit (or "Appeal"); for now the docs contain the profile link https://makerworld.com/it/@RiverFamily, TO BE REPLACED with the model link as soon as it is approved (release README "Also on", publishing/platform-texts.md, README + catalogue.json of the RiverFamily repo, YouTube description); the MakerWorld print profile has only CAD renders, MakerWorld asks for a real photo of the printed part → add it as soon as the gimbal is printed, otherwise it may remove the profile; profile name left as the automatic one "0.2mm layer, 1 walls, 90% infill". YouTube https://youtu.be/bHGGjXYELUE (CAD tour, description with all the links). Website: App Engine version `gallery-umanoide-20260919` promoted (slide `#umanoide`, "more" section with CAD · files · 3MF · video; the website does not link the platforms for any model, consistent). RiverFamily catalogue repo (`/Users/artes/Documents/paths/Ben/riverfamily-github`) updated and pushed. GCS: gs://riverfamily/umanoide/ (zip, urdf zip, images, videos). Browser upload staging: `publishing-upload/` (jpg 4:3/16:9/1:1/3:4 with white padding). Walking policy chosen: **KneeHard** (the simplest one; KneeTorque adds a penalty term on the torque; the configs are on the Isaac workstation, locally only the videos). Walk videos on GCS: videos/walk-kneehard.mp4, videos/walk-kneetorque.mp4.
 
 > **CUSTOM 15-DOF DIRECT-JOINT HAND DEVELOPMENT — 2026-07-19 (AI + user; PLANNED PROJECT WORKSTREAM, ACTUATORS NOT YET LOCKED):**
 > - The project explicitly includes designing and open-sourcing its own five-finger hand with **3 independently actuated DoF per digit = 15 actuators/hand**; this is not merely an optional market comparison. For index through little finger: MCP ab/adduction, MCP flexion, PIP flexion; DIP may be passive/coupled. The thumb must instead implement CMC opposition/reposition, CMC/MCP flexion and IP flexion; do not copy the four-finger axes blindly. The preferred design has an actuator physically at each joint, not tendons, if a genuinely suitable commercial module exists.
@@ -18,27 +19,27 @@ Ultimo aggiornamento: 2026-09-21.
 > - **Next gate before choosing 30 motors:** buy/build one complete three-DoF finger or at minimum a two-flexion-joint finger, then measure sustained fingertip force (not stall), backlash/deadband, loaded position error, temperature over repeated grasps, impact survival and bus update rate with multiple nodes. Do not freeze CAD around SC09, XL330 or BCSA Micro before this test. A mixed XL330+SC09 hand would require separate protocol/UART handling even if both are powered near 5 V.
 
 > **HANDS-ON-WEHO DECISION + ELECTRONICS AUDIT FIXES — 2026-07-17 (AI + user):**
-> - **User decision: le mani RH56DFX-2L/R sono COLLEGATE fin dalla prima build sul singolo rail WEHO 24 V** (supera il "no hands" del lock 2026-07-12 qui sotto). Budget: Thor cap 130 W (5.4 A) + 2 mani a 2 A max pubblicati (96 W) + hub/interfacce ≈ 241 W vs 240 W nominali / OCP 12 A: fuori budget solo a picco totalmente simultaneo. Mitigazioni: abbassare nvpmodel Thor durante lavoro bimane sostenuto, scaglionare i comandi mano in software, bench-log tensione/corrente del rail con entrambe le mani in presa sotto pieno carico GPU. CAVEAT: il manuale di integrazione Inspire raccomanda di provisionare fino a 5 A/mano; se le misure si avvicinano a quel valore il WEHO e' sottodimensionato -> passare a RSD-300C-24 o Cincon CHB350.
-> - **PUNTO APERTO (decidere prima di cablare il ramo mani):** con le mani sul ramo NON commutato, l'e-stop NON toglie alimentazione alle mani (il vecchio rele' Omron dedicato era stato rimosso). Se le mani devono rilasciare su e-stop, aggiungere un piccolo rele' 24 V nel ramo mani 15 A pilotato dalla stessa catena e-stop.
-> - **Correzioni BOM applicate 2026-07-17 (audit AI, generatore `build_umanoide_tab.py` + rigenerazione):** (1) mani, adattatore Waveshare 2CH RS485, cavo LINDY 36940 e fusibile MINI 15 A mani riattivati qty>0; portafusibili uscita 24 V portati a qty 3 (Thor + mani + hub). (2) Nuova riga design `SEQ-PWR-01` (sequenza precarica + driver bobine): il timer Eaton e il selettore a chiave erano stati rimossi e la carrier board citata dalle note era qty0, quindi NIENTE implementava "precarica prima del main" ne' il blocco riavvio automatico; Thor GPIO non puo' pilotare bobine 24 V direttamente. Fino al rilascio: procedura manuale scritta a due interruttori, mai chiudere il LEV100 su bus scarico. (3) Soppressione bobine ripristinata: nuova riga attiva `1.5KE33CA` sulle bobine 24 V (portata a qty 3 nella stessa giornata: LEV100 + CIT precarica + CIT latch); la vecchia riga 1.5KE68CA (dimensionata per le bobine 48 V rimosse) marcata [REMOVED qty0]. (4) Nuova riga `[TO DESIGN qty0]` condensatore low-ESR >=22 uF all'uscita WEHO (richiesto dal datasheet, prima presente solo nel README). (5) Nuova riga `[ORDER WITH BATTERY qty0]` per il mate XT90-S lato robot (mancava; confermare genere connettore alla consegna del pacco). (6) Fasi corrette per rendere coerente il bring-up a banco: LEV100, CIT, WEHO + fusibile/portafusibile ingresso, fusibile Thor 10 A e portafusibili uscita -> Phase 1 (le bobine sono 24 V: senza WEHO a banco la catena e-stop non esiste). (7) Note obsolete corrette: ramo comando safety ora documentato come ramo 24 V dal rail WEHO (non "48 V con timer e chiave"); nota fusibile mani ora cita il rail WEHO (non CHB350); HAR-ARM-01 ora include coppia potenza mani 24 V + doppino RS485 nel trunk braccio.
-> - **TOTALI EXCEL RICALCOLATI E VERIFICATI 2026-07-17** (i totali "31.243,22 / 35,043 kg" scritti il 2026-07-12 erano lo snapshot di mezzogiorno CON mani qty1 e non erano mai stati aggiornati dopo il qty0 serale — errore di handoff): **Umanoide completo EUR 30.395,59; Fase 1 EUR 10.076,77 (di cui Thor 4.026,00); Fase 2 EUR 494,56; Fase 3 EUR 19.824,26; massa acquistata a bordo 33,082 kg** (attuatori 20,913 kg invariati, batteria 2,270 kg). Nota: la riga WEHO attiva ha ancora prezzo 0 in attesa di quotazione, quindi il totale sottostima di qualche decina di EUR.
-> - README aggiornato nella stessa sessione: mani nella prima build, link Phidgets corretto (prodid=1205, riga 17 puntava a 1096), righe SEQ-PWR-01/TVS/condensatore, checklist pre-power-up estesa. Le sezioni storiche piu' in basso in questo file ("Elettrico e sicurezza", vecchia nota CANable V2.0) sono marcate come superate.
-> - **SEQUENZA PRECARICA RISOLTA IN HARDWARE — 2026-07-17 (stessa sessione, decisione utente "componente semplice"):** niente PCB custom. Catena: `fusibile safety 24 V -> e-stop NC -> pulsante START Schneider XB5AA31 + rele' latch autoritenuta CIT A2K1CSQ24VDC1.6 (seconda unita' dello stesso SKU della precarica) -> bobina CIT precarica + timer ON-delay Omron H3YN-2 DC24 su zoccolo PYF08A-E -> contatto timer -> bobina LEV100`. START avvia precarica e ritardo; il timer chiude il LEV100 su bus gia' carico; il rilascio dell'e-stop NON riavvia mai il bus, solo START. Timer di marca deliberato: un timer che chiude in anticipo vanifica silenziosamente la precarica e puo' saldare il contattore principale. Taratura: misurare la tau reale di precarica osservando la telemetria VBUS dei RobStride a banco, impostare 4-5 tau (guida iniziale 10 s); Thor gata l'enable motori in software ma NON e' nella catena safety. `SEQ-PWR-01` in BOM e' ora il deliverable "disegno di cablaggio". Ingombri (verificare i disegni esatti prima del freeze CAD): latch 26.5 x 32 x 33.5 mm; timer+zoccolo circa 25 x 35 x 80 mm in piedi (o sdraiato); START foro pannello Ø22, circa 45 mm dietro pannello, accanto all'e-stop; massa aggiunta ~0.15 kg, costo ~EUR 66 netti (prezzi XB5AA31/H3YN/PYF08A da verificare all'ordine).
-> - **PIPELINE URDF + SCRIPT MIRROR — 2026-07-18:** l'utente modella in Onshape SOLO lato destro + catena centrale (export nel formato `~/Downloads/rl/`: urdf/rl.urdf + meshes STL). Nuovo script repo `mirror_urdf.py`: rinomina i 17 revolute con nomi semantici G1-style (mappa dentro lo script, identificata via FK), converte continuous->revolute con limiti G1 mode_11 sign-corretti + effort dal picco RobStride (caviglia virtuale 72/36 Nm PROVVISORI) + velocity PROVVISORIE, specchia i sottoalberi gamba (subtree part_42) e braccio (part_12, escluso ramo part_49/50) con matematica world-frame per i giunti di attraversamento e coniugazione D=diag(1,-1,1) all'interno, assi (-ax,ay,-az) => stesso comando = moto specchiato e limiti identici, inerzie con Ixy/Iyz flippati, mesh STL specchiate vere (flip y + winding, niente scale negativa), collision di primo giro su pelvi/torso/coscia/stinco/piede. Output `~/Downloads/rl_full/`. VERIFICATO: 30 revolute totali, simmetria 0.000 mm su tutte le coppie. DA FARE IN ONSHAPE: materiali/masse mancanti (export totale 3.63 kg vs ~15 attesi: tutti gli STEP importati - motori, mani, camera - hanno massa ~0; assegnare mass override da manuale), collision vere, conferma identita' part_42/49/50, limiti collo e velocity da datasheet.
-> - **FASI RIDEFINITE + POSSEDUTI + FORNITORI — 2026-07-19 (sera; SUPERA il meccanismo "colonna MS1" del bullet sotto):** l'utente ha chiesto che la milestone-1 SIA la Fase 1, non una colonna parallela. Fatto: **colonna MS1 eliminata; la colonna Phase ora segue l'ordine di costruzione reale**: Fase 1 = banco braccio destro + mano + kit caviglia + batteria/dual-source + catena safety + Thor; Fase 2 = gambe e locomozione (RS04/RS03, RS06 caviglia dedicati, cablaggio gambe, IMU); Fase 3 = completamento (braccio/mano sinistri, vita, collo, audio, mobile). Le righe che attraversavano le fasi sono state SDOPPIATE nel generatore (`ROW_SPLIT`: 5 righe motori braccio RIGHT/LEFT, BCCA4011 superiori 8/9, portafusibili MIDI 2/2/2, fusibile braccio 30A 1/1, CANable 1/2); correzioni fase per il resto via `PHASE_TO`. **POSSEDUTI (lab): Thor e ENTRAMBE le mani RH56DFX** — contati a EUR 0 con prezzo di riferimento in nota; Thor si usa SUBITO in Fase 1 (niente piano PC-only; Molex J74 + fusibile 10 A spostati in Fase 1). **FORNITORI (preferenza utente, CORRETTO in serata dopo obiezione giusta dell'utente):** il primo tentativo (cambiare solo la colonna fornitore lasciando articolo/link originali) era INCOERENTE ed e' stato annullato. Regola finale implementata: si cambia fornitore SOLO con un equivalente REALE verificato (articolo+SKU+link+fornitore insieme), altrimenti resta la fonte specialistica. **Swap verificati sul web 2026-07-19:** capicorda Klauke 704F5/703F5/101R5 → **Bürklin** (stessi SKU esatti, ordini 07F1391/07F1381/07F2090, link prodotto verificati); e-stop → **Schneider XB4BS8442 su RS Italia** (RS 7951306: stessa testa fungo Ø40 rosso twist-release 1NC, versione XB4 METALLICA della XB5AS8442 plastica — verificare blocco 1NC e prezzo all'ordine; aggiornati anche README/schema/SVG e MASSA_UNIT 0.070). **Secondo giro su input utente (stessa sera):** Belden → **Farnell 1891187**: il **9841NH e' la versione halogen-free/LSZH del 9841**, venduto AL METRO (ordinare 50 m; prezzo riga ancora quello della bobina Rapid, verificare il totale Farnell all'ordine); **K05 → Bürklin 05L2734** (stesso carrello dei capicorda; anche RS 398-2270); **cavo Schuko → Amazon generico** (commodity: qualsiasi H07RN-F 3G1.5 ≥3 m con spina Schuko, riferimento precedente Craft EHK22146 in nota). Doc sincronizzati (schema md+svg ora citano 9841NH). **Mantenuti deliberatamente (nessun equivalente sensato nei big store):** Nautica Illiano per i cavi 25/16/6 mm² (RS vende il super-flex H01N2-D solo in bobine 50-100 m; Nautica vende al metro) e Accu per il controdado M8 SINISTRO (nicchia; verificare se il kit puntoni AliExpress li include gia'). NOTA DIN 439: le due righe controdadi NON sono un duplicato — una e' filetto DESTRO (per i KARM), una SINISTRO (per i KALM): i puntoni sono tenditori RH+LH; il filetto sinistro e' merce di nicchia (verificare se il kit puntoni AliExpress li include gia'). Nuovi totali = spesa residua: completo 10.264,90 / F1 4.008,57 / F2 3.997,95 / F3 2.258,38.
-> - **MS1 = PRIMO ACQUISTO (milestone definita con l'utente) — 2026-07-19 [SUPERATO dal bullet sopra: colonna MS1 rimossa, ora Fase 1]:** primo banco fisico: **1 braccio destro** (motori: RS06 x3 + RS00 x4; i 2 RS06 faranno anche da motori caviglia per le prove — NIENTE RS06 caviglia dedicati e NIENTE RS04), **kit leveraggio 1 caviglia** (shoulder screws 45/16, dadi M6, puntoni 140/40, KARM/KALM, controdadi DIN439), **mano destra RH56DFX-2R** + adattatore 2CH RS485 + LINDY 36940, **batteria P45B + caricatore + mate XT90** e **doppia alimentazione banco: batteria E rete INSIEME** — requisito nuovo: NON si mettono mai in parallelo diretto (l'RSP-3000 flotterebbe il pacco 13S senza controllo, back-feed reciproco) -> nuova riga BOM `[TO SELECT qty0] Dual-source 48 V OR-ing stage` (ideal-diode per ramo, classe LTC4357/LM5050, <=20 A per il banco braccio; INTERIM: scambiare la sorgente all'XT90-S, mai entrambe). Catena safety completa inclusa (e-stop/START/latch/timer/TVS/LEV100/precarica/PDU/fusibili). **Thor NON in MS1**: il banco braccio-fisso si comanda dal PC/workstation con 1 CANable Pro + adattatore debug RobStride (Thor serve solo per la mobilita'). Torso stampato e fissato al tavolo (viti/inserti/filamento non-BOM). D436 inclusa per dati teleop/training. Riga Seeed XT30(2+2) Power Separation Board ATTIVATA qty2 Fase 1 (giunzione power/CAN del daisy-chain braccio + sede terminazioni, finche' non esiste JBOX-CAN-01). **Implementazione: nuova colonna Excel `MS1 qty` (col U)** scritta dal generatore (lista MS1 in `build_umanoide_tab.py`): filtrare la colonna per la lista spesa esatta; le qty MS1 sono FRAZIONI delle qty riga (es. shoulder pitch/roll 2 di 4). **Totale MS1 prezzato: EUR 12.085,36 IVA incl.** (mano 8.099 = 67%; motori 1.298; resto ~2.688), + righe senza prezzo da quotare: igus KARM/KALM, caricatore (con batteria), WEHO, condensatore 22uF, OR-ing stage. GATE ORDINE ancora aperti prima di comprare: batteria (spedizione Italia/BMS/regen), igus KALM disponibilita', pinout GX12 mano DFX da confermare con Inspire, prezzi XB5AA31/H3YN/PYF08A. Totali complessivi aggiornati (separation board attivata): completo 30.489,23 / F1 10.170,41.
-> - **TELEOP META QUEST — MODE A SCELTO, HANDOFF AL WORKSTATION — 2026-07-19:** utente vuole teleoperare l'umanoide in Isaac Sim con un Meta Quest, stando lontano (guarda il workstation via AnyDesk, ha il Quest con se'). Decisione: **Mode A** = Quest come SOLO tracker, si guarda il viewport Isaac in 2D via AnyDesk (NON immersivo stereo in cuffia = Mode B/CloudXR, scartato). Fatto chiave: **AnyDesk NON trasporta il tracking del Quest** — le pose servono un percorso di rete separato (Tailscale overlay, oppure tunnel pubblico cloudflared/ngrok). Le pose sono minuscole (~72 Hz) e passano bene su internet; il difficile (video stereo verso la cuffia) non e' in questo design. Split di controllo obbligatorio per un umanoide: **gambe = policy RL autonoma comandata da thumbstick (vx,vy,yaw), NON puppet giunto-per-giunto** (la latenza uccide l'equilibrio); braccia (7/lato)/mani (RH56DFX 6 DOF/lato)/collo = teleop retargettato (latency-tolerant). Scritto `TELEOP_HANDOFF.md` (nel repo) per l'istanza AI sul workstation: architettura, piano a fasi (0 rete -> 1 pose che arrivano -> 2 braccia+grip semplice, gambe ferme -> 3 comando camminata -> 4 mani dexterous+collo), stack consigliato Open-TeleVision/Vuer (WebXR nel browser Quest, pose via WebRTC; usare sessione passthrough/immersive-ar cosi' l'operatore vede ancora lo schermo 2D AnyDesk), dex-retargeting per le mani Inspire (fase 4). Sezione "VERIFY LOCALLY" esplicita: versione Isaac/Isaac Lab e sua API IK, stato repo Open-TeleVision, interfaccia comando della walking policy — da confermare sul workstation, non dare per scontate da memoria. L'esecuzione la fa un'altra conversazione sul workstation; questa sessione Mac ha solo prodotto l'handoff. **ERGONOMIA — DUE SETUP, utente ancora indeciso (2026-07-19):** **A1 = Quest al collo**, testa fuori, guarda lo schermo AnyDesk esterno, solo pose in salita (piu' semplice per il bring-up); vincoli: sensore di prossimita' da disabilitare (nastro + auto-sleep off) o la sessione muore, posa cuffia = riferimento torso (niente head-tracking, niente head->collo), controller tracciati bene solo davanti al torso, calibrazione a timer. **A2 = Quest in testa normale + vista Isaac dentro la cuffia come PANNELLO 2D** (video mono via canale video-back dello stack teleop, NON stereo/CloudXR): questo e' cosa intende l'utente con "streammare lo schermo AnyDesk sul Quest" — si implementa facendo streammare allo stack il viewport Isaac su un pannello, NON facendo girare l'app AnyDesk sul Quest (finestra 2D e sessione immersive di tracking vanno in conflitto). A2 e' PREFERITO: recupera head-tracking (-> head->collo disponibile), FOV controller naturale (mani davanti al viso), niente problema prossimita'; costo = un video mono su internet verso la cuffia (latenza sulla vista tollerabile, le gambe sono autonome). RACCOMANDAZIONE nell'handoff: bring-up con A1 solo-pose (fasi 0-2), poi passare ad A2 aggiungendo lo stream viewport->pannello. Handoff `TELEOP_HANDOFF.md` aggiornato con entrambi.
-> - **CAVIGLIA: MAPPA TRASMISSIONE DIFFERENZIALE RICAVATA DAL CAD — 2026-07-19 (grande risultato):** scoperto che l'export Onshape contiene GIA' la geometria dei puntoni: le parti unite da Group mate hanno il frame all'origine globale e la mesh in coordinate globali, quindi le posizioni dei perni (shoulder screws) sono estraibili. Geometria reale estratta (gamba destra, mm): **manovella 47.75 (entrambi i motori, orizzontale a zero), puntoni 208.01 (sup) e 106.01 (inf) occhio-occhio, braccio pitch 47.75, semi-span roll 43.83, puntoni VERTICALI a zero pose con manovelle a 90° (trasmissione ottimale)**. Risolve la vecchia domanda BOM: la lunghezza AliExpress e' del CORPO, occhio-occhio = corpo + ~68 mm. Nuovo file `ankle_map.py` (IK/FK esatte con solve del loop chiuso, Jacobiano, inviluppo coppie, scan workspace; round-trip validato a precisione macchina) + `ANKLE_TRANSMISSION.md`. **Rapporti: pitch = -0.500 x (th1+th2) = 1:1; roll = -0.545 x (th2-th1) = 1.09:1.** Corsa motori per i limiti URDF: ±43° pitch, ±14° roll (dentro RS06). **DECISIONE CONFERMATA: NON simulare i puntoni come corpi** (URDF non fa loop chiusi, Isaac potrebbe ma e' fragile/lento e inutile); la mappa e' analitica e vive fuori dalla policy (deploy: policy (pitch,roll) -> ik() -> 2 RS06; feedback -> fk() -> osservazione). Quello che DEVE entrare in sim e' l'inviluppo coppie ACCOPPIATO.
-> - **CAVIGLIA — NUMERI CHIAVE 2026-07-19:** (1) **Coppie: pitch 72.0 Nm / roll 66.1 Nm puri a neutro, accoppiati come diamante `|t_pitch|/72 + |t_roll|/66 <= 1`** (non un box!). URDF corretto: effort roll era 36 Nm a occhio, il valore derivato e' **66 Nm** (era 1.8x troppo conservativo); pitch 72 era giusto. (2) **La coppia pitch DEGRADA in plantarflessione: 72 Nm a neutro -> 66.8 a -15° (toe-off tipico) -> 46.0 a -50°.** Il fabbisogno stimato in push-off a 45 kg e' ~67 Nm: **siamo esattamente al limite**, comodi a 35-40 kg, margine zero a 45 kg. NON toccare il CAD ora: misurare la domanda reale in Isaac (stessa filosofia del gate hip yaw); se satura, la correzione e' una **manovella piu' corta** (40 mm -> 86 Nm) al costo di velocita' caviglia e forza puntone (754 N -> 900 N, KARM-08 CL regge 1.7 kN breve). (3) **Continuo 22 Nm pitch / 20.2 roll**: implica CoM in stazionamento entro ~50 mm dall'asse caviglia, altrimenti problema termico (CoM a 90 mm chiederebbe 40 Nm continui) -> aggiungere termine di reward che tiene il CoP a meta' piede. (4) **ROD-END: allarme rientrato.** Disallineamento per-estremita' peggiore su tutto il workspace = **15.7°** (a roll max) contro i **35°** degli igus KARM/KALM-08 CL; il pitch costa ~0° (rotazione attorno al perno). Quindi il vecchio piano di limitare il roll a ±12° e le vie di upgrade spaziatori conici/ball-stud NON servono: ±15° di roll pieni sono OK. (5) Zero pose irraggiungibili e nessuna singolarita' nel range.
-> - **POLICY TRAINATA "SUPER ROTTA" — HANDOFF DEBUG AL PC ISAAC — 2026-07-19:** utente ha allenato una policy su `rl_full.urdf`, risultato rotto; causa non ancora isolata (mirroring? PD/reward/training-side? collision mancanti su braccia? velocity/effort provvisori?). Scritto `MIRROR_DEBUG_HANDOFF.md` (repo + copiato in `~/Downloads/rl_full/`, dentro il nuovo zip `rl_full_isaac.zip`) per l'istanza AI sul PC Isaac: riassume cosa e' GIA' verificato indipendentemente (simmetria 0.000 mm su 13 coppie, convenzione assi "stesso comando = moto specchiato + limiti identici", COM y=0.1mm, catena connessa) cosi' da non ri-derivare tutto da zero, elenca i valori PROVVISORI reali sospetti (tutte le velocity, sforzo caviglia 72/36 Nm, limiti collo, hip yaw 36 Nm RS06 vs gate RS03), i gap noti (niente collision su braccia/polsi, collision piedi = mesh visiva intera non primitiva) e un ordine di debug a step con i 4 test di accettazione di `ISAAC_HANDOFF.md`. Messaggio chiave per l'altra istanza: se i test 1-2 passano ma solo la policy allenata e' rotta, il problema e' quasi certamente reward/PD/action-space lato Isaac Lab, NON il mirroring — non ripartire dall'audit geometria gia' verificato. `mirror_urdf.py` copiato nello zip cosi' l'altra istanza ha il sorgente diretto senza dover chiedere copia-incolla.
-> - **URDF COMPLETO PRONTO PER ISAAC + SECONDO AI SUL PC ISAAC — 2026-07-18 (pomeriggio):** `mirror_urdf.py` ora e' completamente automatico e robusto: (1) auto-match dei giunti per POSIZIONE mondo (REF_POS, tolleranza 40 mm — immune a rinumerazioni/rinomini dell'exporter); (2) auto-derivazione dei sottoalberi da specchiare con esclusione dei rami centrali (Thor/WEHO sotto lo statore spalla); (3) AUTO-RIPARAZIONE gamba appesa: l'exporter Onshape perde un edge dei Group mate (il CAD e' corretto!) e appende la gamba al mondo con catena invertita — lo script la ri-radica (pitch->roll->yaw) e la riaggancia alla pelvi dalle pose mondo preservate, con warning; (4) masse iniettate per token nel nome (rs04/rs03/rs06/rs00/rs05/rh56/d435/battery/thor/weho/eaton/lev100/imu — i rename utente in Onshape hanno identificato tutta l'elettronica in CAD); l'override di massa del pannello Properties Onshape NON viene esportato: mai fidarsi, le masse le mette lo script; (5) floor di sicurezza 0.05 kg sui link mobili <5 g; (6) collisioni token-based (15 corpi: pelvi/ribcage/piedi/gamba). VERIFICATO: 30 revolute, simmetria 0.000 mm su 13 coppie, massa totale 32.25 kg, catena anca corretta. Output `~/Downloads/rl_full/` + `ISAAC_HANDOFF.md` (anche nel repo) + zip `rl_full_isaac.zip` per il PC Isaac (secondo AI attivo li', monitorato via AnyDesk; le sessioni NON si trasferiscono tra macchine: l'handoff passa da MEMORY.md + ISAAC_HANDOFF.md). Divisione dei ruoli: Mac = CAD/BOM/genera rl_full; PC Isaac = import USD + Isaac Lab + training. Il AI Isaac NON deve ripulire il raw rl.urdf (meta' robot, masse placeholder): usare SOLO rl_full.
-> - **AUDIT HIP YAW RS06-vs-RS03 — 2026-07-18 (richiesto dall'utente; CAD monta RS06, mappa bloccata dice RS03):** asse verticale ≈ zero coppia gravitazionale, conta solo il picco dinamico (girata + attrito pivot piede). Stime memoria: ~28 Nm a massa classe G1, ~36 Nm a 45 kg girata aggressiva = ESATTAMENTE il picco RS06 -> zero margine (motivo dell'upgrade RS03 del 2026-06-21: 60 Nm, +0.259 kg e +Ø10 mm cad.). DECISIONE RIMANDATA AL SIM GATE (ora possibile con Isaac): URDF con effort 36 Nm (RS06 come da CAD); loggare la coppia hip-yaw in curva a ~32+ kg; se satura >2-5% dei passi ai turn-rate target -> RS03 (ordine + CAD Ø98); altrimenti si declassa la riga BOM a RS06. Nota gate scritta anche nella riga BOM RS03 hip yaw. Il gate BLOCCA l'ordine motori gambe Fase 1.
-> - **MANUALI MANI INSPIRE SCARICATI E CONNESSIONE VERIFICATA — 2026-07-18:** nuova cartella `hands/` con 5 PDF ufficiali: RH56 SERIES USER MANUAL V1.0.9 (2024-01, pinout + protocollo registri/MODBUS), DEXTEROUS HANDS INSTRUCTIONS, PC INSTRUCTIONS, RH56DFTP User Manual V1.0.0 (riferimento generazione recente) e Selection Guide 2026-02. Fatti verificati: **RH56DFX = RS485/CAN, DC 24 V ±10%, quiescente 0.09 A, PICCO 2 A (conferma ufficiale DFX del budget WEHO; il "5 A" era solo raccomandazione di provisioning), 540 g.** Interfaccia dal manuale serie: UN solo connettore aviation **GX12 5 pin** per mano che porta potenza e RS485 insieme (1 GND, 2 VCC 24 V, 3 A+, 4 B−, 5 GND); RS485 default 115200 bps 8N1, protocollo registri 0xEB90 oppure MODBUS RTU, HAND_ID per mano (assegnare sx=1, dx=2), fino a 254 mani per bus. GATE: confermare all'ordine che il connettore/pinout DFX sia invariato (manuale DFX dedicato non pubblicato — chiederlo a Inspire). Schema elettrico (md+svg), note BOM mani e adattatore RS485 aggiornati con questi dati.
-> - **SCHEMA ELETTRICO COMPLETO 2026-07-17:** nuovo deliverable `ELECTRICAL_SCHEME.md` (schema scritto: sorgenti, distribuzione 48 V con i 5 rami motore e i 30 attuatori, rail 24 V, catena safety, port map Thor completa, regole CAN, gate pre-cablaggio) + disegno `electrical_scheme.svg` / `electrical_scheme.png` (3 zone: POWER 48 V, SAFETY CHAIN 24 V, DATA). Aggiornare entrambi insieme alla BOM quando cambiano componenti o topologia. Totali dopo TVS qty3: EUR 30.477,03 / Fase 1 10.158,21 / massa 33,233 kg.
+> - **User decision: the RH56DFX-2L/R hands are CONNECTED from the very first build on the single WEHO 24 V rail** (supersedes the "no hands" of the 2026-07-12 lock below). Budget: Thor cap 130 W (5.4 A) + 2 hands at 2 A max published (96 W) + hub/interfaces ≈ 241 W vs 240 W rated / OCP 12 A: over budget only at a fully simultaneous peak. Mitigations: lower the Thor nvpmodel during sustained bimanual work, stagger the hand commands in software, bench-log the rail voltage/current with both hands gripping under full GPU load. CAVEAT: the Inspire integration manual recommends provisioning up to 5 A/hand; if the measurements get close to that value the WEHO is undersized -> switch to RSD-300C-24 or Cincon CHB350.
+> - **OPEN POINT (decide before wiring the hands branch):** with the hands on the NON-switched branch, the e-stop does NOT remove power from the hands (the old dedicated Omron relay had been removed). If the hands must release on e-stop, add a small 24 V relay in the 15 A hands branch driven by the same e-stop chain.
+> - **BOM corrections applied 2026-07-17 (AI audit, generator `build_umanoide_tab.py` + regeneration):** (1) hands, Waveshare 2CH RS485 adapter, LINDY 36940 cable and hands MINI 15 A fuse reactivated qty>0; 24 V output fuse holders raised to qty 3 (Thor + hands + hub). (2) New design row `SEQ-PWR-01` (precharge sequence + coil drivers): the Eaton timer and the key selector switch had been removed and the carrier board cited in the notes was qty0, so NOTHING implemented "precharge before main" nor the automatic-restart lockout; Thor GPIO cannot drive 24 V coils directly. Until release: written manual two-switch procedure, never close the LEV100 on a discharged bus. (3) Coil suppression restored: new active row `1.5KE33CA` on the 24 V coils (raised to qty 3 on the same day: LEV100 + CIT precharge + CIT latch); the old 1.5KE68CA row (sized for the removed 48 V coils) marked [REMOVED qty0]. (4) New row `[TO DESIGN qty0]` low-ESR capacitor >=22 uF at the WEHO output (required by the datasheet, previously present only in the README). (5) New row `[ORDER WITH BATTERY qty0]` for the robot-side XT90-S mate (it was missing; confirm the connector gender on delivery of the pack). (6) Phases corrected to make the bench bring-up consistent: LEV100, CIT, WEHO + input fuse/fuse holder, Thor 10 A fuse and output fuse holders -> Phase 1 (the coils are 24 V: without the WEHO on the bench the e-stop chain does not exist). (7) Obsolete notes corrected: safety control branch now documented as a 24 V branch from the WEHO rail (not "48 V with timer and key"); hands fuse note now cites the WEHO rail (not CHB350); HAR-ARM-01 now includes the 24 V hands power pair + RS485 twisted pair in the arm trunk.
+> - **EXCEL TOTALS RECALCULATED AND VERIFIED 2026-07-17** (the totals "31.243,22 / 35,043 kg" written on 2026-07-12 were the midday snapshot WITH hands qty1 and had never been updated after the evening qty0 — handoff error): **Complete humanoid EUR 30.395,59; Phase 1 EUR 10.076,77 (of which Thor 4.026,00); Phase 2 EUR 494,56; Phase 3 EUR 19.824,26; purchased on-board mass 33,082 kg** (actuators 20,913 kg unchanged, battery 2,270 kg). Note: the active WEHO row still has price 0 pending a quotation, so the total underestimates by a few tens of EUR.
+> - README updated in the same session: hands in the first build, Phidgets link corrected (prodid=1205, row 17 pointed to 1096), SEQ-PWR-01/TVS/capacitor rows, pre-power-up checklist extended. The historical sections further down in this file ("Electrical and safety", old CANable V2.0 note) are marked as superseded.
+> - **PRECHARGE SEQUENCE SOLVED IN HARDWARE — 2026-07-17 (same session, user decision "simple component"):** no custom PCB. Chain: `24 V safety fuse -> e-stop NC -> Schneider XB5AA31 START pushbutton + CIT A2K1CSQ24VDC1.6 self-holding latch relay (second unit of the same SKU as the precharge) -> CIT precharge coil + Omron H3YN-2 DC24 ON-delay timer on PYF08A-E socket -> timer contact -> LEV100 coil`. START starts the precharge and the delay; the timer closes the LEV100 on an already charged bus; releasing the e-stop NEVER restarts the bus, only START does. Brand-name timer on purpose: a timer that closes early silently defeats the precharge and can weld the main contactor. Calibration: measure the real precharge tau by watching the RobStride VBUS telemetry on the bench, set 4-5 tau (initial guideline 10 s); Thor gates the motor enable in software but is NOT in the safety chain. `SEQ-PWR-01` in the BOM is now the "wiring drawing" deliverable. Envelopes (verify the exact drawings before the CAD freeze): latch 26.5 x 32 x 33.5 mm; timer+socket about 25 x 35 x 80 mm standing (or lying down); START panel hole Ø22, about 45 mm behind the panel, next to the e-stop; added mass ~0.15 kg, cost ~EUR 66 net (XB5AA31/H3YN/PYF08A prices to be verified at order).
+> - **URDF PIPELINE + MIRROR SCRIPT — 2026-07-18:** the user models in Onshape ONLY the right side + the central chain (export in the `~/Downloads/rl/` format: urdf/rl.urdf + STL meshes). New repo script `mirror_urdf.py`: renames the 17 revolute joints with G1-style semantic names (map inside the script, identified via FK), converts continuous->revolute with sign-corrected G1 mode_11 limits + effort from the RobStride peak (virtual ankle 72/36 Nm PROVISIONAL) + PROVISIONAL velocities, mirrors the leg (subtree part_42) and arm (part_12, excluding the part_49/50 branch) subtrees with world-frame math for the crossing joints and conjugation D=diag(1,-1,1) inside, axes (-ax,ay,-az) => same command = mirrored motion and identical limits, inertias with Ixy/Iyz flipped, truly mirrored STL meshes (flip y + winding, no negative scale), first-pass collisions on pelvis/torso/thigh/shin/foot. Output `~/Downloads/rl_full/`. VERIFIED: 30 revolute joints in total, symmetry 0.000 mm on all pairs. TO DO IN ONSHAPE: missing materials/masses (total export 3.63 kg vs ~15 expected: all the imported STEPs - motors, hands, camera - have mass ~0; assign mass overrides from the manuals), real collisions, confirm the identity of part_42/49/50, neck limits and velocities from the datasheets.
+> - **PHASES REDEFINED + OWNED ITEMS + SUPPLIERS — 2026-07-19 (evening; SUPERSEDES the "MS1 column" mechanism of the bullet below):** the user asked that milestone-1 BE Phase 1, not a parallel column. Done: **MS1 column removed; the Phase column now follows the real build order**: Phase 1 = right arm bench + hand + ankle kit + battery/dual-source + safety chain + Thor; Phase 2 = legs and locomotion (RS04/RS03, dedicated ankle RS06, leg wiring, IMU); Phase 3 = completion (left arm/hand, waist, neck, audio, mobile). The rows that spanned several phases have been SPLIT in the generator (`ROW_SPLIT`: 5 arm motor rows RIGHT/LEFT, upper BCCA4011 8/9, MIDI fuse holders 2/2/2, arm fuse 30A 1/1, CANable 1/2); phase corrections for the rest via `PHASE_TO`. **OWNED (lab): Thor and BOTH RH56DFX hands** — counted at EUR 0 with the reference price in a note; Thor is used RIGHT AWAY in Phase 1 (no PC-only plan; Molex J74 + 10 A fuse moved to Phase 1). **SUPPLIERS (user preference, CORRECTED in the evening after a fair objection by the user):** the first attempt (changing only the supplier column while leaving the original item/link) was INCONSISTENT and has been reverted. Final rule implemented: the supplier is changed ONLY with a verified REAL equivalent (item+SKU+link+supplier together), otherwise the specialist source stays. **Swaps verified on the web 2026-07-19:** Klauke 704F5/703F5/101R5 cable lugs → **Bürklin** (same exact SKUs, order numbers 07F1391/07F1381/07F2090, product links verified); e-stop → **Schneider XB4BS8442 on RS Italia** (RS 7951306: same Ø40 red mushroom head twist-release 1NC, METAL XB4 version of the plastic XB5AS8442 — verify the 1NC block and the price at order; README/schematic/SVG and MASSA_UNIT 0.070 updated too). **Second round on user input (same evening):** Belden → **Farnell 1891187**: the **9841NH is the halogen-free/LSZH version of the 9841**, sold BY THE METRE (order 50 m; row price still that of the Rapid reel, verify the Farnell total at order); **K05 → Bürklin 05L2734** (same cart as the cable lugs; also RS 398-2270); **Schuko cable → generic Amazon** (commodity: any H07RN-F 3G1.5 ≥3 m with Schuko plug, previous reference Craft EHK22146 in a note). Docs synchronized (schematic md+svg now cite 9841NH). **Deliberately kept (no sensible equivalent in the big stores):** Nautica Illiano for the 25/16/6 mm² cables (RS sells the super-flex H01N2-D only in 50-100 m reels; Nautica sells by the metre) and Accu for the LEFT-HAND M8 lock nut (niche; verify whether the AliExpress pushrod kit already includes them). NOTE DIN 439: the two lock nut rows are NOT a duplicate — one is RIGHT-HAND thread (for the KARM), one LEFT-HAND (for the KALM): the pushrods are RH+LH turnbuckles; the left-hand thread is a niche item (verify whether the AliExpress pushrod kit already includes them). New totals = remaining spend: complete 10.264,90 / F1 4.008,57 / F2 3.997,95 / F3 2.258,38.
+> - **MS1 = FIRST PURCHASE (milestone defined with the user) — 2026-07-19 [SUPERSEDED by the bullet above: MS1 column removed, now Phase 1]:** first physical bench: **1 right arm** (motors: RS06 x3 + RS00 x4; the 2 RS06 will also act as ankle motors for the tests — NO dedicated ankle RS06 and NO RS04), **linkage kit for 1 ankle** (shoulder screws 45/16, M6 nuts, pushrods 140/40, KARM/KALM, DIN439 lock nuts), **right hand RH56DFX-2R** + 2CH RS485 adapter + LINDY 36940, **P45B battery + charger + XT90 mate** and **dual bench power supply: battery AND mains TOGETHER** — new requirement: they are NEVER put in direct parallel (the RSP-3000 would float the 13S pack without control, mutual back-feed) -> new BOM row `[TO SELECT qty0] Dual-source 48 V OR-ing stage` (ideal-diode per branch, LTC4357/LM5050 class, <=20 A for the arm bench; INTERIM: swap the source at the XT90-S, never both). Complete safety chain included (e-stop/START/latch/timer/TVS/LEV100/precharge/PDU/fuses). **Thor NOT in MS1**: the fixed-arm bench is commanded from the PC/workstation with 1 CANable Pro + RobStride debug adapter (Thor is needed only for mobility). Torso printed and fixed to the table (screws/inserts/filament non-BOM). D436 included for teleop/training data. Seeed XT30(2+2) Power Separation Board row ACTIVATED qty2 Phase 1 (power/CAN junction of the arm daisy-chain + location for the terminations, until JBOX-CAN-01 exists). **Implementation: new Excel column `MS1 qty` (col U)** written by the generator (MS1 list in `build_umanoide_tab.py`): filter the column to get the exact shopping list; the MS1 qty are FRACTIONS of the row qty (e.g. shoulder pitch/roll 2 of 4). **Priced MS1 total: EUR 12.085,36 VAT incl.** (hand 8.099 = 67%; motors 1.298; rest ~2.688), + unpriced rows to be quoted: igus KARM/KALM, charger (with battery), WEHO, 22uF capacitor, OR-ing stage. ORDER GATES still open before buying: battery (shipping to Italy/BMS/regen), igus KALM availability, DFX hand GX12 pinout to be confirmed with Inspire, XB5AA31/H3YN/PYF08A prices. Overall totals updated (separation board activated): complete 30.489,23 / F1 10.170,41.
+> - **META QUEST TELEOP — MODE A CHOSEN, HANDOFF TO THE WORKSTATION — 2026-07-19:** the user wants to teleoperate the humanoid in Isaac Sim with a Meta Quest while being far away (he watches the workstation via AnyDesk and has the Quest with him). Decision: **Mode A** = Quest as tracker ONLY, the Isaac viewport is watched in 2D via AnyDesk (NOT immersive stereo in the headset = Mode B/CloudXR, discarded). Key fact: **AnyDesk does NOT carry the Quest tracking** — the poses need a separate network path (Tailscale overlay, or a public cloudflared/ngrok tunnel). The poses are tiny (~72 Hz) and travel well over the internet; the hard part (stereo video to the headset) is not in this design. Mandatory control split for a humanoid: **legs = autonomous RL policy commanded by thumbstick (vx,vy,yaw), NOT a joint-by-joint puppet** (latency kills balance); arms (7/side)/hands (RH56DFX 6 DOF/side)/neck = retargeted teleop (latency-tolerant). Wrote `TELEOP_HANDOFF.md` (in the repo) for the AI session on the workstation: architecture, phased plan (0 network -> 1 poses arriving -> 2 arms+simple grip, legs still -> 3 walking command -> 4 dexterous hands+neck), recommended stack Open-TeleVision/Vuer (WebXR in the Quest browser, poses via WebRTC; use a passthrough/immersive-ar session so that the operator still sees the 2D AnyDesk screen), dex-retargeting for the Inspire hands (phase 4). Explicit "VERIFY LOCALLY" section: Isaac/Isaac Lab version and its IK API, state of the Open-TeleVision repo, command interface of the walking policy — to be confirmed on the workstation, not to be taken for granted from memory. The execution is done by another conversation on the workstation; this Mac session only produced the handoff. **ERGONOMICS — TWO SETUPS, user still undecided (2026-07-19):** **A1 = Quest around the neck**, head out, watching the external AnyDesk screen, poses uplink only (simpler for the bring-up); constraints: proximity sensor to be disabled (tape + auto-sleep off) or the session dies, headset pose = torso reference (no head-tracking, no head->neck), controllers tracked well only in front of the torso, timer-based calibration. **A2 = Quest worn normally on the head + Isaac view inside the headset as a 2D PANEL** (mono video via the video-back channel of the teleop stack, NOT stereo/CloudXR): this is what the user means by "streaming the AnyDesk screen to the Quest" — it is implemented by having the stack stream the Isaac viewport onto a panel, NOT by running the AnyDesk app on the Quest (a 2D window and an immersive tracking session conflict). A2 is PREFERRED: it recovers head-tracking (-> head->neck available), natural controller FOV (hands in front of the face), no proximity problem; cost = one mono video over the internet to the headset (latency on the view is tolerable, the legs are autonomous). RECOMMENDATION in the handoff: bring-up with A1 poses-only (phases 0-2), then move to A2 by adding the viewport->panel stream. Handoff `TELEOP_HANDOFF.md` updated with both.
+> - **ANKLE: DIFFERENTIAL TRANSMISSION MAP DERIVED FROM THE CAD — 2026-07-19 (major result):** discovered that the Onshape export ALREADY contains the pushrod geometry: the parts joined by a Group mate have their frame at the global origin and their mesh in global coordinates, so the positions of the pins (shoulder screws) can be extracted. Real geometry extracted (right leg, mm): **crank 47.75 (both motors, horizontal at zero), pushrods 208.01 (upper) and 106.01 (lower) eye-to-eye, pitch arm 47.75, roll semi-span 43.83, pushrods VERTICAL at zero pose with cranks at 90° (optimal transmission)**. This resolves the old BOM question: the AliExpress length is that of the BODY, eye-to-eye = body + ~68 mm. New file `ankle_map.py` (exact IK/FK with closed-loop solve, Jacobian, torque envelope, workspace scan; round-trip validated to machine precision) + `ANKLE_TRANSMISSION.md`. **Ratios: pitch = -0.500 x (th1+th2) = 1:1; roll = -0.545 x (th2-th1) = 1.09:1.** Motor travel for the URDF limits: ±43° pitch, ±14° roll (within RS06). **DECISION CONFIRMED: do NOT simulate the pushrods as bodies** (URDF does not do closed loops, Isaac could but it is fragile/slow and pointless); the map is analytical and lives outside the policy (deploy: policy (pitch,roll) -> ik() -> 2 RS06; feedback -> fk() -> observation). What MUST go into the sim is the COUPLED torque envelope.
+> - **ANKLE — KEY NUMBERS 2026-07-19:** (1) **Torques: pitch 72.0 Nm / roll 66.1 Nm pure at neutral, coupled as a diamond `|t_pitch|/72 + |t_roll|/66 <= 1`** (not a box!). URDF corrected: the roll effort was 36 Nm by eye, the derived value is **66 Nm** (it was 1.8x too conservative); pitch 72 was right. (2) **The pitch torque DEGRADES in plantarflexion: 72 Nm at neutral -> 66.8 at -15° (typical toe-off) -> 46.0 at -50°.** The estimated requirement in push-off at 45 kg is ~67 Nm: **we are exactly at the limit**, comfortable at 35-40 kg, zero margin at 45 kg. Do NOT touch the CAD now: measure the real demand in Isaac (same philosophy as the hip yaw gate); if it saturates, the fix is a **shorter crank** (40 mm -> 86 Nm) at the cost of ankle speed and pushrod force (754 N -> 900 N, KARM-08 CL withstands 1.7 kN short-term). (3) **Continuous 22 Nm pitch / 20.2 roll**: implies the CoM while standing within ~50 mm of the ankle axis, otherwise a thermal problem (CoM at 90 mm would require 40 Nm continuous) -> add a reward term that keeps the CoP at mid-foot. (4) **ROD-END: alarm cleared.** Worst per-end misalignment over the whole workspace = **15.7°** (at max roll) versus the **35°** of the igus KARM/KALM-08 CL; pitch costs ~0° (rotation about the pin). So the old plan of limiting roll to ±12° and the conical-spacer/ball-stud upgrade paths are NOT needed: the full ±15° of roll are OK. (5) Zero unreachable poses and no singularity in the range.
+> - **TRAINED POLICY "SUPER BROKEN" — DEBUG HANDOFF TO THE ISAAC PC — 2026-07-19:** the user trained a policy on `rl_full.urdf`, result broken; cause not yet isolated (mirroring? PD/reward/training-side? missing collisions on the arms? provisional velocity/effort?). Wrote `MIRROR_DEBUG_HANDOFF.md` (repo + copied into `~/Downloads/rl_full/`, inside the new zip `rl_full_isaac.zip`) for the AI session on the Isaac PC: it summarizes what has ALREADY been verified independently (symmetry 0.000 mm on 13 pairs, axis convention "same command = mirrored motion + identical limits", COM y=0.1mm, connected chain) so as not to re-derive everything from scratch, lists the real suspect PROVISIONAL values (all the velocities, ankle effort 72/36 Nm, neck limits, hip yaw 36 Nm RS06 vs RS03 gate), the known gaps (no collisions on arms/wrists, foot collisions = full visual mesh, not a primitive) and a step-by-step debug order with the 4 acceptance tests of `ISAAC_HANDOFF.md`. Key message for the other session: if tests 1-2 pass but only the trained policy is broken, the problem is almost certainly reward/PD/action-space on the Isaac Lab side, NOT the mirroring — do not restart from the already verified geometry audit. `mirror_urdf.py` copied into the zip so that the other session has the source directly without having to ask for copy-paste.
+> - **COMPLETE URDF READY FOR ISAAC + SECOND AI SESSION ON THE ISAAC PC — 2026-07-18 (afternoon):** `mirror_urdf.py` is now fully automatic and robust: (1) auto-match of the joints by world POSITION (REF_POS, tolerance 40 mm — immune to renumbering/renaming by the exporter); (2) auto-derivation of the subtrees to be mirrored, excluding the central branches (Thor/WEHO under the shoulder stator); (3) AUTO-REPAIR of the hung leg: the Onshape exporter loses an edge of the Group mates (the CAD is correct!) and hangs the leg from the world with an inverted chain — the script re-roots it (pitch->roll->yaw) and re-attaches it to the pelvis from the preserved world poses, with a warning; (4) masses injected by token in the name (rs04/rs03/rs06/rs00/rs05/rh56/d435/battery/thor/weho/eaton/lev100/imu — the user's renames in Onshape identified all the electronics in the CAD); the mass override of the Onshape Properties panel is NOT exported: never trust it, the script sets the masses; (5) safety floor of 0.05 kg on moving links <5 g; (6) token-based collisions (15 bodies: pelvis/ribcage/feet/leg). VERIFIED: 30 revolute, symmetry 0.000 mm on 13 pairs, total mass 32.25 kg, hip chain correct. Output `~/Downloads/rl_full/` + `ISAAC_HANDOFF.md` (also in the repo) + zip `rl_full_isaac.zip` for the Isaac PC (a second AI session active there, monitored via AnyDesk; sessions do NOT transfer between machines: the handoff goes through MEMORY.md + ISAAC_HANDOFF.md). Division of roles: Mac = CAD/BOM/generates rl_full; Isaac PC = USD import + Isaac Lab + training. The Isaac AI session must NOT clean up the raw rl.urdf (half robot, placeholder masses): use ONLY rl_full.
+> - **HIP YAW AUDIT RS06-vs-RS03 — 2026-07-18 (requested by the user; the CAD mounts RS06, the locked map says RS03):** vertical axis ≈ zero gravitational torque, only the dynamic peak matters (turning + foot pivot friction). Estimates in memory: ~28 Nm at G1-class mass, ~36 Nm at 45 kg in an aggressive turn = EXACTLY the RS06 peak -> zero margin (reason for the RS03 upgrade of 2026-06-21: 60 Nm, +0.259 kg and +Ø10 mm each). DECISION DEFERRED TO THE SIM GATE (now possible with Isaac): URDF with effort 36 Nm (RS06 as per CAD); log the hip-yaw torque while turning at ~32+ kg; if it saturates >2-5% of the steps at the target turn rates -> RS03 (order + CAD Ø98); otherwise the BOM row is downgraded to RS06. Gate note also written in the RS03 hip yaw BOM row. The gate BLOCKS the Phase 1 leg motor order.
+> - **INSPIRE HAND MANUALS DOWNLOADED AND CONNECTION VERIFIED — 2026-07-18:** new folder `hands/` with 5 official PDFs: RH56 SERIES USER MANUAL V1.0.9 (2024-01, pinout + register/MODBUS protocol), DEXTEROUS HANDS INSTRUCTIONS, PC INSTRUCTIONS, RH56DFTP User Manual V1.0.0 (recent-generation reference) and Selection Guide 2026-02. Verified facts: **RH56DFX = RS485/CAN, DC 24 V ±10%, quiescent 0.09 A, PEAK 2 A (official DFX confirmation of the WEHO budget; the "5 A" was only a provisioning recommendation), 540 g.** Interface from the series manual: ONE single **GX12 5 pin** aviation connector per hand carrying power and RS485 together (1 GND, 2 VCC 24 V, 3 A+, 4 B−, 5 GND); RS485 default 115200 bps 8N1, register protocol 0xEB90 or MODBUS RTU, HAND_ID per hand (assign left=1, right=2), up to 254 hands per bus. GATE: confirm at order time that the DFX connector/pinout is unchanged (dedicated DFX manual not published — ask Inspire for it). Electrical scheme (md+svg), hand BOM notes and RS485 adapter updated with these data.
+> - **COMPLETE ELECTRICAL SCHEME 2026-07-17:** new deliverable `ELECTRICAL_SCHEME.md` (written scheme: sources, 48 V distribution with the 5 motor branches and the 30 actuators, 24 V rail, safety chain, complete Thor port map, CAN rules, pre-wiring gates) + drawing `electrical_scheme.svg` / `electrical_scheme.png` (3 zones: POWER 48 V, SAFETY CHAIN 24 V, DATA). Update both together with the BOM whenever components or topology change. Totals after TVS qty3: EUR 30.477,03 / Phase 1 10.158,21 / mass 33,233 kg.
 
-> **CURRENT POWER / PACKAGING LOCK — 2026-07-12 (AI + user):** [AGGIORNATO 2026-07-17: le mani sono ora COLLEGATE al rail WEHO per decisione utente — vedi blocco sopra; resta valido tutto il resto.] The active first mobile walking configuration is **no hands** and uses one `WEHO WH-C482410` sealed non-isolated 48 V -> 24 V, 10 A, 240 W converter (`74 x 74 x 32 mm`, `0.300 kg`, manufacturer-direct link: <https://www.wehopower.com/product/48v-to-24v-10a-240w-dc-to-dc-converter>). It powers Thor capped to 130 W, the powered USB hub and small interfaces only. It does **not** have enough verified power margin for Thor plus two RH56DFX hands. Bench validation is mandatory: Thor boot transient, sustained GPU load, converter thermal rise, 24 V ripple and EMI. WEHO requires an external low-ESR capacitor >=22 uF at its output; have an electrical engineer select/mount it at the converter output.
+> **CURRENT POWER / PACKAGING LOCK — 2026-07-12 (AI + user):** [UPDATED 2026-07-17: the hands are now CONNECTED to the WEHO rail by user decision — see block above; everything else remains valid.] The active first mobile walking configuration is **no hands** and uses one `WEHO WH-C482410` sealed non-isolated 48 V -> 24 V, 10 A, 240 W converter (`74 x 74 x 32 mm`, `0.300 kg`, manufacturer-direct link: <https://www.wehopower.com/product/48v-to-24v-10a-240w-dc-to-dc-converter>). It powers Thor capped to 130 W, the powered USB hub and small interfaces only. It does **not** have enough verified power margin for Thor plus two RH56DFX hands. Bench validation is mandatory: Thor boot transient, sustained GPU load, converter thermal rise, 24 V ripple and EMI. WEHO requires an external low-ESR capacitor >=22 uF at its output; have an electrical engineer select/mount it at the converter output.
 >
-> - [SUPERATO 2026-07-17: mani, scheda dual-RS485 e cavo USB-C-B sono di nuovo ATTIVI qty1 sul rail WEHO — vedi blocco in testa.] Hands `RH56DFX-2L/R`, Waveshare dual-RS485 board and its USB-C-to-B cable were **deferred qty0** in the BOM on 2026-07-12.
+> - [SUPERSEDED 2026-07-17: hands, dual-RS485 board and USB-C-B cable are ACTIVE again qty1 on the WEHO rail — see block at the top.] Hands `RH56DFX-2L/R`, Waveshare dual-RS485 board and its USB-C-to-B cable were **deferred qty0** in the BOM on 2026-07-12.
 > - `Cincon CHB350-48S24` + `UHG-PWR-001` are **qty0 alternatives**, not active: very compact but require a properly designed/released carrier PCB. The off-the-shelf no-custom-PCB fallback is `MEAN WELL RSD-300C-24`, `216 x 96.5 x 40 mm`, `1.19 kg`; it supports later hands but has a severe rear-torso packaging penalty. Do not widen the torso for it unless hands are required.
 > - Front electrical bay `100 x 100 x 90 mm`: reserve it only for the 48 V motor switch/precharge/PDU, not Thor or WEHO. One `TE LEV100A5ANG` (CAD reserve `50 x 50 x 60 mm`, 0.190 kg), **one** `Eaton Bussmann 16220-2` (`76.2 x 50.8 x 25.4 mm`, 0.151 kg), `Vishay RHA050100R0FE02` (mounting envelope `70.6 x 21.4 x 16 mm`, 0.050 kg), `CIT A2K1CSQ24VDC1.6` (`26.5 x 32 x 33.5 mm`, 0.040 kg), and the main `Littelfuse BF1 70A + 04980921GXM5 holder` belong there. Exactly **one** Eaton block is needed. Put the five motor-branch fuse holders at cable exits/on a removable rear or underside panel, not all in the 100 mm cube. E-stop is externally accessible.
 > - Topology: `battery -> 70A main fuse -> split`; protected **unswitched** branch -> WEHO -> 24 V fuses -> Thor/hub; **switched** branch -> precharge resistor/relay -> LEV100 -> one Eaton block -> motor branch fuses -> harnesses. E-stop interrupts the LEV100 coil independently of Thor; Thor stays live to log the event.
@@ -46,7 +47,7 @@ Ultimo aggiornamento: 2026-09-21.
 > - Screw/CAD mass correction: ISO 4762 standard lengths selected: `M3x10` (8 installed), `M3x15` (184), `M4x15` (201), `M4x20` (12); M3x20, M4x10 and M4x25 remain catalogue qty0. Fractional `7.5/12.5/17.5/22.5 mm` lengths are not normal ISO stock and are intentionally not listed. Motor assembly masses, including only the stated screws: RS06 `0.642930 kg`; RS04 `1.452625 kg`; RS03 `0.912625 kg` (uses the 0.880 kg manual base); RS00 `0.323320 kg`; RS05 `0.211620 kg`. Screw purchase rows deliberately have no BOM mass to avoid double counting.
 > - Pushrod mass correction: the 40 mm and 140 mm links are no longer identical. Pending a scale measurement of the delivered AliExpress part, BOM CAD body estimates assume a 6061-class aluminium tube OD12/ID8: `6.8 g` for 40 mm and `23.8 g` for 140 mm, each excluding separately listed igubal ends/jam nuts. Replace these values after verifying delivered tube geometry and advertised length definition.
 
-> **TABELLE SPEC MOTORI (scannabili) = file separato `MOTORI_TABELLE.md`** (Encos planetari+armonici, RobStride, ZeroErr, CubeMars, Steadywin, Dynamixel, Damiao, opzioni sensori). Da aggiornare insieme a questa memoria quando si trovano spec nuove.
+> **MOTOR SPEC TABLES (scannable) = separate file `MOTORI_TABELLE.md`** (Encos planetary+harmonic, RobStride, ZeroErr, CubeMars, Steadywin, Dynamixel, Damiao, sensor options). To be updated together with this memory whenever new specs are found.
 
 > **CURRENT ACTUATOR DECISION 2026-06-20: QDD architecture, RobStride supplier. Unitree G1 is the actual reference; K-Scale K-Bot is observation only.**
 > The previous CubeMars choice was based on a dimensional error. `AK70-9` is **Ø89 x 49 mm**, not Ø70; `AKE90-8` is **Ø107.5 x 43.5 mm**, not Ø90. CubeMars therefore has no decisive diameter advantage over RS06/RS04 for this robot. RobStride is retained because dimensions and torque class are comparable, price is lower, and its data are already in the CAD/BOM workflow.
@@ -73,13 +74,13 @@ Ultimo aggiornamento: 2026-09-21.
 > - Isaac Sim/Isaac Lab work can begin now, but train on a desktop/workstation GPU rather than Thor. Gate before RL: one rigid link per body, correct revolute axes/limits/zero pose, measured masses/inertias, simplified collision meshes, foot friction and selected self-collisions, actuator torque/speed/sign limits, and stable standing PD. The offset ankle gimbal is two serial revolute joints (pitch above roll), not a ball joint. For the first URDF/RL model use virtual ankle pitch/roll joints with the real axis offset; omit the closed pushrod loop from dynamics or keep it visual-only, then apply the measured motor-to-joint differential/Jacobian map and domain randomization later.
 > - The BOM “purchased onboard mass” excludes the 4 kg bench supply but conservatively counts full purchased cable lengths. It is therefore not the final CAD mass; replace cable rows with installed lengths after harness routing.
 >
-> **CAMERA, HANDS AND BATTERY UPDATE 2026-07-11 (AI + user; shared handoff for AI):**
+> **CAMERA, HANDS AND BATTERY UPDATE 2026-07-11 (AI + user; shared handoff for the other AI session):**
 > - Camera selected: `RealSense D436`, SKU `99CWHP`, `90 x 25 x 25 mm`, `75 g`, global-shutter stereo depth + global-shutter RGB + IMU. The official D400 CAD archive does not yet contain D436; use the same-envelope D435i CAD provisionally and verify the physical camera before releasing the bracket.
 > - Hands selected: `Inspire RH56DFX-2L` + `RH56DFX-2R`, **without Inspire wrist** because the robot already has RS00 3-axis wrists. Each hand is `540 g`, `217.8 mm` long, about `80.7 mm` palm width, 6 actuators / 12 moving joints, `24 V`, RS485. Cleaned one-file visual meshes for Onshape are `cad_reference/RH56DFX-2L_reference.stl` and `cad_reference/RH56DFX-2R_reference.stl`; they are packaging meshes, not watertight manufacturing solids. Their dedicated `CHB300W-48S24` rail is disabled through hardware remote-on/off during e-stop; no separate Omron relay. Communication remains one isolated two-channel Waveshare USB-RS485 adapter.
 > - **Battery superseded again 2026-07-11 after the user rejected the Tattu envelope as too large.** Current CAD/procurement baseline is the commercial Bicycle Motor Works `48 V 9 Ah Molicel P45B` pack: `13S2P`, `46.8 V` nominal / `54.6 V` full, exactly `421.2 Wh` like G1, integrated BMS `45 A continuous / 100 A maximum`, XT90-S discharge, XT60 charge, published `165.1 x 101.6 x 76.2 mm`. Published mass is “under 5 lb”; use conservative `2.27 kg` until the supplier gives the exact finished mass. This is smaller than the G1 battery (`182 x 120 x 80 mm`) in every oriented dimension. CAD reserve `170 x 106 x 81 mm` plus `35-50 mm` cable bend at the connector face. ORDER GATE: confirm Italy lithium shipment, exact mass, duration of the 100 A rating, BMS trip curve, short-circuit current, regen charge-current limit, charger and lead lengths. The original Unitree G1 battery remains unsuitable because its load detection prevents generic standalone power-on. The previous Tattu and 25 Ah ENERprof selections are superseded.
 > - EU fallback: Tõuksi Vabrik in Estonia publishes the same `13S2P / P45B / 9 Ah / 421.2 Wh` architecture with a `60 A BMS`, `2.04 kg` and EUR 416 VAT included. It is qty 0 until they provide a drawing and guarantee a finished envelope no larger than about `165 x 102 x 76 mm`; use it if Bicycle Motor Works cannot legally ship to Italy.
 > - Secondary EU softpack fallback is Dan-Tech `13S2P 48 V 10 Ah 60 A`, `280 x 35 x 130 mm`, `2.2 kg`, EUR 347 VAT included. It remains qty 0 because it is longer than desired and its page contradicts itself: the selected configuration says `No BMS`, while the feature list claims full BMS/CAN/RS485/UART protection.
-> **2026-06-21 — CubeMars 36:1 (AK45-36, Ø55x54, 24/8 Nm) EVALUATED and REJECTED. STAY ALL-QDD, no high-reduction anywhere.** User's 3 questions settled it: (1) QDD is more FUTUREPROOF — 36:1 permanently closes force/impedance control + compliance + impact tolerance on that joint (hardware life sentence, not sw-upgradeable). (2) 36:1 is WORST on the ANKLE (contact joint, wants compliance most) -> keep ankle QDD. (3) On the arms 36:1 helps only today's position-based ACT/diffusion, but kills future contact-rich/compliant manipulation. User values futureproofing -> all-QDD. Chunky Ø88 arms/ankle = cosmetic + ~2.5 kg, does NOT cap capability; 36:1 does. RobStride QDD map (AI lock) STANDS; CubeMars-QDD AKE90 only if stronger legs wanted (170 vs 120 Nm, same Ø). AI over-sold AK45-36 the prior turn; user correctly pushed back.
+> **2026-06-21 — CubeMars 36:1 (AK45-36, Ø55x54, 24/8 Nm) EVALUATED and REJECTED. STAY ALL-QDD, no high-reduction anywhere.** User's 3 questions settled it: (1) QDD is more FUTUREPROOF — 36:1 permanently closes force/impedance control + compliance + impact tolerance on that joint (hardware life sentence, not sw-upgradeable). (2) 36:1 is WORST on the ANKLE (contact joint, wants compliance most) -> keep ankle QDD. (3) On the arms 36:1 helps only today's position-based ACT/diffusion, but kills future contact-rich/compliant manipulation. User values futureproofing -> all-QDD. Chunky Ø88 arms/ankle = cosmetic + ~2.5 kg, does NOT cap capability; 36:1 does. RobStride QDD map (earlier AI lock) STANDS; CubeMars-QDD AKE90 only if stronger legs wanted (170 vs 120 Nm, same Ø). The AI over-sold AK45-36 the prior turn; user correctly pushed back.
 > **2026-06-21 — REAL PROJECTED MASS ≈ 45 kg, HEIGHT ≈ 1.40 m (user's numbers, agreed). SIZE AGAINST THESE, not the old 35 kg / 1.2 m.** Why heavier than G1's 35 kg: RobStride ≈ 84 Nm/kg (RS04) vs Unitree custom ≈ 189 Nm/kg, so ~2× actuator mass per Nm. 20.35 kg motors + structure + on-board battery + push-rod/shaft/bearing hardware -> 40–45 kg; budget the top. Height rises to ~1.40 m partly from the 2× Ø88 ankle stack lengthening the shin.
 > **TORQUE re-scaled (first-pass rules of thumb, ±25%, NO CAD mass model yet — re-validate after CAD):** 35->45 kg (×1.29) and 1.2->1.4 m (longer levers, ×~1.17) push proximal-joint torque ~1.3–1.5× above the old estimates. Binding joints @45 kg/1.4 m (hold/peak Nm vs motor rated/peak):
 >   - Ankle pitch: ~40 / **~67** push-off vs RS06 11/36 -> **needs ~1.9:1 push-rod leverage** (was 1.45). MANDATORY. Less leverage = flat-foot ZMP only, no energetic toe-off.
@@ -89,7 +90,7 @@ Ultimo aggiornamento: 2026-09-21.
 >   - Hip pitch: ~35 / ~78 vs RS04 40/120 -> OK. Shoulder pitch/roll: sustained arm+payload-out ~22 Nm > RS06 rated 11 -> go **RS03** only if sustained extended-load holds are required; else RS06 ok for motion.
 > **CONSEQUENCE: RS04 legs are now RIGHT-sized, NOT oversized — RETRACT the earlier "shrink legs to RS03" idea; keep RS04.** Only safe shrink left = **wrists RS00 -> RS05** (~0.7 kg). Robot WALKS fine: walking single-support is brief/dynamic, lives in PEAK numbers (RS04 120 ≫ 78); only SUSTAINED static high-torque poses (long single-leg, deep squat, payload at arm's length) are thermally marginal.
 > **Roll < Pitch at the ankle CONFIRMED (physics):** pitch CoP travels the foot LENGTH (half ~0.10 m) + has push-off (1.5 Nm/kg); roll CoP travels the foot WIDTH (half ~0.045 m, ~2.2× shorter lever) and has NO sideways push-off. Heavy lateral balance in single-support is the HIP roll (RS04), not the ankle. -> in the 2-push-rod ankle the PITCH rod can carry MORE leverage than the ROLL rod (need not be symmetric even with 2× RS06).
-> **ANKLE ARCH (corrected by user 2026-06-21): DIFFERENTIAL / parallel, NOT serial.** 2 push-rods from 2 shin motors to the SAME shaft on the foot: both push/pull = PITCH, opposed = ROLL (sum=pitch, diff=roll). Both motors drive BOTH DOFs. Map = clean sum/diff mix (m1 = pitch/2k + roll/2k', m2 = pitch/2k - roll/2k') + geometric corrections; RL trains in (pitch,roll), the map converts at deploy. **BONUS: pitch = SUM of both motors -> up to ~72 Nm (2× RS06) -> covers the 45 kg push-off (~67 Nm) with NO leverage; flat-foot now, push-off-capable later.** Diamond torque envelope (can't max pitch+roll simultaneously; fine in practice). Body weight rides a CENTRAL 2-DOF pivot; rods carry only torque. (My earlier serial/"triangular" description was WRONG.)
+> **ANKLE ARCH (corrected by user 2026-06-21): DIFFERENTIAL / parallel, NOT serial.** 2 push-rods from 2 shin motors to the SAME shaft on the foot: both push/pull = PITCH, opposed = ROLL (sum=pitch, diff=roll). Both motors drive BOTH DOFs. Map = clean sum/diff mix (m1 = pitch/2k + roll/2k', m2 = pitch/2k - roll/2k') + geometric corrections; RL trains in (pitch,roll), the map converts at deploy. **BONUS: pitch = SUM of both motors -> up to ~72 Nm (2× RS06) -> covers the 45 kg push-off (~67 Nm) with NO leverage; flat-foot now, push-off-capable later.** Diamond torque envelope (can't max pitch+roll simultaneously; fine in practice). Body weight rides a CENTRAL 2-DOF pivot; rods carry only torque. (The AI's earlier serial/"triangular" description was WRONG.)
 > **2026-06-21 — HIP YAW upgraded RS06 -> RS03 (user).** Reason: at 45 kg projected mass the aggressive-turn peak (~36 Nm) sat exactly at RS06's 36 Nm limit; RS03 = 60 Nm peak gives headroom for snappy turns (gravity-free axis, so only peak matters). **NEW LOCKED MAP (30): RS04 x6** (hip pitch/roll + knees) | **RS03 x3** (waist roll x1 + hip yaw x2) | **RS06 x11** (ankle pitch/roll x4, waist yaw x1, shoulder pitch/roll x4, elbows x2) | **RS00 x8** (shoulder yaw x2 + wrists x6) | **RS05 x2** (neck). New actuator mass ≈ **20.913 kg** (+0.558 vs 20.355). RS03 body drawing from the RobStride 2025-06-26 PDF is OD 98 x length 54.1 mm; RS04 is OD 120 x length 56 mm; RS06 OD 88 x 49 mm; RS00 OD 57 x 51 mm; RS05 OD 46 x 44 mm. BOM Excel re-synced 2026-06-27.
 >
 > **ROBSTRIDE vs CUBEMARS CONTENDERS BY TORQUE CLASS (2026-06-23, comparison only, NOT a BOM switch).** `Height`
@@ -129,15 +130,15 @@ Ultimo aggiornamento: 2026-09-21.
 >
 > **ACTUATOR-ARCHITECTURE CHECK AGAINST FIRGELLI GUIDE 2026-06-20.** The guide does not invalidate QDD for this project: it explicitly places Unitree G1/H1 in the QDD class and reserves harmonic + planetary-roller-screw systems mainly for high-payload continuous-duty factory humanoids. Important correction to its loose wording: a planetary roller screw is resistant to impact because line contact distributes Hertzian stress; it is still a rigid, high-reduction transmission and does not inherently absorb impact energy. True passive absorption requires a separate compliant element, for example a Series Elastic Actuator spring. High-reduction harmonic actuators normally need an output torque sensor for accurate force control; this is commonly a strain-gauged flexure. A linear screw actuator analogously uses an axial force sensor/load cell, commonly strain gauges, or an SEA spring measured by encoders. These sensors are optional for position control but required for accurate output-force control when current estimation is corrupted by friction.
 
-> **CAVIGLIA - DIREZIONE CAD CORRENTE (aggiornata 2026-06-27, SUPERA la nota Ø12 del 2026-06-21):**
-> L'utente ha disegnato una soluzione a gimbal/cardano stampato 3D con due pin da 45 mm uno sopra l'altro in Z. Non e' un
-> cardano matematico a centro singolo: e' un gimbal offset. Pin piu alto = pitch; pin un po' piu basso = roll. Direzione
-> corrente BOM/CAD: usare shoulder screws `Ø8 mm` con filetto `M6` sia per i due assi del gimbal caviglia sia per i pivot
-> dei rod-end dei puntoni. La precedente
-> direzione "assi caviglia Ø12/M10 e perni puntoni Ø12" e' superata per la caviglia; resta solo nello storico. Anche il
-> vecchio perno idle Ø12/M10 della waist roll e' ora disattivato qty0: non ci sono Ø12/M10 attivi nel CAD/BOM corrente.
+> **ANKLE - CURRENT CAD DIRECTION (updated 2026-06-27, SUPERSEDES the Ø12 note of 2026-06-21):**
+> The user has designed a 3D-printed gimbal/Cardan solution with two 45 mm pins one above the other in Z. It is not a
+> mathematical single-center Cardan joint: it is an offset gimbal. Higher pin = pitch; slightly lower pin = roll. Current
+> BOM/CAD direction: use shoulder screws `Ø8 mm` with `M6` thread both for the two axes of the ankle gimbal and for the pivots
+> of the pushrod rod-ends. The previous
+> direction "ankle axes Ø12/M10 and pushrod pins Ø12" is superseded for the ankle; it remains only in the history. Also the
+> old Ø12/M10 idle pin of the waist roll is now deactivated qty0: there are no active Ø12/M10 items in the current CAD/BOM.
 >
-> Hardware selezionato in BOM 2026-06-27:
+> Hardware selected in BOM 2026-06-27:
 > - First-choice shoulder screw listing: `https://it.aliexpress.com/item/1005007885495357.html`.
 > - Old shoulder screw listing kept only as second source / backup: `https://it.aliexpress.com/item/1005007481484485.html`.
 > - Offset-gimbal ankle axes: `2 x` shoulder screws `Ø8 x M6 x 45 mm`; upper-Z pin = pitch, lower-Z pin = roll.
@@ -160,7 +161,7 @@ Ultimo aggiornamento: 2026-09-21.
 > BOM quantities above are the user's literal current prototype quantities, not an automatically doubled full-robot estimate;
 > revisit after left/right CAD is frozen.
 >
-> MOTORI CAVIGLIA: `RS06 x2` per leg are still the active actuator choice. Physical ankle motors are A/B differential
+> ANKLE MOTORS: `RS06 x2` per leg are still the active actuator choice. Physical ankle motors are A/B differential
 > drives through pushrods, not direct pitch/roll labels. Virtual pitch/roll comes from the linkage map. Keep the two
 > RS06 close to the knee/proximal shin when possible; verify collisions, cable exits, crank geometry and conditioning of
 > the motor-to-pitch/roll matrix in CAD.
@@ -172,18 +173,18 @@ Ultimo aggiornamento: 2026-09-21.
 > ±35 deg pivot. KARM mass is 6.2 g each; KALM assumed same until supplier data is confirmed. Price is still `0` in the
 > sheet until the exact igus cart/quote is confirmed.
 
-> **CHIARIMENTO CHIAVE 2026-06-20 (correzione di una mia sovra-enfasi): CAMMINARE IN RL NON RICHIEDE SENSORI DI COPPIA.** Le policy RL (Unitree, ToddlerBot, ecc.) prendono in input posizioni/velocita' giunto + IMU (NON coppie), emettono target di POSIZIONE, tracciati da PD a giunto, coppia applicata OPEN-LOOP dalla corrente. Nessun sensore di coppia, su NESSUN motore. ToddlerBot lo fa con Dynamixel 288:1 (piu' rigido degli Encos) e cammina + manipola. **Quindi Encos SENZA sensori = robot valido** (controllo di posizione + RL Isaac Lab, gia' nel piano utente); l'alta riduzione e' anzi BUONA per il controllo di posizione (rigido/preciso, l'attrito lo assorbe la policy con domain randomization). I sensori di coppia servono SOLO per FORCE/IMPEDANCE control, task contact-rich, sicurezza-forza — NON per camminare. -> Encos-vs-RobStride NON e' "sensore si/no" (entrambi zero sensori per RL), ma **compatto-rigido (Encos, classe ASIMO/ToddlerBot) vs ingombrante-compliant (RobStride QDD, classe Unitree)**. Caveat scala: ToddlerBot 3.4 kg (perdona tutto), noi ~20 kg (fattibile, ASIMO a ~50 kg, ma tenere leggero/piano/gait prudente). Tutta la saga vestizione/UKF/Bota = NON necessaria per l'obiettivo "cammina calmo + task base".
+> **KEY CLARIFICATION 2026-06-20 (correction of an over-emphasis by the AI): WALKING WITH RL DOES NOT REQUIRE TORQUE SENSORS.** RL policies (Unitree, ToddlerBot, etc.) take joint positions/velocities + IMU as input (NOT torques), output POSITION targets, tracked by a joint-level PD, with torque applied OPEN-LOOP from the current. No torque sensor, on ANY motor. ToddlerBot does it with Dynamixel 288:1 (stiffer than the Encos) and walks + manipulates. **So Encos WITHOUT sensors = valid robot** (position control + Isaac Lab RL, already in the user's plan); the high reduction is in fact GOOD for position control (stiff/precise, the friction is absorbed by the policy with domain randomization). Torque sensors are needed ONLY for FORCE/IMPEDANCE control, contact-rich tasks, force-safety — NOT for walking. -> Encos-vs-RobStride is NOT "sensor yes/no" (both zero sensors for RL), but **compact-stiff (Encos, ASIMO/ToddlerBot class) vs bulky-compliant (RobStride QDD, Unitree class)**. Scale caveat: ToddlerBot 3.4 kg (forgives everything), us ~20 kg (feasible, ASIMO at ~50 kg, but keep it light/slow/cautious gait). The whole sensor-dressing/UKF/Bota saga = NOT necessary for the goal "walks calmly + basic tasks".
 
-## Regola di collaborazione AI
+## Collaboration rule between AI sessions
 
-Questo progetto viene seguito alternativamente da AI quando uno dei due termina il contesto disponibile.
-Questo file e l'unica fonte di verita per il passaggio di consegne: aggiornarlo a fine sessione con decisioni, modifiche,
-fonti e dubbi aperti. Non ricreare un secondo file di stato. Il prossimo agente deve leggere tutto, verificare le fonti
-e criticare le scelte tecniche deboli prima di aggiungere componenti o ordinare materiale.
+Two AI sessions take turns following this project, whenever one of the two runs out of its available context.
+This file is the single source of truth for the handover: update it at the end of the session with decisions, changes,
+sources and open doubts. Do not recreate a second status file. The next agent must read everything, verify the sources
+and criticize the weak technical choices before adding components or ordering material.
 
-Regola meccanica obbligatoria: non trasformare un'ipotesi in una scelta BOM. Se CAD, carichi, sedi, spessori, tolleranze
-o sistema di ritegno non sono noti, lasciare la riga `DA DIMENSIONARE qty0`, elencare i dati mancanti e chiedere conferma
-all'utente prima di proporre SKU, quantita o geometrie. Non dedurre dettagli costruttivi da immagini parziali.
+Mandatory mechanical rule: do not turn a hypothesis into a BOM choice. If CAD, loads, seats, thicknesses, tolerances
+or retention system are not known, leave the row `DA DIMENSIONARE qty0`, list the missing data and ask for confirmation
+from the user before proposing SKUs, quantities or geometries. Do not infer construction details from partial images.
 
 Workspace:
 
@@ -191,78 +192,78 @@ Workspace:
 /Users/artes/Documents/artes/umanoide
 ```
 
-Deliverable aggiornato:
+Updated deliverable:
 
 ```text
 BOM umanoide G1 - RobStride.xlsx
 ```
 
-Totali BOM verificati, IVA inclusa. ATTENZIONE 2026-07-19: i totali sono ora la SPESA RESIDUA
-(Thor + entrambe le mani RH56DFX sono GIA' POSSEDUTI in laboratorio e contati a EUR 0 con prezzo
-di riferimento nelle note; le FASI sono state RIDEFINITE sull'ordine di costruzione reale):
+Verified BOM totals, VAT included. WARNING 2026-07-19: the totals are now the REMAINING SPEND
+(Thor + both RH56DFX hands are ALREADY OWNED in the lab and counted at EUR 0 with the reference price
+in the notes; the PHASES have been REDEFINED on the real build order):
 
-| Scope | Totale (da spendere) |
+| Scope | Total (to be spent) |
 |---|---:|
-| Umanoide completo (residuo) | EUR 10.264,90 |
-| Fase 1 - banco braccio+mano teleop | EUR 4.008,57 |
-| Fase 2 - gambe e locomozione | EUR 3.997,95 |
-| Fase 3 - completamento (braccio sx, vita, collo, mobile) | EUR 2.258,38 |
+| Complete humanoid (remaining) | EUR 10.264,90 |
+| Phase 1 - arm+hand teleop bench | EUR 4.008,57 |
+| Phase 2 - legs and locomotion | EUR 3.997,95 |
+| Phase 3 - completion (left arm, waist, neck, mobile) | EUR 2.258,38 |
 
-(Totali Excel ricalcolati e verificati 2026-07-17 dopo la riattivazione delle mani sul rail WEHO, le nuove righe
-SEQ-PWR-01/TVS 33CA/condensatore/XT90 e le correzioni di fase; la riga WEHO attiva ha prezzo 0 in attesa di quotazione.
-I precedenti totali 31.243,22 / 35,043 kg erano lo snapshot 2026-07-12 di mezzogiorno con mani qty1, mai riallineato
-dopo il qty0 serale.
-ATTENZIONE: la massa acquistata esclude il telaio PA-CF; con circa 10 kg di telaio il robot finito puo superare
-45 kg. A quella massa caviglie, knee/hip roll in continuo e waist roll vanno rivalutati dopo CAD/mass budget reale.)
+(Excel totals recalculated and verified 2026-07-17 after the reactivation of the hands on the WEHO rail, the new rows
+SEQ-PWR-01/TVS 33CA/capacitor/XT90 and the phase corrections; the active WEHO row has price 0 pending a quotation.
+The previous totals 31.243,22 / 35,043 kg were the 2026-07-12 midday snapshot with hands qty1, never realigned
+after the evening qty0.
+WARNING: the purchased mass excludes the PA-CF frame; with about 10 kg of frame the finished robot can exceed
+45 kg. At that mass the ankles, knee/hip roll in continuous duty and waist roll must be re-evaluated after the real CAD/mass budget.)
 
-Massa acquistata a bordo stimata: `33,233 kg`, escluso telaio stampato PA-CF. Di questi, i soli attuatori selezionati
-pesano circa `20,913 kg`. La massa e prudente perche conta le lunghezze complete acquistate dei cavi di potenza; sostituire
-con le lunghezze realmente installate dopo il routing. La bobina completa di cavo CAN da 50 m e gli elementi da banco
-non sono conteggiati come massa a bordo.
+Estimated purchased on-board mass: `33,233 kg`, excluding the printed PA-CF frame. Of this, the selected actuators alone
+weigh about `20,913 kg`. The mass is conservative because it counts the full purchased lengths of the power cables; replace
+with the lengths actually installed after the routing. The full 50 m spool of CAN cable and the bench items
+are not counted as on-board mass.
 
-Generatore:
+Generator:
 
 ```text
 python3 build_umanoide_tab.py
 ```
 
-Il generatore crea ora un workbook vergine con la sola scheda `umanoide`; non copia piu l'Excel storico in `~/Downloads`
-e non genera piu schede `G1 joints CAD`, `MOTORI premium`, `MOTORI Encos (quote)` o `MOTORI RobStride`. Backup locale
-pre-pulizia: `BOM umanoide G1 - RobStride.backup-before-single-sheet-20260623.xlsx`.
-Aggiornamento 2026-06-26: lo stile righe e' ora guidato solo dalla colonna `Unita`: `0` = grigio automatico, quantita
-diversa da zero = nero. Anche righe etichettate `[SCELTO qty0]` restano grigie finche non vengono davvero quantificate.
-Aggiornamento 2026-06-27: workbook `BOM umanoide G1 - RobStride.xlsx` tradotto in inglese nella vista attiva; colonna
-`Uniqueness` eliminata; intestazioni ora `Item/Supplier/Unit cost/...`; filtro Excel su `Qty != 0` (`A1:T164`) e righe
-`Qty=0` nascoste automaticamente all'apertura. I link sulle righe `Qty=0` non restano blu: tutta la riga e' grigia se
-viene sbloccata. Aggiornamento ulteriore 2026-06-27: rod-end caviglia ora `2 x KARM-08 CL` destra + `2 x KALM-08 CL`
-sinistra, piu `4 x` controdadi sottili DIN 439 M8 per bloccare la regolazione; `6002-2RS` waist-roll bearing e il relativo `Ø12/M10` idle-side pin sono stati
-disattivati qty `0` perche' appartenevano al vecchio supporto idle della vita e non servono nel CAD corrente. Le righe
-storiche qty0 possono ancora contenere note miste IT/EN, ma la vista attiva filtrata e in inglese.
+The generator now creates a blank workbook with only the `umanoide` sheet; it no longer copies the historical Excel file in `~/Downloads`
+and no longer generates the sheets `G1 joints CAD`, `MOTORI premium`, `MOTORI Encos (quote)` or `MOTORI RobStride`. Local backup
+from before the cleanup: `BOM umanoide G1 - RobStride.backup-before-single-sheet-20260623.xlsx`.
+Update 2026-06-26: the row style is now driven only by the `Unita` column: `0` = automatic gray, quantity
+other than zero = black. Even rows labeled `[SCELTO qty0]` stay gray until they are actually given a quantity.
+Update 2026-06-27: workbook `BOM umanoide G1 - RobStride.xlsx` translated into English in the active view; column
+`Uniqueness` removed; headers now `Item/Supplier/Unit cost/...`; Excel filter on `Qty != 0` (`A1:T164`) and rows with
+`Qty=0` hidden automatically on opening. The links on `Qty=0` rows do not stay blue: the whole row is gray if
+it is unhidden. Further update 2026-06-27: ankle rod-ends now `2 x KARM-08 CL` right-hand + `2 x KALM-08 CL`
+left-hand, plus `4 x` thin DIN 439 M8 jam nuts to lock the adjustment; the `6002-2RS` waist-roll bearing and the related `Ø12/M10` idle-side pin have been
+deactivated qty `0` because they belonged to the old idle support of the waist and are not needed in the current CAD. The historical
+qty0 rows may still contain mixed IT/EN notes, but the filtered active view is in English.
 
-## Obiettivo
+## Objective
 
-Costruire un umanoide stampabile in PA-CF il piu possibile, con architettura, geometrie e potenze prese dal riferimento
-Unitree G1. Unitree G1 e l'unica baseline del progetto. K-Scale K-Bot non e un riferimento dimensionale o cinematico:
-puo essere consultato solo come esempio open hardware secondario per packaging, producibilita e problemi pratici di
-cablaggio. Non inventare simulazioni dinamiche: non sono disponibili. Prima degli acquisti servono CAD e verifiche
-geometriche sui componenti reali.
+Build a humanoid that is printable in PA-CF as far as possible, with architecture, geometries and power ratings taken from the reference
+Unitree G1. Unitree G1 is the only baseline of the project. K-Scale K-Bot is not a dimensional or kinematic reference:
+it may be consulted only as a secondary open hardware example for packaging, manufacturability and practical
+wiring problems. Do not invent dynamic simulations: they are not available. Before the purchases, CAD and geometric checks
+on the real components are needed.
 
-## Baseline Unitree G1 ufficiale
+## Official Unitree G1 baseline
 
-Usare il modello G1 aggiornato `g1_29dof_mode_11`, non il vecchio `g1_29dof` marcato deprecated.
+Use the updated G1 model `g1_29dof_mode_11`, not the old `g1_29dof` marked deprecated.
 
-Fonti ufficiali:
+Official sources:
 
-- Repository e README: <https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description>
-- URDF corrente: <https://github.com/unitreerobotics/unitree_ros/blob/master/robots/g1_description/g1_29dof_mode_11.urdf>
-- Mesh: <https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description/meshes>
-- Pagina prodotto G1: <https://www.unitree.com/g1/>
-- Pagina ufficiale G1-Comp con testa 2 DOF: <https://www.unitree.com/robocup/>
-- Manuale ufficiale G1-EDU Waist Fastener: <https://marketing.unitree.com/article/en/G1/Lumbar_fasteners.html>
+- Repository and README: <https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description>
+- Current URDF: <https://github.com/unitreerobotics/unitree_ros/blob/master/robots/g1_description/g1_29dof_mode_11.urdf>
+- Meshes: <https://github.com/unitreerobotics/unitree_ros/tree/master/robots/g1_description/meshes>
+- G1 product page: <https://www.unitree.com/g1/>
+- Official G1-Comp page with 2 DOF head: <https://www.unitree.com/robocup/>
+- Official G1-EDU Waist Fastener manual: <https://marketing.unitree.com/article/en/G1/Lumbar_fasteners.html>
 
-Limiti `effort` del modello ufficiale corrente:
+`effort` limits of the current official model:
 
-| Asse | Nm |
+| Axis | Nm |
 |---|---:|
 | Hip pitch / roll | 139 |
 | Hip yaw | 88 |
@@ -275,40 +276,40 @@ Limiti `effort` del modello ufficiale corrente:
 | Wrist roll | 25 |
 | Wrist pitch / yaw | 5 |
 
-L'URDF fornisce origini dei giunti, limiti e mesh esterne. Per la caviglia descrive i due assi cinematici virtuali pitch
-e roll, ma non espone il CAD interno del leveraggio. Non trattare i valori virtuali come somma banale delle coppie dei
-due motori paralleli.
+The URDF provides joint origins, limits and external meshes. For the ankle it describes the two virtual kinematic axes pitch
+and roll, but it does not expose the internal CAD of the linkage. Do not treat the virtual values as a trivial sum of the torques of the
+two parallel motors.
 
-Lo stesso vale per la vita: la catena cinematica virtuale `yaw -> roll -> pitch` dell'URDF non dimostra che i tre
-attuatori fisici siano montati in serie. La scelta CAD corrente di questo progetto e diversa dal vecchio schema a
-puntoni: vita seriale diretta con `roll` sotto `yaw`, nessun waist pitch e nessun puntone vita. Il pitch del busto viene
-dagli hip pitch.
+The same applies to the waist: the virtual kinematic chain `yaw -> roll -> pitch` of the URDF does not prove that the three
+physical actuators are mounted in series. The current CAD choice of this project is different from the old pushrod
+scheme: direct serial waist with `roll` below `yaw`, no waist pitch and no waist pushrod. The torso pitch comes
+from the hip pitch joints.
 
-Il modello `g1_29dof_mode_11` non include il collo. La pagina ufficiale G1-Comp dichiara invece `Head 2 degrees of
-freedom = 2`, ma non pubblica la coppia dei due motori. Il collo di questo progetto usa quindi due RS05 come scelta
-provvisoria compatta, non come equivalenza di coppia certificata Unitree.
+The `g1_29dof_mode_11` model does not include the neck. The official G1-Comp page instead states `Head 2 degrees of
+freedom = 2`, but does not publish the torque of the two motors. The neck of this project therefore uses two RS05 as a compact
+provisional choice, not as a Unitree-certified torque equivalence.
 
-### Posizioni esatte giunti G1 e CAD (estratti 2026-06-04)
+### Exact G1 joint positions and CAD (extracted 2026-06-04)
 
-Estratti dall'URDF ufficiale `g1_29dof_mode_11.urdf` (scaricato e salvato nel progetto). File nel workspace:
-`g1_29dof_mode_11.urdf` e `g1_joints.csv` (offset relativi padre-figlio + rpy + posizioni assolute + assi + limiti).
-Convenzione: X avanti, Y sinistra, Z su; origine = pelvis; mm. 29 DOF; il collo (2 DOF) NON e nel modello, va aggiunto
-a parte. Usare per disegnare lo skeleton Onshape: un mate connector per giunto, nome = nome G1.
+Extracted from the official URDF `g1_29dof_mode_11.urdf` (downloaded and saved in the project). Files in the workspace:
+`g1_29dof_mode_11.urdf` and `g1_joints.csv` (relative parent-child offsets + rpy + absolute positions + axes + limits).
+Convention: X forward, Y left, Z up; origin = pelvis; mm. 29 DOF; the neck (2 DOF) is NOT in the model, it must be added
+separately. Use these to draw the Onshape skeleton: one mate connector per joint, name = G1 name.
 
-Posizioni assolute (frame pelvis, mm) - lato sinistro; destro speculare in Y:
+Absolute positions (pelvis frame, mm) - left side; right side mirrored in Y:
 
-| Giunto | x | y | z | asse | limiti rad |
+| Joint | x | y | z | axis | limits rad |
 |---|--:|--:|--:|---|---|
 | hip_pitch | 0 | 64.4 | -102.7 | Y | -2.53..2.88 |
-| hip_roll | 0 | 116.5 | -133.2 | 0.98,0,0.17 cantato | -0.52..2.97 |
-| hip_yaw | 46.2 | 116.5 | -251.0 | -0.17,0,0.98 cantato | -2.76..2.76 |
+| hip_roll | 0 | 116.5 | -133.2 | 0.98,0,0.17 canted | -0.52..2.97 |
+| hip_yaw | 46.2 | 116.5 | -251.0 | -0.17,0,0.98 canted | -2.76..2.76 |
 | knee | 0 | 118.6 | -439.3 | Y | -0.09..2.88 |
 | ankle_pitch | 0 | 118.5 | -739.3 | Y | -0.87..0.52 |
 | ankle_roll | 0 | 118.5 | -756.9 | X | -0.26..0.26 |
 | waist_yaw | 0 | 0 | 0 | Z | -2.62..2.62 |
 | waist_roll | -4 | 0 | 44 | X | -0.52..0.52 |
 | waist_pitch | -4 | 0 | 44 | Y | -0.52..0.52 |
-| shoulder_pitch | 0 | 100.2 | 291.8 | 0,0.96,0.28 cantato | -3.09..2.67 |
+| shoulder_pitch | 0 | 100.2 | 291.8 | 0,0.96,0.28 canted | -3.09..2.67 |
 | shoulder_roll | 0 | 140.6 | 289.0 | X | -1.59..2.25 |
 | shoulder_yaw | 0 | 146.8 | 185.8 | Z | -2.62..2.62 |
 | elbow | 15.8 | 146.8 | 105.2 | Y | -1.05..2.09 |
@@ -316,801 +317,801 @@ Posizioni assolute (frame pelvis, mm) - lato sinistro; destro speculare in Y:
 | wrist_pitch | 153.8 | 148.7 | 95.2 | Y | -1.61..1.61 |
 | wrist_yaw | 199.8 | 148.7 | 95.2 | Z | -1.61..1.61 |
 
-Note: anche e spalle hanno assi CANTATI (non ortogonali); ankle pitch/roll a 17,6 mm in Z (e il cardano dei 2 perni Ø12);
-waist roll e pitch coincidenti. Coppie giunto (effort URDF, Nm): hip pitch/roll 139, hip yaw 88, knee 139, ankle 35,
-waist yaw 88, waist roll/pitch 35, spalla 25, gomito 25, polso roll 25, polso pitch/yaw 5. Massa totale G1 (somma link
-URDF) 33,3 kg.
+Notes: hips and shoulders have CANTED axes (not orthogonal); ankle pitch/roll 17.6 mm apart in Z (it is the cardan joint of the 2 Ø12 pins);
+waist roll and pitch coincident. Joint torques (URDF effort, Nm): hip pitch/roll 139, hip yaw 88, knee 139, ankle 35,
+waist yaw 88, waist roll/pitch 35, shoulder 25, elbow 25, wrist roll 25, wrist pitch/yaw 5. Total G1 mass (sum of the URDF
+links) 33.3 kg.
 
-**Offset z hip pitch->roll (G1: ~30 mm, linea che li collega inclinata ~30 gradi verso il basso secondo calcolo
-utente).** NON e lunghezza morta: e un compromesso reale.
-- La coppia pitch = m*g*D*sin(theta), con D = profondita' del CoM gamba sotto l'asse pitch. L'offset fa parte di D:
-  appena il pitch ruota, il blocco sotto il roll assume una quota X = offset*sin(theta) che da allineati non avrebbe
-  (correzione utente: il mio "x=0 quindi non conta" valeva solo a theta=0, posa in cui la coppia e' nulla a prescindere).
-- Allineare pitch/roll in z -> CoM gamba 30 mm piu' in alto -> -2,1 Nm di picco = ~10% di coppia pitch in meno
-  (gamba ~7,3 kg, CoM ~305 mm sotto il pitch). Reale ma modesto (il braccio dominante e' la lunghezza gamba).
-- MA allineare avvicina le carcasse: in adduzione il motore di YAW sbatte contro il PITCH a un angolo di rollio molto
-  piu' piccolo -> si perde ROM in adduzione. Coi RobStride (carcasse PIU' GROSSE delle attuazioni Unitree) il problema
-  peggiora. Quindi tenere lo sfalsamento G1 (o un filo di piu') e' probabilmente giusto: il ~10% di coppia pitch e' un
-  prezzo basso per il ROM di rollio + niente collisione.
-- DA DECIDERE in CAD con gli ingombri reali dei tre motori (pitch+roll+yaw): trovare l'offset minimo che evita la
-  collisione all'adduzione massima richiesta; quello fissa anche la coppia pitch. (Posizioni esatte: utente le passera'.)
+**z offset hip pitch->roll (G1: ~30 mm, the line connecting them inclined ~30 degrees downward according to the user's
+calculation).** It is NOT dead length: it is a real trade-off.
+- The pitch torque = m*g*D*sin(theta), with D = depth of the leg CoM below the pitch axis. The offset is part of D:
+  as soon as the pitch rotates, the block below the roll acquires an X coordinate = offset*sin(theta) that it would not have with the axes aligned
+  (user correction: the AI's "x=0 so it does not count" held only at theta=0, a pose in which the torque is zero regardless).
+- Aligning pitch/roll in z -> leg CoM 30 mm higher -> -2.1 Nm of peak = ~10% less pitch torque
+  (leg ~7.3 kg, CoM ~305 mm below the pitch). Real but modest (the dominant lever arm is the leg length).
+- BUT aligning brings the housings closer together: in adduction the YAW motor hits the PITCH at a roll angle that is much
+  smaller -> ROM in adduction is lost. With the RobStride motors (housings BIGGER than the Unitree actuators) the problem
+  gets worse. So keeping the G1 stagger (or a touch more) is probably right: the ~10% of pitch torque is a
+  low price for the roll ROM + no collision.
+- TO BE DECIDED in CAD with the real envelopes of the three motors (pitch+roll+yaw): find the minimum offset that avoids the
+  collision at the maximum required adduction; that also fixes the pitch torque. (Exact positions: the user will provide them.)
 
-### Skeleton Onshape: coordinate CAD semplificate
+### Onshape skeleton: simplified CAD coordinates
 
-Decisione CAD 2026-06-05, corretta dopo revisione utente: la scheda `G1 joints CAD` mantiene le coordinate G1 esatte e
-aggiunge colonne CAD semplificate per disegnare lo skeleton in Onshape senza rumore geometrico inutile.
+CAD decision 2026-06-05, corrected after user review: the `G1 joints CAD` sheet keeps the exact G1 coordinates and
+adds simplified CAD columns to draw the skeleton in Onshape without useless geometric noise.
 
-- `exact_x/y/z`: coordinate assolute URDF G1;
-- `cad_x/y/z`: coordinate CAD primarie; `-` significa uguale alla rispettiva coordinata `exact_*`, non zero;
-- `pose_down_x/y/z`: solo colonna ausiliaria per visualizzare le braccia lungo il corpo; `-` significa uguale alla posa
-  CAD primaria `cad_*`.
+- `exact_x/y/z`: absolute G1 URDF coordinates;
+- `cad_x/y/z`: primary CAD coordinates; `-` means equal to the respective `exact_*` coordinate, not zero;
+- `pose_down_x/y/z`: auxiliary column only, to visualize the arms along the body; `-` means equal to the primary
+  CAD pose `cad_*`.
 
-Regola CAD primaria:
+Primary CAD rule:
 
-- `X`: portata a `0` quando l'URDF ha avanzamenti/arretramenti che disturbano lo skeleton;
-- `Y`: nelle colonne verticali viene allineata al primo giunto alto della catena. Gamba: da `hip_roll` a `ankle_roll`
-  usare la `Y` di `hip_roll`. Braccio: da `shoulder_yaw` a `wrist_yaw` usare la `Y` di `shoulder_yaw`;
-- `Z`: resta la quota esatta G1 nella tabella primaria. Non abbassare `hip_yaw` e non redistribuire la sua `X` sulla `Z`;
-- `axis_preciso`: non viene semplificato. Gli assi cantati restano annotati come dato URDF.
+- `X`: set to `0` when the URDF has forward/backward shifts that disturb the skeleton;
+- `Y`: in the vertical columns it is aligned to the first upper joint of the chain. Leg: from `hip_roll` to `ankle_roll`
+  use the `Y` of `hip_roll`. Arm: from `shoulder_yaw` to `wrist_yaw` use the `Y` of `shoulder_yaw`;
+- `Z`: remains the exact G1 height in the primary table. Do not lower `hip_yaw` and do not redistribute its `X` onto the `Z`;
+- `axis_preciso`: it is not simplified. The canted axes remain annotated as URDF data.
 
-Coordinate CAD primarie lato sinistro, frame pelvis, mm. Il lato destro e speculare in `Y`.
+Primary CAD coordinates left side, pelvis frame, mm. The right side is mirrored in `Y`.
 
-| Giunto | x CAD | y CAD sx | z CAD | Nota |
+| Joint | x CAD | y CAD left | z CAD | Note |
 |---|--:|--:|--:|---|
-| hip_pitch | 0.0 | 64.5 | -102.7 | solo X=0 |
-| hip_roll | 0.0 | 116.5 | -133.2 | solo X=0 |
+| hip_pitch | 0.0 | 64.5 | -102.7 | X=0 only |
+| hip_roll | 0.0 | 116.5 | -133.2 | X=0 only |
 | hip_yaw | 0.0 | 116.5 | -251.0 | exact_x 46.2 -> 0 |
-| knee | 0.0 | 116.5 | -439.3 | Y allineata a hip_roll |
-| ankle_pitch | 0.0 | 116.5 | -739.3 | Y allineata a hip_roll |
-| ankle_roll | 0.0 | 116.5 | -756.9 | Y allineata a hip_roll |
-| waist_yaw | 0.0 | 0.0 | 0.0 | solo X=0 |
+| knee | 0.0 | 116.5 | -439.3 | Y aligned to hip_roll |
+| ankle_pitch | 0.0 | 116.5 | -739.3 | Y aligned to hip_roll |
+| ankle_roll | 0.0 | 116.5 | -756.9 | Y aligned to hip_roll |
+| waist_yaw | 0.0 | 0.0 | 0.0 | X=0 only |
 | waist_roll | 0.0 | 0.0 | 44.0 | exact_x -4 -> 0 |
 | waist_pitch | 0.0 | 0.0 | 44.0 | exact_x -4 -> 0 |
-| shoulder_pitch | 0.0 | 100.2 | 291.8 | solo X=0 |
-| shoulder_roll | 0.0 | 140.6 | 289.0 | solo X=0 |
-| shoulder_yaw | 0.0 | 146.8 | 185.8 | solo X=0 |
-| elbow | 0.0 | 146.8 | 105.2 | Y allineata a shoulder_yaw |
-| wrist_roll | 0.0 | 146.8 | 95.2 | Y allineata a shoulder_yaw |
-| wrist_pitch | 0.0 | 146.8 | 95.2 | Y allineata a shoulder_yaw |
-| wrist_yaw | 0.0 | 146.8 | 95.2 | Y allineata a shoulder_yaw |
+| shoulder_pitch | 0.0 | 100.2 | 291.8 | X=0 only |
+| shoulder_roll | 0.0 | 140.6 | 289.0 | X=0 only |
+| shoulder_yaw | 0.0 | 146.8 | 185.8 | X=0 only |
+| elbow | 0.0 | 146.8 | 105.2 | Y aligned to shoulder_yaw |
+| wrist_roll | 0.0 | 146.8 | 95.2 | Y aligned to shoulder_yaw |
+| wrist_pitch | 0.0 | 146.8 | 95.2 | Y aligned to shoulder_yaw |
+| wrist_yaw | 0.0 | 146.8 | 95.2 | Y aligned to shoulder_yaw |
 
-Per disegnare o controllare visivamente le braccia appese lungo il corpo, usare solo le colonne ausiliarie `pose_down_*`.
-In quelle colonne gomito e polso vengono calcolati convertendo la lunghezza relativa `X/Z` della posa URDF in discesa `Z`.
-Questa non e la tabella primaria dei giunti e non va usata come nuova cinematica G1.
+To draw or visually check the arms hanging along the body, use only the auxiliary `pose_down_*` columns.
+In those columns the elbow and wrist are computed by converting the relative `X/Z` length of the URDF pose into a `Z` drop.
+This is not the primary joint table and must not be used as new G1 kinematics.
 
-Significato fisico dei punti: sono origini dei frame giunto URDF, quindi centri cinematici degli assi di rotazione. In
-Onshape trattarli come mate connector del giunto: il punto attraversato dall'asse `axis_preciso`. Non sono automaticamente
-il centro del cilindro del motore e non sono automaticamente il centro della faccia esterna del cilindro. Per un motore
-coassiale, il cilindro motore va posizionato rispetto a questo mate connector con l'offset reale tra piano/flangia di uscita,
-corpo motore e centro geometrico del cilindro. Per caviglia e vita a puntoni, questi punti sono giunti virtuali G1 e non
-posizioni dei motori fisici.
+Physical meaning of the points: they are origins of the URDF joint frames, hence kinematic centers of the rotation axes. In
+Onshape treat them as the mate connector of the joint: the point crossed by the `axis_preciso` axis. They are not automatically
+the center of the motor cylinder and they are not automatically the center of the outer face of the cylinder. For a coaxial
+motor, the motor cylinder must be positioned relative to this mate connector with the real offset between the output plane/flange,
+the motor body and the geometric center of the cylinder. For the pushrod-driven ankle and waist, these points are virtual G1 joints and not
+positions of the physical motors.
 
-CAD motori RobStride: STEP scaricabile dalle pagine Seeed (in BOM nella colonna "Link acquisto" e ora anche "CAD 3D").
-Fonte STEP diretta per modello: AIFITLAB `aifitlab.com/products/robstride-0X-motor` (STEP + disegno installazione col
-pattern bulloni). Alternative: download center robstride.com, GrabCAD (RS06).
+RobStride motor CAD: STEP downloadable from the Seeed pages (in the BOM in the "Purchase link" column and now also "CAD 3D").
+Direct STEP source per model: AIFITLAB `aifitlab.com/products/robstride-0X-motor` (STEP + installation drawing with the
+bolt pattern). Alternatives: robstride.com download center, GrabCAD (RS06).
 
-## K-Scale K-Bot: nota secondaria, non baseline
+## K-Scale K-Bot: secondary note, not a baseline
 
-Fonti:
+Sources:
 
-- Meccanica e CAD pubblico: <https://docs.kscale.dev/robots/k-bot/mechanical/>
+- Mechanics and public CAD: <https://docs.kscale.dev/robots/k-bot/mechanical/>
 - Motor mapping: <https://docs.kscale.dev/robots/k-bot/motor-id-mapping>
 - Repository: <https://github.com/kscalelabs/kbot>
 
-Non copiare geometrie, motori o cinematica K-Bot nella baseline. La sua caviglia e diversa; il nostro progetto replica
-invece il concetto G1 con due attuatori nel polpaccio e due puntoni per ottenere pitch e roll. K-Bot resta utile solo per
-osservare soluzioni costruttive e per ricordare che il cablaggio dinamico richiede progettazione accurata. La sua
-documentazione e in sviluppo: non usarla per dimensionare componenti.
+Do not copy K-Bot geometries, motors or kinematics into the baseline. Its ankle is different; our project instead replicates
+the G1 concept with two actuators in the calf and two pushrods to obtain pitch and roll. K-Bot remains useful only for
+observing construction solutions and as a reminder that dynamic wiring requires careful design. Its
+documentation is under development: do not use it to size components.
 
-## Decisione motori: solo RobStride
+## Motor decision: RobStride only
 
-Damiao e CubeMars sono stati eliminati dalla distinta scelta. L'ecosistema unico riduce firmware, tool di debug, ricambi
-e varianti di cablaggio. La distinta contiene solo le alternative RobStride rilevanti.
+Damiao and CubeMars have been removed from the selected BOM. The single ecosystem reduces firmware, debug tools, spare parts
+and wiring variants. The BOM contains only the relevant RobStride alternatives.
 
-### Gambe, fase 1
+### Legs, phase 1
 
-| Posizione | Motore | Quantita | Picco | Dimensioni | Nota |
+| Position | Motor | Quantity | Peak | Dimensions | Note |
 |---|---|---:|---:|---|---|
-| Hip pitch / roll + knee | RS04 | 6 | 120 Nm | 120 x 120 x 56 mm | massimo disponibile RobStride |
-| Hip yaw | RS06 | 2 | 36 Nm | 88 x 88 x 49 mm | asse verticale: gravita 0, ~28 Nm in girata aggressiva a massa G1; borderline se il robot arriva a 46 kg |
-| Caviglia a puntoni, un motore per asse | RS06 | 4 | 36 Nm picco | 88 x 88 x 49 mm | eguaglia i 35 Nm G1 per asse al picco; rapporto leveraggio minimo 1:1, preferibile 1.3-1.6:1 se il robot diventa pesante |
-| Alternativa caviglia alleggerita | RS00 a riduzione ~2:1 | qty 0 | 14 Nm picco | 57 x 57 x 51 mm | risparmia 1.244 kg ma riduce velocita e margine; non selezionata |
+| Hip pitch / roll + knee | RS04 | 6 | 120 Nm | 120 x 120 x 56 mm | maximum available from RobStride |
+| Hip yaw | RS06 | 2 | 36 Nm | 88 x 88 x 49 mm | vertical axis: gravity 0, ~28 Nm in an aggressive turn at G1 mass; borderline if the robot reaches 46 kg |
+| Pushrod ankle, one motor per axis | RS06 | 4 | 36 Nm peak | 88 x 88 x 49 mm | matches the 35 Nm of the G1 per axis at peak; minimum linkage ratio 1:1, preferably 1.3-1.6:1 if the robot becomes heavy |
+| Lightened ankle alternative | RS00 with ~2:1 reduction | qty 0 | 14 Nm peak | 57 x 57 x 51 mm | saves 1.244 kg but reduces speed and margin; not selected |
 
-Limite noto: il RS04 resta sotto del 13.7% rispetto ai 139 Nm G1 su hip pitch, hip roll e knee. Copiare esattamente la
-potenza G1 non e possibile restando nella gamma RobStride corrente. Il compromesso e esplicito, non va nascosto.
+Known limitation: the RS04 remains 13.7% below the 139 Nm of the G1 on hip pitch, hip roll and knee. Copying exactly the
+G1 power is not possible while staying within the current RobStride range. The trade-off is explicit, it must not be hidden.
 
-Nodo densita di coppia (analisi 2026-06-04, sollevata dall'utente): il G1 ottiene ~120 Nm in un attuatore Unitree da
-~80 mm (misura mesh utente); RobStride per ~120 Nm richiede l'RS04 da ~110-120 mm. Quindi NON si possono rispettare insieme
-le posizioni giunto G1 (pensate per motori ~80 mm) e la coppia G1. Riferimento crudo: il link hip_pitch del G1 pesa
-1,35 kg (motore+struttura), quanto UN solo RS04 (1,4 kg) -> con RS04 le gambe diventano piu pesanti del G1. E non esiste
-un RobStride intermedio: tra RS03 (60 Nm picco, 106 mm) e RS04 (120 Nm picco, ~110 mm) non c'e nulla, e RS03 e appena
-piu piccolo (declassare a RS03 risparmia massa, non diametro). Opzioni reali sulle gambe: (a) tenere RS04 -> coppia vicina
-al G1 ma gambe piu grosse/pesanti, geometria anca da riadattare (i joint G1 esatti non entrano); (b) RS06 ~88 mm -> vicino
-alla geometria G1 ma solo ~36 Nm picco, un quarto del G1, adatto solo a robot piu leggero/meno dinamico. La scelta dipende
-dall'ambizione (locomozione dinamica tipo G1 vs camminata + RL su piano): 139/120 Nm servono per il dinamico, per la
-camminata lenta il fabbisogno e piu basso. NON cambiare i motori gamba in BOM finche l'utente non decide l'ambizione.
+Torque density issue (analysis 2026-06-04, raised by the user): the G1 gets ~120 Nm in a Unitree actuator of
+~80 mm (user's mesh measurement); RobStride for ~120 Nm requires the RS04 of ~110-120 mm. So it is NOT possible to respect together
+the G1 joint positions (designed for ~80 mm motors) and the G1 torque. Raw reference: the hip_pitch link of the G1 weighs
+1.35 kg (motor+structure), as much as just ONE RS04 (1.4 kg) -> with RS04 the legs become heavier than the G1. And there is no
+intermediate RobStride: between RS03 (60 Nm peak, 106 mm) and RS04 (120 Nm peak, ~110 mm) there is nothing, and RS03 is only slightly
+smaller (downgrading to RS03 saves mass, not diameter). Real options for the legs: (a) keep RS04 -> torque close
+to the G1 but bigger/heavier legs, hip geometry to be readapted (the exact G1 joints do not fit); (b) RS06 ~88 mm -> close
+to the G1 geometry but only ~36 Nm peak, a quarter of the G1, suitable only for a lighter/less dynamic robot. The choice depends
+on the ambition (G1-style dynamic locomotion vs walking + RL on flat ground): 139/120 Nm are needed for dynamic motion, for
+slow walking the requirement is lower. Do NOT change the leg motors in the BOM until the user decides the ambition.
 
-La caviglia conserva l'architettura richiesta: due attuatori nel polpaccio, due puntoni regolabili e un giunto a due
-assi tra piede e stinco. Sono sottosistemi distinti:
+The ankle keeps the requested architecture: two actuators in the calf, two adjustable pushrods and a two-axis
+joint between foot and shin. They are distinct subsystems:
 
-- I quattro puntoni caviglia M8 restano selezionati: due per gamba. Spingono su un perno trasversale solidale al piede.
-- Il perno trasversale dei puntoni ha diametro 8 mm, coerente con i fori delle teste a snodo M8. Lunghezza, materiale,
-  tolleranza, distanza laterale tra le sfere e ritegno restano da definire nel CAD.
-- Il giunto piede-stinco permette pitch e roll e porta i carichi strutturali del piede. Usa due perni ortogonali di
-  diametro 12 mm per caviglia: servono solo come assi di rotazione del giunto e non ricevono i puntoni. Lunghezza,
-  materiale, tolleranze, ritegni, tipo e quantita dei supporti restano da definire nel CAD.
-- I due puntoni vita M10 restano selezionati: il totale del robot e quindi sei puntoni, quattro M8 alle caviglie e due
-  M10 alla vita.
+- The four M8 ankle pushrods remain selected: two per leg. They push on a transverse pin fixed to the foot.
+- The transverse pin of the pushrods has a diameter of 8 mm, consistent with the bores of the M8 rod ends. Length, material,
+  tolerance, lateral distance between the balls and retention remain to be defined in the CAD.
+- The foot-shin joint allows pitch and roll and carries the structural loads of the foot. It uses two orthogonal pins of
+  12 mm diameter per ankle: they serve only as rotation axes of the joint and do not receive the pushrods. Length,
+  material, tolerances, retainers, type and quantity of the supports remain to be defined in the CAD.
+- The two M10 waist pushrods remain selected: the robot total is therefore six pushrods, four M8 at the ankles and two
+  M10 at the waist.
 
-Geometria chiarita dall'utente per entrambi gli assi diametro 12 mm: le due orecchie esterne sono fisse rispetto al perno;
-il pezzo centrale della caviglia ruota sul perno. Non mettere automaticamente supporti radiali sia nel centro sia nelle
-orecchie: sarebbe ridondante e rischierebbe disallineamenti. Le orecchie devono portare e trattenere il perno fisso; il
-pezzo centrale mobile contiene il supporto radiale.
+Geometry clarified by the user for both 12 mm diameter axes: the two outer lugs are fixed relative to the pin;
+the central part of the ankle rotates on the pin. Do not automatically put radial supports both in the center and in the
+lugs: it would be redundant and would risk misalignments. The lugs must carry and retain the fixed pin; the
+moving central part contains the radial support.
 
-DECISIONE FINALE caviglia (2026-06-03) - radente igus flangiato, assiale nella flangia. Vale per ciascuno dei due assi
-diametro 12 mm. E la soluzione scelta come la piu semplice e sostituisce le ipotesi NKI / manicotto-colonna / ralle
-separate descritte sotto, ora archiviate come alternative.
+FINAL DECISION for the ankle (2026-06-03) - flanged igus plain bearing, axial in the flange. It applies to each of the two
+12 mm diameter axes. It is the solution chosen as the simplest and it replaces the hypotheses NKI / sleeve-column / separate
+thrust washers described below, now archived as alternatives.
 
-- Perno = vite a colletto ISO 7379 `Ø12 / M10`. Fa da perno, da pista su cui scorre l'igus e da ritegno. E reso solidale
-  alle orecchie dal SERRAGGIO ASSIALE (colletto da un lato, dado autobloccante M10 + Loctite 243 sul filetto dall'altro),
-  non da un piantaggio forte. Accoppiamento gambo-foro orecchia: scorrevole-bloccato (snug), giusto per togliere il gioco
-  radiale ed evitare fretting; niente interferenza forte nel PA-CF stampato (crepa i layer ed e dura da montare su due fori
-  coassiali). Quasi nessuna coppia arriva al perno perche il pezzo mobile gira sull'igus a basso attrito: il serraggio
-  basta a tenerlo fermo. Variante pulita: filettare il capo lontano in un inserto metallico/dado annegato nell'orecchia,
-  cosi il serraggio reagisce su metallo. Antirotazione extra (flat sul gambo) solo se serve.
-- Supporto = boccola flangiata igus nel pezzo mobile. PRIMARIO scelto dall'utente: boccola STAMPATA multimateriale J260+PA-CF
-  integrale al pezzo mobile in FDM (J260 sia sul foro sia sulle facce di flangia; filamento gia acquistato). FALLBACK
-  acquistabile se la stampa non regge: `GFM-1214` iglidur G (drop-in `Q2FM-1214` per urti/sporco o
-  `JFM-1214` basso attrito) piantate a PRESSIONE nel pezzo centrale mobile, flange verso l'esterno. La boccola porta il
-  RADIALE; la FLANGIA porta l'ASSIALE, una per verso. Quindi niente ralle separate, niente reggispinta, niente
-  manicotto/colonna. Ritegno boccola: interferenza nella sede + flangia di battuta. Su PA-CF stampato il foro non e
-  preciso: stampare, provare il fit, aggiustare il Ø in CAD; riserva `Loctite 603/638` (bloccante anaerobico per
-  accoppiamenti). Mai cianoacrilato (Attak): fragile e sbagliato per trattenere boccole.
-- Serraggio = dado M10 autobloccante DIN 985 + rondella larga DIN 9021.
-- Controfaccia su cui striscia la flangia = OPZIONALE. PARTENZA scelta dall'utente: spallamento PA-CF ricavato dalle orecchie verso l'interno, su cui striscia la
-  flangia igus stampata (contatto PA-CF contro igus, non PA-CF contro PA-CF su tutta la faccia, concentrato sull'anello di
-  flangia). In alternativa la flangia striscia diretta sulla faccia PA-CF
-  dell'orecchia (assiale stimato ~1,3 MPa, oscillazione lenta, ok per prototipo, validare usura sul provino). Upgrade se
-  il PA-CF si consuma: una bussola flangiata METALLICA piantata a pressione in ciascuna orecchia (`DIN 172-B12-20` o
-  simile), solidale per interferenza come l'igus (niente colla), la sua flangia e la controfaccia metallica e il foro
-  guida e protegge il perno. NON usare una rondella sfusa in tasca: non resta solidale all'orecchia, gira e finisce per
-  strisciare comunque su PA-CF su una faccia.
-- Verifiche di carico: radiale ~8 MPa, assiale ~1,3 MPa sull'igus, contro limite iglidur G `>60 MPa`, margini ~10x e ~45x.
-  Il tipo di supporto non e guidato dal carico (irrisorio) ma dalla semplicita e dall'oscillazione: i rullini rischiano
-  false brinelling sotto moto oscillante, il radente no.
-- Quantita: 2 perni per caviglia x 2 caviglie = 4 assi. Per asse: 1 vite a colletto, 2 boccole flangiate igus, 1 dado +
-  1 rondella larga, piu (opzionale) 2 bussole flangiate metalliche.
-- Resta al CAD: lunghezza delle due boccole = spessore reale del pezzo mobile (es. due da 9 mm in 20 mm); lunghezza
-  colletto = pacco forcella reale (~60-70 mm); gioco assiale 0,1-0,3 mm (boccole + mobile un filo piu strette del vano
-  fra le orecchie).
+- Pin = ISO 7379 shoulder screw `Ø12 / M10`. It acts as the pin, as the race on which the igus slides and as the retainer. It is fixed
+  to the lugs by the AXIAL CLAMPING (shoulder on one side, M10 self-locking nut + Loctite 243 on the thread on the other),
+  not by a heavy press fit. Shank-to-lug-bore fit: sliding-locked (snug), just enough to remove the radial
+  play and avoid fretting; no heavy interference in the printed PA-CF (it cracks the layers and is hard to assemble on two coaxial
+  bores). Almost no torque reaches the pin because the moving part turns on the low-friction igus: the clamping
+  is enough to hold it still. Clean variant: thread the far end into a metal insert/nut embedded in the lug,
+  so the clamping reacts on metal. Extra anti-rotation (flat on the shank) only if needed.
+- Support = igus flanged bushing in the moving part. PRIMARY chosen by the user: multi-material J260+PA-CF PRINTED bushing
+  integral with the moving part in FDM (J260 both on the bore and on the flange faces; filament already purchased). FALLBACK
+  that can be purchased if the print does not hold up: `GFM-1214` iglidur G (drop-in `Q2FM-1214` for shocks/dirt or
+  `JFM-1214` low friction) PRESS-fitted into the moving central part, flanges facing outward. The bushing carries the
+  RADIAL load; the FLANGE carries the AXIAL load, one per direction. So no separate thrust washers, no thrust bearing, no
+  sleeve/column. Bushing retention: interference in the seat + stop flange. On printed PA-CF the bore is not
+  precise: print, test the fit, adjust the Ø in CAD; backup `Loctite 603/638` (anaerobic retaining compound for
+  fits). Never cyanoacrylate (Attak): brittle and wrong for retaining bushings.
+- Clamping = M10 self-locking nut DIN 985 + wide washer DIN 9021.
+- Counterface on which the flange slides = OPTIONAL. STARTING POINT chosen by the user: PA-CF shoulder formed from the lugs toward the inside, on which the
+  printed igus flange slides (contact PA-CF against igus, not PA-CF against PA-CF over the whole face, concentrated on the flange
+  ring). Alternatively the flange slides directly on the PA-CF face
+  of the lug (estimated axial ~1.3 MPa, slow oscillation, ok for a prototype, validate wear on the test specimen). Upgrade if
+  the PA-CF wears: a METAL flanged bush press-fitted into each lug (`DIN 172-B12-20` or
+  similar), fixed by interference like the igus (no glue), its flange is the metal counterface and the bore
+  guides and protects the pin. Do NOT use a loose washer in a pocket: it does not stay fixed to the lug, it spins and ends up
+  sliding on PA-CF on one face anyway.
+- Load checks: radial ~8 MPa, axial ~1.3 MPa on the igus, against the iglidur G limit `>60 MPa`, margins ~10x and ~45x.
+  The type of support is not driven by the load (negligible) but by simplicity and by the oscillation: needle roller bearings risk
+  false brinelling under oscillating motion, the plain bearing does not.
+- Quantities: 2 pins per ankle x 2 ankles = 4 axes. Per axis: 1 shoulder screw, 2 igus flanged bushings, 1 nut +
+  1 wide washer, plus (optional) 2 metal flanged bushes.
+- Left to the CAD: length of the two bushings = real thickness of the moving part (e.g. two of 9 mm in 20 mm); shoulder
+  length = real fork stack (~60-70 mm); axial play 0.1-0.3 mm (bushings + moving part a touch narrower than the gap
+  between the lugs).
 
-Fornitori verificati 2026-06-03 (piu scelte, roba comune):
+Suppliers verified 2026-06-03 (several choices, common stuff):
 
-| Pezzo | SKU / famiglia | Fornitori |
+| Part | SKU / family | Suppliers |
 |---|---|---|
-| Boccola flangiata igus | `GFM-1214` iglidur G, Ø12/Ø14, flangia ~Ø20x1, L da CAD ~9-10 | igus diretto, RS, Misumi, Minetti, F.lli Bono, Solema, ERIKS |
-| Vite a colletto | ISO 7379 `Ø12-M10`, L colletto da CAD | RS PRO `292-417` (12x60), Rubix `GN.35185`, Elesa, Puntoviti, Berardi, KIPP |
-| Bussola flangiata metallica (opzionale) | `DIN 172-B12-20` | Verzolla `Y1137`, Best4Automation, KIPP `K1022.A1200X20` |
-| Dado + rondella | M10 DIN 985 autobloccante + DIN 9021 | ovunque |
-[ALTERNATIVA ARCHIVIATA - superata dalla DECISIONE FINALE caviglia sopra; tenuta solo come opzione a rullini se un giorno
-servisse] Prima architettura semplice da disegnare in CAD, richiesta dall'utente:
+| igus flanged bushing | `GFM-1214` iglidur G, Ø12/Ø14, flange ~Ø20x1, L from CAD ~9-10 | igus direct, RS, Misumi, Minetti, F.lli Bono, Solema, ERIKS |
+| Shoulder screw | ISO 7379 `Ø12-M10`, shoulder L from CAD | RS PRO `292-417` (12x60), Rubix `GN.35185`, Elesa, Puntoviti, Berardi, KIPP |
+| Metal flanged bush (optional) | `DIN 172-B12-20` | Verzolla `Y1137`, Best4Automation, KIPP `K1022.A1200X20` |
+| Nut + washer | M10 DIN 985 self-locking + DIN 9021 | everywhere |
+[ARCHIVED ALTERNATIVE - superseded by the ankle FINAL DECISION above; kept only as a needle-roller option in case one day
+it is needed] First simple architecture to draw in CAD, requested by the user:
 
-- orecchio esterno PA-CF circa `20 mm`;
-- pezzo centrale mobile circa `20 mm`, con SKF `NKI 12/16` largo `16 mm` nella propria sede;
-- secondo orecchio esterno PA-CF circa `20 mm`;
-- pacco strutturale preliminare circa `60 mm`, esclusi piccoli giochi e dettagli di ritegno.
+- outer PA-CF lug about `20 mm`;
+- moving central part about `20 mm`, with SKF `NKI 12/16` `16 mm` wide in its own seat;
+- second outer PA-CF lug about `20 mm`;
+- preliminary structural stack about `60 mm`, excluding small amounts of play and retention details.
 
-Con `NKI 12/16` l'anello interno separabile va serrato tra gli spallamenti integrati delle due orecchie PA-CF e resta fisso
-insieme al perno; l'anello esterno resta nella sede del pezzo centrale mobile. Il gioco di funzionamento va lasciato tra
-le orecchie e il pezzo centrale mobile, non tra spallamenti e anello interno. Gli spallamenti non devono schiacciare la
-parte mobile. Verificare in CAD area di battuta, creep del PA-CF e serraggio: se la pressione locale e eccessiva, interporre
-spessori metallici di ripartizione oppure passare agli inserti metallici flangiati documentati sotto.
+With `NKI 12/16` the separable inner ring must be clamped between the integrated shoulders of the two PA-CF lugs and stays fixed
+together with the pin; the outer ring stays in the seat of the moving central part. The running play must be left between
+the lugs and the moving central part, not between the shoulders and the inner ring. The shoulders must not squeeze the
+moving part. Verify in CAD the abutment area, PA-CF creep and clamping: if the local pressure is excessive, insert
+metal load-spreading spacers or switch to the flanged metal inserts documented below.
 
-Attenzione: `NKI 12/16` porta il radiale ma non sostituisce un reggispinta. Se il pezzo centrale mobile arriva a toccare
-assialmente le orecchie sotto carico, prevedere una tasca per ralla igus sottile e registrata oppure un reggispinta separato.
-Non lasciare PA-CF contro PA-CF come superficie di usura.
+Caution: `NKI 12/16` carries the radial load but does not replace a thrust bearing. If the moving central part ends up touching
+the lugs axially under load, provide a pocket for a thin, located igus thrust washer or a separate thrust bearing.
+Do not leave PA-CF against PA-CF as a wear surface.
 
-Serraggio preliminare dell'asse con `NKI 12/16`: non usare il bullone per flettere le orecchie verso l'interno fino a
-recuperare un errore dimensionale. La catena fissa deve risultare chiusa gia a quota nominale; le correzioni fini si fanno
-con rasamenti selezionati dopo la prova del primo prototipo. Sequenza dall'esterno verso l'esterno: testa del bullone a
-colletto e rondella larga, orecchia PA-CF, spallamento anulare integrato nell'orecchia, anello interno `NKI`, secondo
-spallamento anulare integrato, seconda orecchia PA-CF, rondella larga e dado autobloccante. Il corpo centrale mobile e
-l'anello esterno del cuscinetto devono restare esclusi dalla catena serrata e conservare un piccolo gioco assiale controllato
-rispetto alle orecchie. Il filetto non deve lavorare nella zona di taglio o nella pista del cuscinetto. Usare rondelle larghe
-per distribuire il carico sul PA-CF; coppia di serraggio e creep vanno verificati sul provino reale. Se la pressione locale e
-eccessiva, aggiungere distanziali metallici di ripartizione oppure passare alla variante con bussole DIN 172.
+Preliminary clamping of the axle with `NKI 12/16`: do not use the bolt to bend the lugs inward until
+a dimensional error is taken up. The fixed chain must already be closed at the nominal dimension; fine corrections are made
+with shims selected after the test of the first prototype. Sequence from the outside to the outside: head of the shoulder
+bolt and large washer, PA-CF lug, annular shoulder integrated in the lug, `NKI` inner ring, second
+integrated annular shoulder, second PA-CF lug, large washer and self-locking nut. The moving central body and
+the outer ring of the bearing must stay excluded from the clamped chain and keep a small controlled axial play
+relative to the lugs. The thread must not work in the shear zone or in the bearing raceway. Use large washers
+to spread the load on the PA-CF; tightening torque and creep must be verified on the real test specimen. If the local pressure is
+excessive, add metal load-spreading spacers or switch to the variant with DIN 172 bushes.
 
-Riferimenti preliminari da confermare sulla quota finale del pacco:
+Preliminary references to be confirmed against the final dimension of the stack:
 
-| Componente | Dimensioni utili | Link |
+| Component | Useful dimensions | Link |
 |---|---|---|
-| RS PRO `292-417`, bullone a colletto ISO 7379 | colletto liscio `12 x 60 mm`, filetto `M10 x 16 mm`, lunghezza totale `84 mm` | <https://it.rs-online.com/web/p/viti-a-colletto/0292417> |
-| RS PRO `797-6254`, rondella larga DIN 9021 | foro `10,5 mm`, diametro esterno `30 mm`, spessore `2,5 mm` | <https://it.rs-online.com/web/p/rondelle/7976254> |
+| RS PRO `292-417`, ISO 7379 shoulder bolt | plain shoulder `12 x 60 mm`, thread `M10 x 16 mm`, total length `84 mm` | <https://it.rs-online.com/web/p/viti-a-colletto/0292417> |
+| RS PRO `797-6254`, DIN 9021 large washer | hole `10,5 mm`, outer diameter `30 mm`, thickness `2,5 mm` | <https://it.rs-online.com/web/p/rondelle/7976254> |
 
-Il colletto liscio da `60 mm` e coerente con il pacco strutturale preliminare `20 + 20 + 20 mm`, ma la misura definitiva
-dipende da giochi, rasamenti e sedi reali.
+The `60 mm` plain shoulder is consistent with the preliminary structural stack `20 + 20 + 20 mm`, but the final dimension
+depends on the real play, shims and seats.
 
-Non selezionare ancora definitivamente cuscinetti, boccole o rullini per il giunto caviglia: prima servono CAD, carichi,
-sedi, spessori e tolleranze. Le precedenti ipotesi `6001-2RS` e `6801-2RS` sono state rimosse dalla BOM perche premature.
-Se mancano dati meccanici, chiedere conferma all'utente invece di proporre una soluzione come se fosse gia definita.
+Do not yet definitively select bearings, bushings or needle rollers for the ankle joint: first CAD, loads,
+seats, thicknesses and tolerances are needed. The earlier hypotheses `6001-2RS` and `6801-2RS` were removed from the BOM because premature.
+If mechanical data are missing, ask the user for confirmation instead of proposing a solution as if it were already defined.
 
-Prima alternativa da valutare per i due assi diametro 12 mm: boccole radenti lunghe, non necessariamente cuscinetti
-volventi. Il giunto caviglia compie rotazioni limitate e oscillanti, con urti e velocita ridotte: una boccola radente
-composita metallo/PTFE oppure polimerica heavy-duty puo risultare piu semplice, compatta e tollerante dei rullini.
-Per separare correttamente i compiti:
+First alternative to evaluate for the two 12 mm diameter axles: long plain bushings, not necessarily rolling
+bearings. The ankle joint performs limited, oscillating rotations, with shocks and low speeds: a plain bushing,
+metal/PTFE composite or heavy-duty polymer, can turn out simpler, more compact and more tolerant than needle rollers.
+To separate the tasks correctly:
 
-- la boccola cilindrica nel pezzo centrale mobile porta il carico radiale;
-- una ralla radente dedicata per lato porta il carico assiale e deve essere registrata, non lasciata libera tra due facce;
-- un inserto metallico flangiato fisso in ciascuna orecchia, simile a una boccola a cappello, contiene o guida il perno
-  diametro 12 mm e offre alla ralla igus una controfaccia assiale liscia e sostituibile;
-- eventuali rasamenti DIN 988 correggono solo il gioco residuo dopo il montaggio: non sono la superficie primaria di usura.
+- the cylindrical bushing in the moving central part carries the radial load;
+- one dedicated plain thrust washer per side carries the axial load and must be located, not left free between two faces;
+- a fixed flanged metal insert in each lug, similar to a top-hat bushing, contains or guides the
+  12 mm diameter pin and gives the igus thrust washer a smooth, replaceable axial counterface;
+- any DIN 988 shims only correct the residual play after assembly: they are not the primary wear surface.
 
-Non lasciare lavorare igus direttamente contro il PA-CF dell'orecchia e non usare direttamente il PA-CF stampato come
-superficie di scorrimento. Non lasciare una rondella libera di ruotare casualmente contro entrambe le facce. La ralla puo
-essere registrata in una tasca poco profonda del pezzo mobile; l'inserto metallico e invece solidale all'orecchia.
+Do not let igus work directly against the PA-CF of the lug and do not use the printed PA-CF directly as
+a sliding surface. Do not leave a washer free to rotate randomly against both faces. The thrust washer can
+be located in a shallow pocket of the moving part; the metal insert is instead rigidly fixed to the lug.
 
-Gli inserti metallici a cappello non sono piu la prima architettura da disegnare, ma restano un'alternativa standard facile
-da acquistare se si usa una boccola igus centrale stampata oppure se gli spallamenti PA-CF non bastano. La misura reale
-individuata e Elesa+Ganter `DIN 172-B12-20-A` / `GN.12825`: foro `12 mm F7`, esterno `18 mm n6`, flangia diametro `22 mm`,
-corpo lungo `20 mm`, flangia spessa `4 mm`. Va usato un cappello su entrambe le orecchie. Il foro guida il perno ma non lo
-blocca automaticamente in rotazione: progettare antirotazione e ritegno assiale. Se si mantiene il riferimento strutturale
-`20 + 20 + 20 = circa 60 mm`, incassare la flangia da `4 mm` nell'orecchia; altrimenti le due flange aggiungono ingombro.
+The top-hat metal inserts are no longer the first architecture to draw, but remain a standard alternative that is easy
+to buy if a printed central igus bushing is used or if the PA-CF shoulders are not enough. The real size
+identified is Elesa+Ganter `DIN 172-B12-20-A` / `GN.12825`: bore `12 mm F7`, outside `18 mm n6`, flange diameter `22 mm`,
+body `20 mm` long, flange `4 mm` thick. A top hat must be used on both lugs. The bore guides the pin but does not
+automatically lock it in rotation: design anti-rotation and axial retention. If the structural reference
+`20 + 20 + 20 = about 60 mm` is kept, recess the `4 mm` flange into the lug; otherwise the two flanges add to the envelope.
 
-Fornitori verificati il 2026-06-02 per cappelli standard foro 12 mm, lunghezza 20 mm:
+Suppliers verified on 2026-06-02 for standard top hats, 12 mm bore, 20 mm length:
 
-| Fornitore | SKU | Prezzo | Disponibilita dichiarata | Link |
+| Supplier | SKU | Price | Declared availability | Link |
 |---|---|---:|---|---|
-| Verzolla Italia | Elesa+Ganter `DIN172-B12-20-A`, codice `Y1137` | EUR 6,89 cad | 5 disponibili | <https://www.verzolla.com/elesa-bussola-di-guida-flangiata-din172-b12-20-a-y1137> |
-| Best4Automation | Otto Ganter `172-B12-20-A` | EUR 5,26 netto cad | spedibile in 2-3 giorni lavorativi, B2B | <https://www.best4automation.com/positionierbuchse-mit-bund-bohrung-eins.-gerundet-sc-4042-172-b12-20-a/> |
-| Normteile Leinigen | KIPP `K1022.A1200X20`, equivalente DIN 172 forma A | EUR 4,50 netto / EUR 5,36 IVA inclusa cad | disponibile, 2-5 giorni | <https://www.normteile-leinigen.de/Bundbohrbuchse-12-x-20-DIN-172-Form-A/K1022.A1200X20> |
-| TME | Elesa+Ganter `DIN172-B12-20-A` | USD 10,04 cad | stock zero: usare come scheda tecnica o backup richiesta | <https://www.tme.eu/en/details/din172-b12-20-a/indexing-plungers/elesa-ganter/din-172-b12-20-a/> |
+| Verzolla Italia | Elesa+Ganter `DIN172-B12-20-A`, code `Y1137` | EUR 6.89 each | 5 available | <https://www.verzolla.com/elesa-bussola-di-guida-flangiata-din172-b12-20-a-y1137> |
+| Best4Automation | Otto Ganter `172-B12-20-A` | EUR 5.26 net each | ships in 2-3 working days, B2B | <https://www.best4automation.com/positionierbuchse-mit-bund-bohrung-eins.-gerundet-sc-4042-172-b12-20-a/> |
+| Normteile Leinigen | KIPP `K1022.A1200X20`, DIN 172 form A equivalent | EUR 4.50 net / EUR 5.36 VAT included each | available, 2-5 days | <https://www.normteile-leinigen.de/Bundbohrbuchse-12-x-20-DIN-172-Form-A/K1022.A1200X20> |
+| TME | Elesa+Ganter `DIN172-B12-20-A` | USD 10.04 each | zero stock: use as datasheet or backup request | <https://www.tme.eu/en/details/din172-b12-20-a/indexing-plungers/elesa-ganter/din-172-b12-20-a/> |
 
-Scheda ufficiale Elesa+Ganter: <https://www.elesa.com/siteassets/PDF/PDF_IT/DIN%20172.pdf>.
+Official Elesa+Ganter datasheet: <https://www.elesa.com/siteassets/PDF/PDF_IT/DIN%20172.pdf>.
 
-Cataloghi utili per perni e ritegni caviglia, mantenuti in BOM a quantita zero per verificare cosa esiste realmente prima
-di chiudere le quote del CAD:
+Useful catalogues for ankle pins and retainers, kept in the BOM at zero quantity to verify what really exists before
+closing the CAD dimensions:
 
-| Famiglia | Riferimento | Link |
+| Family | Reference | Link |
 |---|---|---|
-| Viti a spallamento assortite | set storico AliExpress `M3-M10` | <https://it.aliexpress.com/item/1005007481484485.html> |
-| Bullone a colletto corto | RS PRO `822-9316`, `12 x 20 mm`, filetto `M10` | <https://it.rs-online.com/web/p/viti-a-colletto/8229316> |
-| Bullone a colletto asse completo | RS PRO `292-417`, `12 x 60 mm`, filetto `M10 x 16 mm` | <https://it.rs-online.com/web/p/viti-a-colletto/0292417> |
-| Albero rettificato da tagliare | Motedis `12 mm h6`, temprato e rettificato | <https://www.motedis.it/it/Albero-di-precisione-12-mm-h6-acciaio-temprato-e-rettificato> |
-| Spina cilindrica corta | Wurth DIN 6325 / ISO 8734 `12 x 20 mm` | <https://eshop.wurth.fr/Goupille-cylindrique-DIN-6325-acier-brut-GOUPILLE-CYL-DIN6325-M6-12X20/025201220.sku/fr/FR/EUR/> |
-| Ritegni elastici | assortimento anelli Seeger interni ed esterni | <https://www.amazon.it/ANELLI-ELASTICI-INTERNI-ESTERNI-ASSORTITI/dp/B09CZKWD5J> |
-| Collare apribile asse `12 mm` | Ruland `MSP-12-F` | <https://www.ruland.com/msp-12-f.html> |
-| Albero rettificato da tagliare per perno puntoni | Motedis `8 mm h6`, temprato e rettificato | <https://www.motedis.it/it/Albero-di-precisione-8-mm-h6-acciaio-temprato-e-rettificato> |
-| Collare apribile asse `8 mm` | Ruland `MSP-8-F` | <https://www.ruland.com/msp-8-f.html> |
+| Assorted shoulder screws | legacy AliExpress set `M3-M10` | <https://it.aliexpress.com/item/1005007481484485.html> |
+| Short shoulder bolt | RS PRO `822-9316`, `12 x 20 mm`, thread `M10` | <https://it.rs-online.com/web/p/viti-a-colletto/8229316> |
+| Full-axle shoulder bolt | RS PRO `292-417`, `12 x 60 mm`, thread `M10 x 16 mm` | <https://it.rs-online.com/web/p/viti-a-colletto/0292417> |
+| Ground shaft to be cut | Motedis `12 mm h6`, hardened and ground | <https://www.motedis.it/it/Albero-di-precisione-12-mm-h6-acciaio-temprato-e-rettificato> |
+| Short cylindrical dowel pin | Wurth DIN 6325 / ISO 8734 `12 x 20 mm` | <https://eshop.wurth.fr/Goupille-cylindrique-DIN-6325-acier-brut-GOUPILLE-CYL-DIN6325-M6-12X20/025201220.sku/fr/FR/EUR/> |
+| Elastic retainers | assortment of internal and external Seeger rings | <https://www.amazon.it/ANELLI-ELASTICI-INTERNI-ESTERNI-ASSORTITI/dp/B09CZKWD5J> |
+| Split collar for `12 mm` axle | Ruland `MSP-12-F` | <https://www.ruland.com/msp-12-f.html> |
+| Ground shaft to be cut for pushrod pin | Motedis `8 mm h6`, hardened and ground | <https://www.motedis.it/it/Albero-di-precisione-8-mm-h6-acciaio-temprato-e-rettificato> |
+| Split collar for `8 mm` axle | Ruland `MSP-8-F` | <https://www.ruland.com/msp-8-f.html> |
 
-Se si valuta invece un cuscinetto radiale a rullini:
+If instead a radial needle roller bearing is evaluated:
 
-- SKF `HK 1216.2RS` e compatto ma non ha anello interno: richiede una pista perno temprata e rettificata;
-- SKF `NKI 12/16` include l'anello interno: gli spallamenti fissi delle orecchie possono serrare quell'anello mentre
-  l'anello esterno resta nella sede del pezzo centrale mobile;
-- un cuscinetto radiale a rullini non sostituisce automaticamente la battuta assiale: per l'assiale serve ancora una
-  interfaccia radente dedicata oppure un reggispinta separato. Non serrare il pezzo centrale mobile tra gli spallamenti.
+- SKF `HK 1216.2RS` is compact but has no inner ring: it requires a hardened and ground pin raceway;
+- SKF `NKI 12/16` includes the inner ring: the fixed shoulders of the lugs can clamp that ring while
+  the outer ring stays in the seat of the moving central part;
+- a radial needle roller bearing does not automatically replace the axial stop: for the axial load a
+  dedicated sliding interface or a separate thrust bearing is still needed. Do not clamp the moving central part between the shoulders.
 
-Non scegliere ancora SKU o lunghezza `20-25 mm`: servono carico radiale massimo, carico assiale, angolo e frequenza di
-oscillazione, diametro esterno massimo della sede, materiale del perno, finitura superficiale, tolleranze e spazio assiale.
+Do not yet choose SKU or length `20-25 mm`: what is needed is maximum radial load, axial load, angle and frequency of
+oscillation, maximum outer diameter of the seat, pin material, surface finish, tolerances and axial space.
 
-Esempi reali aggiunti in BOM come alternative `qty 0`, non ancora selezionate:
+Real examples added to the BOM as `qty 0` alternatives, not yet selected:
 
-| SKU | Tipo | Dimensioni | Prezzo verificato 2026-06-02 | Nota |
+| SKU | Type | Dimensions | Price verified 2026-06-02 | Note |
 |---|---|---|---:|---|
-| SKF `PCM 121420 E` | metallo/PTFE | 12 x 14 x 20 mm | EUR 2,13 netto | prima candidata semplice |
-| SKF `PCM 121425 E` | metallo/PTFE | 12 x 14 x 25 mm | EUR 2,94 netto | dimostra che 25 mm e una lunghezza standard |
-| igus `Q2SM-1214-20` | polimero heavy-duty | 12 x 14 x 20 mm | circa EUR 6,15 netto | candidato per oscillazione, urti e sporco |
-| igus `Q2FM-1214-12` | polimero heavy-duty flangiato | 12 x 14 x 12 mm, flangia 20 x 1 mm | da verificare | solo se il CAD consente la flangia |
-| igus `GTM-1224-015` | ralla radente separata | 12 x 24 x 1,5 mm | EUR 1,49 IVA inclusa | una per lato da registrare, non libera |
-| SKF `HK 1216.2RS` | rullini radiale senza anello interno | 12 x 18 x 16 mm | quotazione | richiede pista perno temprata |
-| SKF `NKI 12/16` | rullini radiale con anello interno | 12 x 24 x 16 mm | EUR 22,15 netto | coerente con spallamenti fissi, ma non regge da solo l'assiale |
-| SKF `AXK 1226` + `AS 1226` | reggispinta a rullini con piste | 12 x 26 x 4 mm per lato | EUR 4,10 + 2 x EUR 1,86 netto | alternativa piu ingombrante alla ralla igus |
-| HGI `PS12X18X1` DIN 988 | rasamento di registro | 12 x 18 x 1 mm | EUR 0,48 netto | solo correzione finale del gioco |
-| Elesa+Ganter `DIN 172-B12-20-A` / `GN.12825` | inserto metallico flangiato fisso alternativo | 12 x 18 x 20 mm, flangia 22 x 4 mm | EUR 6,89 cad Verzolla | cappello standard per entrambe le orecchie se si sceglie la strada igus |
+| SKF `PCM 121420 E` | metal/PTFE | 12 x 14 x 20 mm | EUR 2.13 net | first simple candidate |
+| SKF `PCM 121425 E` | metal/PTFE | 12 x 14 x 25 mm | EUR 2.94 net | shows that 25 mm is a standard length |
+| igus `Q2SM-1214-20` | heavy-duty polymer | 12 x 14 x 20 mm | about EUR 6.15 net | candidate for oscillation, shocks and dirt |
+| igus `Q2FM-1214-12` | flanged heavy-duty polymer | 12 x 14 x 12 mm, flange 20 x 1 mm | to be verified | only if the CAD allows the flange |
+| igus `GTM-1224-015` | separate plain thrust washer | 12 x 24 x 1.5 mm | EUR 1.49 VAT included | one per side, to be located, not free |
+| SKF `HK 1216.2RS` | radial needle roller without inner ring | 12 x 18 x 16 mm | quotation | requires hardened pin raceway |
+| SKF `NKI 12/16` | radial needle roller with inner ring | 12 x 24 x 16 mm | EUR 22.15 net | consistent with fixed shoulders, but does not carry the axial load by itself |
+| SKF `AXK 1226` + `AS 1226` | needle roller thrust bearing with raceways | 12 x 26 x 4 mm per side | EUR 4.10 + 2 x EUR 1.86 net | bulkier alternative to the igus thrust washer |
+| HGI `PS12X18X1` DIN 988 | adjustment shim | 12 x 18 x 1 mm | EUR 0.48 net | only final correction of the play |
+| Elesa+Ganter `DIN 172-B12-20-A` / `GN.12825` | alternative fixed flanged metal insert | 12 x 18 x 20 mm, flange 22 x 4 mm | EUR 6.89 each Verzolla | standard top hat for both lugs if the igus route is chosen |
 
-L'utente sta acquistando tre tribofilamenti igus stampabili per fare prove comparative: `iglidur i150`, `iglidur i190`
-e `iglidur J260-PF`. Sono state aggiunte tre righe `[ALT CUSTOM qty0]` separate. Le boccole custom possono essere utili
-per iterare rapidamente lunghezza, flangia e gioco, ma non sono ancora una scelta dimensionata ne una sostituzione
-automaticamente equivalente alle boccole SKF metallo/PTFE o igus `Q2` stampate a iniezione. Stampare provini confrontabili
-e validare pressione superficiale, usura, orientamento di stampa, finitura del perno, tolleranze e gioco. `i150` e il piu
-facile da processare; `i190` privilegia resistenza e usura ed e sensibile all'umidita; `J260-PF` e piu esigente da stampare
-ma va confrontato per attrito, usura e temperatura.
+The user is buying three printable igus tribofilaments to run comparative tests: `iglidur i150`, `iglidur i190`
+and `iglidur J260-PF`. Three separate `[ALT CUSTOM qty0]` rows were added. Custom bushings can be useful
+for quickly iterating length, flange and play, but they are not yet a sized choice nor a replacement
+automatically equivalent to the SKF metal/PTFE or igus `Q2` injection-moulded bushings. Print comparable test specimens
+and validate surface pressure, wear, print orientation, pin finish, tolerances and play. `i150` is the
+easiest to process; `i190` favours strength and wear and is sensitive to humidity; `J260-PF` is more demanding to print
+but must be compared for friction, wear and temperature.
 
-### Corpo superiore, fase 3
+### Upper body, phase 3
 
-La vita mantiene l'architettura fisica richiesta: un motore yaw verticale sotto che ruota tutto il busto, poi cardano
-centrale e due attuatori collegati a due puntoni per produrre pitch e roll. Il motore yaw e piu grosso; i due motori a
-puntoni sono piu piccoli ma non vanno dimensionati assumendo automaticamente meta carico ciascuno.
+The waist keeps the requested physical architecture: a vertical yaw motor below that rotates the whole torso, then a central
+cardan joint and two actuators connected to two pushrods to produce pitch and roll. The yaw motor is bigger; the two pushrod
+motors are smaller but must not be sized by automatically assuming half the load each.
 
-| Posizione | Motore | Quantita | Dimensioni | Peso | Coppia RobStride | Riferimento G1 |
+| Position | Motor | Quantity | Dimensions | Weight | RobStride torque | G1 reference |
 |---|---|---:|---|---:|---|---|
-| Waist yaw | RS06 (declassato da RS03) | 1 | 88 x 88 x 49 mm | 0.621 kg | 11 nom / 36 picco | 88 Nm; verif ~28 Nm torsione aggressiva < 36 |
-| Waist pitch / roll via 2 puntoni | RS06 (declassato da RS03) | 2 | 88 x 88 x 49 mm | 0.621 kg | 11 nom / 36 picco | 35 Nm/asse; giunto ~18-37, condiviso dai 2 puntoni |
-| Shoulder pitch / roll prossimali | RS00 (declassato da RS02, 2026-06-16) | 4 | 57 x 57 x 51 mm | 0.310 kg | 5 nom / 14 picco | 25 Nm; dinamico ~12 < 14; hold orizzontale 6.8 non continuo (gia' cosi' con RS02). -95 g e Ø57 vs 78.5. Dual encoder. RS06 alt qty0 |
-| Shoulder yaw distale | RS00 (declassato da RS02) | 2 | 57 x 57 x 51 mm | 0.310 kg | 5 nom / 14 picco | 25 Nm; gravita 0, ~4-6 Nm. dual encoder |
-| Elbow | RS00 (declassato da RS02, 2026-06-16) | 2 | 57 x 57 x 51 mm | 0.310 kg | 5 nom / 14 picco | 25 Nm; ~6.9 con 2 kg -> ~1.2 kg continui / 2 kg picco. -95 g, Ø57. Dual enc. RS06 se serve 2 kg continui |
-| Wrist roll + pitch/yaw uniformi | RS00 | 6 | 57 x 57 x 51 mm | 0.310 kg | 5 nom / 14 picco | roll 25 / pitch-yaw 5; regge 2 kg in mano, dual encoder |
-| Collo pan / tilt G1-Comp | RS05 | 2 | 46 x 46 x 44 mm | 0.191 kg | 1.6 nom / 5.5 picco | coppia non pubblicata |
+| Waist yaw | RS06 (downgraded from RS03) | 1 | 88 x 88 x 49 mm | 0.621 kg | 11 rated / 36 peak | 88 Nm; check ~28 Nm aggressive torsion < 36 |
+| Waist pitch / roll via 2 pushrods | RS06 (downgraded from RS03) | 2 | 88 x 88 x 49 mm | 0.621 kg | 11 rated / 36 peak | 35 Nm/axis; joint ~18-37, shared by the 2 pushrods |
+| Proximal shoulder pitch / roll | RS00 (downgraded from RS02, 2026-06-16) | 4 | 57 x 57 x 51 mm | 0.310 kg | 5 rated / 14 peak | 25 Nm; dynamic ~12 < 14; horizontal hold 6.8 not continuous (already so with RS02). -95 g and Ø57 vs 78.5. Dual encoder. RS06 alt qty0 |
+| Distal shoulder yaw | RS00 (downgraded from RS02) | 2 | 57 x 57 x 51 mm | 0.310 kg | 5 rated / 14 peak | 25 Nm; gravity 0, ~4-6 Nm. dual encoder |
+| Elbow | RS00 (downgraded from RS02, 2026-06-16) | 2 | 57 x 57 x 51 mm | 0.310 kg | 5 rated / 14 peak | 25 Nm; ~6.9 with 2 kg -> ~1.2 kg continuous / 2 kg peak. -95 g, Ø57. Dual enc. RS06 if 2 kg continuous is needed |
+| Uniform wrist roll + pitch/yaw | RS00 | 6 | 57 x 57 x 51 mm | 0.310 kg | 5 rated / 14 peak | roll 25 / pitch-yaw 5; holds 2 kg in the hand, dual encoder |
+| Neck pan / tilt G1-Comp | RS05 | 2 | 46 x 46 x 44 mm | 0.191 kg | 1.6 rated / 5.5 peak | torque not published |
 
-Riserve qty0: spalla pitch/roll RS06; spalla yaw RS02; polso RS02 (robusta) + RS05 (ultraleggera pitch/yaw); caviglia RS03.
+Reserves qty0: shoulder pitch/roll RS06; shoulder yaw RS02; wrist RS02 (robust) + RS05 (ultralight pitch/yaw); ankle RS03.
 
-**TRAPPOLA RS01 (verificata 2026-06-08).** RS01 e RS02 hanno la STESSA coppia (6/17 Nm) ma RS01 ha **1 solo encoder
-(lato motore)**, RS02 ne ha **2 (motore + uscita)**. L'encoder d'uscita legge l'angolo vero del giunto dopo il riduttore
-(compensa il backlash) -> serve per RL e manipolazione. RS01 e' la versione tagliata: solo 36V, niente IP, -$15 e -5.5mm.
-Quindi sui giunti controllati (spalla, gomito) si tiene **RS02**, NON RS01. RS00 (polso, spalla yaw) ha dual encoder.
-**RS01 non usato.** RS00 verificato dual encoder, 5 nom / 14 picco, 57x57x51, 0.310 kg, ~$125.
+**RS01 TRAP (verified 2026-06-08).** RS01 and RS02 have the SAME torque (6/17 Nm) but RS01 has **only 1 encoder
+(motor side)**, RS02 has **2 (motor + output)**. The output encoder reads the true joint angle after the gearbox
+(compensates the backlash) -> needed for RL and manipulation. RS01 is the cut-down version: 36V only, no IP, -$15 and -5.5mm.
+So on the controlled joints (shoulder, elbow) **RS02** is kept, NOT RS01. RS00 (wrist, shoulder yaw) has dual encoder.
+**RS01 not used.** RS00 verified dual encoder, 5 rated / 14 peak, 57x57x51, 0.310 kg, ~$125.
 
-**Verifica braccio (posizioni reali G1, polso alleggerito a RS00).** Tenere il braccio disteso orizzontale = **6,8 Nm
-statici**, picco dinamico ~12 Nm < 17. Il motore GOMITO a braccio teso conta 1,14 Nm (leva X = 187 mm a braccio disteso,
-non i 16 mm a riposo). RS02 copre: l'hold a braccio orizzontale e' posa occasionale (non continua), dinamica 12 < 17.
-Gomito con payload a 90 gradi: ~4,7 Nm con 1 kg, ~6,9 con 2 kg -> RS02 regge ~1,5 kg continui / 2 kg di picco; RS06 riserva.
+**Arm check (real G1 positions, wrist lightened to RS00).** Holding the arm extended horizontally = **6.8 Nm
+static**, dynamic peak ~12 Nm < 17. The ELBOW motor with the arm straight accounts for 1.14 Nm (lever X = 187 mm with the arm extended,
+not the 16 mm at rest). RS02 covers it: the hold with the arm horizontal is an occasional pose (not continuous), dynamic 12 < 17.
+Elbow with payload at 90 degrees: ~4.7 Nm with 1 kg, ~6.9 with 2 kg -> RS02 holds ~1.5 kg continuous / 2 kg peak; RS06 reserve.
 
-**Caviglia + vita pitch/roll = LEVERAGGI, non presa diretta (correzione utente 2026-06-08).** La coppia al GIUNTO e' fissa
-dal carico (caviglia ~46 Nm = peso x leva punta 130 mm); la coppia MOTORE = giunto x (crank_motore / crank_piede). I
-puntoni spingono ~40 mm dal perno: spingere vicino al perno NON riduce la coppia motore (alza la forza nell'asta ~1150 N);
-a ridurla e' il crank motore piu corto del crank piede (riduzione), che costa velocita di giunto. SCELTA FINALE
-(2026-06-16, vedi bullet sessione punto e): solo cammino -> caviglia = 2x RS00 a riduzione ~2:1 (BOM). A 1:1 servirebbero
-2x RS06 (alt qty0, per gait dinamici); l'RS02 e' eliminato. Crank esatti (per asse) DA FISSARE in CAD col Jacobiano 2x2.
+**Ankle + waist pitch/roll = LINKAGES, not direct drive (user correction 2026-06-08).** The torque at the JOINT is fixed
+by the load (ankle ~46 Nm = weight x toe lever 130 mm); the MOTOR torque = joint x (crank_motor / crank_foot). The
+pushrods push ~40 mm from the pin: pushing close to the pin does NOT reduce the motor torque (it raises the force in the rod ~1150 N);
+what reduces it is the motor crank being shorter than the foot crank (reduction), which costs joint speed. FINAL CHOICE
+(2026-06-16, see session bullet item e): walking only -> ankle = 2x RS00 at ~2:1 reduction (BOM). At 1:1 it would take
+2x RS06 (alt qty0, for dynamic gaits); the RS02 is eliminated. Exact cranks (per axis) TO BE SET in CAD with the 2x2 Jacobian.
 
-Il corpo G1 EDU resta una baseline da 29 DOF. Aggiungendo il collo G1-Comp selezionato il progetto sale a 31 assi
-motorizzati, esclusi eventuali motori delle mani. La coppia collo G1-Comp non e pubblica: RS05 `5.5 Nm picco / 1.6 Nm
-nominali` e una scelta provvisoria basata su compattezza e massa. Il polso e' tutto RS00 (dual encoder, 57 mm, 5 nom /
-14 picco): regge 2 kg in mano e dimezza l'ingombro vs RS02. Riserve qty0: RS02 (robusta) e RS05 (ultraleggera pitch/yaw).
+The G1 EDU body remains a 29 DOF baseline. Adding the selected G1-Comp neck, the project rises to 31 motorized
+axes, excluding any hand motors. The G1-Comp neck torque is not public: RS05 `5.5 Nm picco / 1.6 Nm
+nominali` is a provisional choice based on compactness and mass. The wrist is all RS00 (dual encoder, 57 mm, 5 rated /
+14 peak): it holds 2 kg in the hand and halves the size vs RS02. Reserves qty0: RS02 (robust) and RS05 (ultralight pitch/yaw).
 
-## Confronto marche motori a parita' di coppia (ingombro, peso, costo) - 2026-06-14
+## Motor brand comparison at equal torque (size, weight, cost) - 2026-06-14
 
-Confronto chiesto dall'utente: a PARITA' DI COPPIA conta prima ingombro+peso, poi costo, poi reperibilita'.
-Spec verificate via web (Seeed, CubeMars, ROBOTIS emanual, Foxtech). Dynamixel aggiunto al confronto.
+Comparison requested by the user: at EQUAL TORQUE what counts first is size+weight, then cost, then availability.
+Specs verified via web (Seeed, CubeMars, ROBOTIS emanual, Foxtech). Dynamixel added to the comparison.
 
-**CLASSE ~36 Nm - caviglia (4) + hip yaw (2) + vita puntoni (3) = 9 motori. QUI sta il risparmio di peso.**
+**CLASS ~36 Nm - ankle (4) + hip yaw (2) + waist pushrods (3) = 9 motors. HERE is where the weight saving is.**
 
-| Marca / modello | Picco Nm | Ingombro mm | Peso | Nm/kg | Tipo + encoder | Costo cad | Reperibilita' |
+| Brand / model | Peak Nm | Size mm | Weight | Nm/kg | Type + encoder | Cost each | Availability |
 |---|---:|---|---:|---:|---|---|---|
-| RobStride RS06 | 36 | Ø88 x 49 | 621 g | 58 | QDD, dual enc | ~200 EUR | buona (Seeed, AliExpress) |
-| **Encos EC-A4310-P2-36** | 36 | Ø56 x 60.5 | **382 g** | 94 | QDD 36:1, dual enc | ~700 USD | **scarsa (solo Foxtech, a preventivo)** |
-| CubeMars AK10-9 v3 | ~48-53 | Ø98 x 62 | 940 g | ~53 | QDD, dual enc | ~700 USD | ottima (T-Motor) |
-| Dynamixel PH42-020-S300 | ~25 (max) | 42 x 84 x 42 | 340 g | ~74 | cicloidale >300:1, NON backdrivabile | ~900-1100 USD | ottima (ROBOTIS) |
+| RobStride RS06 | 36 | Ø88 x 49 | 621 g | 58 | QDD, dual enc | ~200 EUR | good (Seeed, AliExpress) |
+| **Encos EC-A4310-P2-36** | 36 | Ø56 x 60.5 | **382 g** | 94 | QDD 36:1, dual enc | ~700 USD | **poor (Foxtech only, on quotation)** |
+| CubeMars AK10-9 v3 | ~48-53 | Ø98 x 62 | 940 g | ~53 | QDD, dual enc | ~700 USD | excellent (T-Motor) |
+| Dynamixel PH42-020-S300 | ~25 (max) | 42 x 84 x 42 | 340 g | ~74 | cycloidal >300:1, NOT backdrivable | ~900-1100 USD | excellent (ROBOTIS) |
 
-**CLASSE ~120-170 Nm - gambe: hip pitch/roll + ginocchio = 6 motori. CubeMars qui e' CAPACITA', non peso.**
+**CLASS ~120-170 Nm - legs: hip pitch/roll + knee = 6 motors. CubeMars here is CAPACITY, not weight.**
 
-| Marca / modello | Picco Nm | Ingombro mm | Peso | Nm/kg | Tipo + encoder | Costo cad | Reperibilita' |
+| Brand / model | Peak Nm | Size mm | Weight | Nm/kg | Type + encoder | Cost each | Availability |
 |---|---:|---|---:|---:|---|---|---|
-| RobStride RS04 | 120 | Ø106 x 56 | 1420 g | 85 | QDD, dual enc, INTEGRATO | **~255 USD** | buona (8+ rivenditori) |
-| **CubeMars AKE90-8** | **170** | Ø107.5 x **43.5** | 1400 g | 121 | planet. 9 arcmin, dual enc, NUDO (+driver) | ~484 USD + driver | ottima (T-Motor) |
-| Encos A10020 | 150 | non pubblicato | 1350 g | 111 | QDD | ~2250 USD | scarsa (Foxtech) |
-| Dynamixel PH54-200-S500 | 44 (rated) | 54 x 126 x 54 | 855 g | 52 | cicloidale ~500:1, NON backdriv. | **3541 USD** | ottima (ROBOTIS) |
+| RobStride RS04 | 120 | Ø106 x 56 | 1420 g | 85 | QDD, dual enc, INTEGRATED | **~255 USD** | good (8+ resellers) |
+| **CubeMars AKE90-8** | **170** | Ø107.5 x **43.5** | 1400 g | 121 | planet. 9 arcmin, dual enc, BARE (+driver) | ~484 USD + driver | excellent (T-Motor) |
+| Encos A10020 | 150 | not published | 1350 g | 111 | QDD | ~2250 USD | poor (Foxtech) |
+| Dynamixel PH54-200-S500 | 44 (rated) | 54 x 126 x 54 | 855 g | 52 | cycloidal ~500:1, NOT backdriv. | **3541 USD** | excellent (ROBOTIS) |
 
-(Dynamixel PH54 = flagship e NON arriva alla coppia gamba: 44 Nm vs 120-170 richiesti. Fuori gioco per le gambe.)
+(Dynamixel PH54 = flagship and does NOT reach the leg torque: 44 Nm vs 120-170 required. Out of the running for the legs.)
 
-**CLASSE <=17 Nm - spalle/gomito/polso/collo. RobStride imbattibile, niente premium.**
+**CLASS <=17 Nm - shoulders/elbow/wrist/neck. RobStride unbeatable, no premium.**
 
-| RobStride RS00 | 14 | Ø57 | 310 g | 45 | QDD dual enc | ~116 EUR | buona |
-| RobStride RS02 | 17 | Ø78.5 x 45.5 | 405 g | 42 | QDD dual enc | ~135 EUR | buona |
-| RobStride RS05 | 5.5 | compatto | 191 g | 29 | QDD | ~100 EUR | buona |
+| RobStride RS00 | 14 | Ø57 | 310 g | 45 | QDD dual enc | ~116 EUR | good |
+| RobStride RS02 | 17 | Ø78.5 x 45.5 | 405 g | 42 | QDD dual enc | ~135 EUR | good |
+| RobStride RS05 | 5.5 | compact | 191 g | 29 | QDD | ~100 EUR | good |
 
-(Sotto i ~20 Nm nessun premium batte RobStride su peso+costo+integrazione. RS00 310 g e' piu' leggero di qualunque alternativa a quella taglia.)
+(Below ~20 Nm no premium beats RobStride on weight+cost+integration. RS00 310 g is lighter than any alternative at that size.)
 
-**DOVE risparmiamo davvero, in chiaro:**
-- **Peso = SOLO Encos sui 36 Nm**: -244 g x 9 motori = **-2,2 kg**, e tutto DISTALE (caviglia/gamba) -> oro per le dinamiche di camminata. Costo: ~700 USD vs ~200 EUR cad (~3,5x) e reperibilita' pessima.
-- **CubeMars AKE90-8 sulle gambe = NON peso** (1,40 vs 1,42 kg, uguale): e' +50 Nm (supera il G1, toglie lo 0,86x dell'RS04) e **13 mm piu' sottile** (43,5 vs 56) -> packaging anca migliore. Costo ~2x e "nudo" (driver+encoder a parte).
-- **Piccoli (<=17 Nm)**: nessun guadagno, RobStride resta.
+**WHERE we really save, in plain terms:**
+- **Weight = ONLY Encos on the 36 Nm**: -244 g x 9 motors = **-2.2 kg**, and all DISTAL (ankle/leg) -> gold for the walking dynamics. Cost: ~700 USD vs ~200 EUR each (~3.5x) and very poor availability.
+- **CubeMars AKE90-8 on the legs = NOT weight** (1.40 vs 1.42 kg, the same): it is +50 Nm (exceeds the G1, removes the 0.86x of the RS04) and **13 mm thinner** (43.5 vs 56) -> better hip packaging. Cost ~2x and "bare" (driver+encoder separate).
+- **Small ones (<=17 Nm)**: no gain, RobStride stays.
 
-**REPERIBILITA' worldwide (ordine):** Dynamixel (ROBOTIS, distributori globali) > CubeMars/T-Motor (retail mondiale) > RobStride (Seeed + 8 rivenditori, AliExpress, in crescita) > **Encos (Foxtech, solo a preventivo, non pubblica nemmeno le quote)**. Quindi SI: RobStride e' MOLTO piu' facile da reperire di Encos.
+**AVAILABILITY worldwide (order):** Dynamixel (ROBOTIS, global distributors) > CubeMars/T-Motor (worldwide retail) > RobStride (Seeed + 8 resellers, AliExpress, growing) > **Encos (Foxtech, on quotation only, does not even publish the dimensions)**. So YES: RobStride is MUCH easier to source than Encos.
 
-**Dynamixel = CLASSE SBAGLIATA per noi.** Sono servo di POSIZIONE con riduttore cicloidale alto (300-500:1): coppia densa ma NON backdrivabili, lenti (29-33 rpm), backlash basso ma controllo in forza/impedenza scarso, e carissimi (PH54 = 3541 USD, 14x un RS04). Ottimi per bracci lenti in posizione, INADATTI a un clone G1 con locomozione RL e manipolazione in forza, che vuole QDD backdrivabili (RobStride/Encos/CubeMars). Reperibilita' top, ma irrilevante se la categoria e' sbagliata. (NB: il paper ToddlerBot - Stanford - usa proprio i Dynamixel ed e' infatti piccolo/lento/servo di posizione, conferma della categoria.)
+**Dynamixel = WRONG CLASS for us.** They are POSITION servos with a high-ratio cycloidal gearbox (300-500:1): dense torque but NOT backdrivable, slow (29-33 rpm), low backlash but poor force/impedance control, and very expensive (PH54 = 3541 USD, 14x an RS04). Excellent for slow position-controlled arms, UNSUITABLE for a G1 clone with RL locomotion and force-controlled manipulation, which wants backdrivable QDDs (RobStride/Encos/CubeMars). Top availability, but irrelevant if the category is wrong. (NB: the ToddlerBot paper - Stanford - uses precisely Dynamixels and is in fact small/slow/position-servo, confirmation of the category.)
 
-**NB "T-Motor" = CubeMars.** Stessa azienda (Sanrui Intelligent): CubeMars e' il brand-sorella robotico di T-Motor, e i manuali della serie AK sono ospitati su store.tmotor.com. Le AK10-9 / AKE90-8 gia' in tabella SONO i "T-Motor": non esiste un'opzione T-Motor separata da valutare. Le altre linee T-Motor (U/Antigravity) sono motori RC/droni, non attuatori robotici.
+**NB "T-Motor" = CubeMars.** Same company (Sanrui Intelligent): CubeMars is the robotics sister brand of T-Motor, and the AK series manuals are hosted on store.tmotor.com. The AK10-9 / AKE90-8 already in the table ARE the "T-Motor" ones: there is no separate T-Motor option to evaluate. The other T-Motor lines (U/Antigravity) are RC/drone motors, not robotic actuators.
 
-## Due-diligence motori premium / fornitori + reference ASIMOV (2026-06-16)
+## Due diligence on premium motors / suppliers + ASIMOV reference (2026-06-16)
 
-Ricerca di mercato per "umanoide leggero + elegante + potente + force control", dopo decisione CORRENTE A MURO
-(tethered, batteria a terra per i picchi, NIENTE batteria di bordo -> robot ~28-30 kg -> gambe e caviglie chiedono
-meno coppia). Direzione: motori PICCOLI e DENSI ovunque, tutti CAN + dual-encoder + controllo di COPPIA (omogenei per RL).
+Market research for a "light + elegant + powerful + force control humanoid", after the WALL POWER decision
+(tethered, battery on the ground for the peaks, NO on-board battery -> robot ~28-30 kg -> legs and ankles require
+less torque). Direction: SMALL and DENSE motors everywhere, all CAN + dual-encoder + TORQUE control (homogeneous for RL).
 
-**REFERENCE = ASIMOV v1 (il nostro gemello open-source).** 1,2 m, 35 kg, 25 DOF, **caviglia RSU parallela identica
-alla nostra**, **motori ENCOS ovunque**, CAD meccanico+elettrico + BOM completi pubblici. Attuatori ~$7.000 per 25
-(~$280 medio). I MODELLI ENCOS esatti per ogni giunto sono nel loro BOM Tally (link da docs.menlo.ai/asimov/v1/bom);
-CAD su github.com/asimovinc/asimov-1 (file mechanical/FABRICATION_MANIFEST.csv + modello sim). DA COPIARE giunto-per-giunto.
-Conferma: Encos sta su ASIMOV (non X-Humanoids, l'utente si era corretto). Compute Asimov = Raspberry Pi 5 + Radxa CM5.
+**REFERENCE = ASIMOV v1 (our open-source twin).** 1.2 m, 35 kg, 25 DOF, **parallel RSU ankle identical
+to ours**, **ENCOS motors everywhere**, complete public mechanical+electrical CAD + BOM. Actuators ~$7.000 for 25
+(~$280 average). The exact ENCOS MODELS for each joint are in their Tally BOM (link from docs.menlo.ai/asimov/v1/bom);
+CAD on github.com/asimovinc/asimov-1 (file mechanical/FABRICATION_MANIFEST.csv + sim model). TO BE COPIED joint-by-joint.
+Confirmation: Encos is on ASIMOV (not X-Humanoids, the user had corrected himself). Asimov compute = Raspberry Pi 5 + Radxa CM5.
 
-**ENCOS (il piu' leggero a 36 Nm: A4310 377 g).** Reperibile: Foxtech (store.foxtech.com) + aifitlab.com +
-arcsecondrobo.net (tutti rivenditori cinesi). Spedizione internazionale dichiarata, Italia DA CONFERMARE (utente ha
-mandato inquiry Foxtech il 2026-06-16: chiedere prezzo shipped-to-Italy + file CAD STEP + tempi/dogana). Affidabilita':
-validato da Asimov; dati guasto indipendenti scarsi. PUNTO DEBOLE = documentazione: NIENTE CAD/quote pubblici ->
-CAD da RICHIEDERE a Foxtech o misurare campione. Lineup (modulo Ø): A2806 (12 Nm, Ø44, 162 g) / A4310 (36 Nm, Ø56, 382 g) /
+**ENCOS (the lightest at 36 Nm: A4310 377 g).** Available from: Foxtech (store.foxtech.com) + aifitlab.com +
+arcsecondrobo.net (all Chinese resellers). International shipping declared, Italy TO BE CONFIRMED (the user
+sent an inquiry to Foxtech on 2026-06-16: ask for shipped-to-Italy price + STEP CAD files + lead times/customs). Reliability:
+validated by Asimov; independent failure data scarce. WEAK POINT = documentation: NO public CAD/dimensions ->
+CAD to be REQUESTED from Foxtech or measure a sample. Lineup (module Ø): A2806 (12 Nm, Ø44, 162 g) / A4310 (36 Nm, Ø56, 382 g) /
 A4315 (75 Nm, Ø56, 485 g) / A6416 (120 Nm, Ø88, 805 g) / A8112 (Ø81) / A10020 (Ø100) / A13715-720 (Ø137).
-CORREZIONE 2026-06-19 (datasheet V3.15): l'A2806 Ø44 esiste -> Encos HA un'opzione polso (smentito il vecchio "sotto Ø60 niente").
+CORRECTION 2026-06-19 (datasheet V3.15): the A2806 Ø44 exists -> Encos DOES HAVE a wrist option (the old "nothing below Ø60" is refuted).
 
-**STEADYWIN (micro, cheap, MIT protocol).** Reperibile: steadywin-motor.com, OpenELAB, Alibaba, aifitlab (niche ma ok).
-Driver: integrato CAN/UART, **protocollo MIT open-source** (standard Mini-Cheetah, codice community) o SHS; pilotabile
-pure con Arduino+MCP2515. CAD 2D+3D + manuali su steadywin-motor.com/products/document-download. ROS2 testato (Ubuntu/
-Iron, SOLO Linux). **POLSO IDEALE = GIM3510-64: Ø35 mm, riduzione 64:1, dual encoder, FOC** = micro + tanta coppia +
-lento (esattamente il requisito polso). Niche ma integrabile, nessun red flag grave.
+**STEADYWIN (micro, cheap, MIT protocol).** Available from: steadywin-motor.com, OpenELAB, Alibaba, aifitlab (niche but ok).
+Driver: integrated CAN/UART, **open-source MIT protocol** (Mini-Cheetah standard, community code) or SHS; can also be driven
+with Arduino+MCP2515. 2D+3D CAD + manuals at steadywin-motor.com/products/document-download. ROS2 tested (Ubuntu/
+Iron, Linux ONLY). **IDEAL WRIST = GIM3510-64: Ø35 mm, reduction 64:1, dual encoder, FOC** = micro + lots of torque +
+slow (exactly the wrist requirement). Niche but integrable, no serious red flag.
 
-**MYACTUATOR (la meglio SUPPORTATA).** ROS2 maturo (github 2b-t/myactuator_rmd_ros) + SDK C++17 SocketCAN + Python +
-CAD ufficiali; Amazon/RobotShop/Dings (USA/EU). Dual encoder. MA i piccoli RMD-L sono DIRECT-DRIVE deboli (5015=0,7 Nm,
-9015=3,4 Nm); per coppia servono gli RMD-X planetari (un filo piu' grossi). Vince sul supporto, non sulla taglia minima.
+**MYACTUATOR (the best SUPPORTED).** Mature ROS2 (github 2b-t/myactuator_rmd_ros) + C++17 SocketCAN SDK + Python +
+official CAD; Amazon/RobotShop/Dings (USA/EU). Dual encoder. BUT the small RMD-L are weak DIRECT-DRIVE units (5015=0.7 Nm,
+9015=3.4 Nm); for torque you need the planetary RMD-X (a bit larger). It wins on support, not on minimum size.
 
-**SURVEY "il migliore per categoria" (piccolo+potente+force control):**
-- GAMBE 120-170 Nm: fisica = ~Ø100 minimo, NON si rimpicciolisce. Encos A10020 (Ø100, 150) o **CubeMars AKE90-8**
-  (Ø107, 170, 9 arcmin, $484, CAD pronti). Col tether l'RS04 (120) torna pure comodo.
-- MID 36 Nm (anca-yaw, vita, spalla p/r, caviglia): **Encos A4310** (Ø60, 377 g) = il piu' leggero; alt CubeMars
+**SURVEY "the best per category" (small+powerful+force control):**
+- LEGS 120-170 Nm: physics = ~Ø100 minimum, it does NOT get any smaller. Encos A10020 (Ø100, 150) or **CubeMars AKE90-8**
+  (Ø107, 170, 9 arcmin, $484, CAD ready). With the tether the RS04 (120) also comes in handy again.
+- MID 36 Nm (hip-yaw, waist, shoulder p/r, ankle): **Encos A4310** (Ø60, 377 g) = the lightest; alt CubeMars
   AK10-9 (Ø98, 940 g) / Steadywin GIM8108-36.
-- POLSO/piccoli force-control: **Steadywin GIM3510-64** (Ø35, 64:1) o MyActuator RMD-X (CAD/ROS top) o **Harmonic Drive
-  RH-mini** (premium, zero gioco, €€€). Dynamixel SCARTATO (servo di posizione, niente force control).
+- WRIST/small force-control: **Steadywin GIM3510-64** (Ø35, 64:1) or MyActuator RMD-X (top CAD/ROS) or **Harmonic Drive
+  RH-mini** (premium, zero backlash, €€€). Dynamixel REJECTED (position servo, no force control).
 
-**TENSIONE chiave:** i migliori a peso/taglia (Encos A4310, Steadywin micro) sono NICHE (Cina, supporto/CAD scarsi);
-i meglio supportati (MyActuator, CubeMars) sono un filo piu' grossi/cari ma con CAD+driver pronti. Asimov dimostra che
-la via niche (Encos + protocollo MIT) si costruisce davvero.
+**Key TENSION:** the best in weight/size (Encos A4310, Steadywin micro) are NICHE (China, poor support/CAD);
+the best supported (MyActuator, CubeMars) are a bit larger/more expensive but with CAD+drivers ready. Asimov proves that
+the niche route (Encos + MIT protocol) can really be built.
 
-**CAD/manuali:** CubeMars (pagina prodotto) / Steadywin (document-download) / MyActuator (myactuator.com/dowload +
-ROS driver) hanno CAD pubblici. Encos NO -> richiedere a Foxtech. Asimov intero: github.com/asimovinc/asimov-1.
+**CAD/manuals:** CubeMars (product page) / Steadywin (document-download) / MyActuator (myactuator.com/dowload +
+ROS driver) have public CAD. Encos does NOT -> request from Foxtech. Entire Asimov: github.com/asimovinc/asimov-1.
 
-**SEQUENZA:** 1) copiare i modelli dal BOM Tally di Asimov; 2) aspettare quote Foxtech (prezzo Italia + CAD + tempi);
-3) se Encos ok -> Encos (gambe A10020 + mid A4310) + Steadywin GIM3510-64 ai polsi; 4) se no -> ripiego CubeMars +
-Steadywin (CAD pronti). Polso pista principale = Steadywin GIM3510-64. BOM RobStride attuale resta intatto come baseline.
+**SEQUENCE:** 1) copy the models from Asimov's Tally BOM; 2) wait for the Foxtech quote (Italy price + CAD + lead times);
+3) if Encos ok -> Encos (legs A10020 + mid A4310) + Steadywin GIM3510-64 at the wrists; 4) if not -> fallback CubeMars +
+Steadywin (CAD ready). Main track for the wrist = Steadywin GIM3510-64. The current RobStride BOM remains intact as baseline.
 
-**MAPPA MOTORI ASIMOV completa (ricostruita 2026-06-16: BOM gambe v0 CERTO + matching `armature` nel sim model v1
-sim-model/xmls/asimov.xml -> giunti con stessa armature = stesso attuatore). Naming Encos = EC-A[Ø frame][h]-[P plan /
-H armonico][riduzione]:**
-- Hip pitch: **EC-A6416-P2-25** (Ø64, planetario) | Hip roll: **EC-A5013-H17-100** (Ø50, ARMONICO 100:1) |
-  Hip yaw: **EC-A3814-H14-107** (Ø38, ARMONICO 107:1) | Knee: **EC-A4315-P2-36** (Ø43) |
-  Ankle A+B (RSU parallela pitch+roll): **EC-A4310-P2-36** (Ø43, 377 g) x2  [tutti CERTI dal BOM v0]
-- CONFERMATO dal BOM Excel Asimov ("Asimov 1 BOM.xlsx" in cartella, qty tornano: A4310x10, A6416x3, A5013x4, A4315x4,
-  A3814x4 = 25): Waist yaw = A6416 (Ø64) | Shoulder pitch = A5013-H armonico (Ø50) | Shoulder roll = A4315 (Ø43) |
-  Shoulder yaw = A3814-H armonico (Ø38) | **Elbow + Wrist yaw + Neck = EC-A4310 (Ø43)** [stesso dell'ankle, qty 10 =
-  ankle4+elbow2+wrist2+neck2]. Quindi Asimov usa SOLO 5 MODELLI, 4 taglie frame (Ø38/43/50/64); l'A4310 Ø43 fa il grosso.
-- FORNITORE vero: **ENCOS = Nanjing Inks Intelligent Technology (Nanjing)**, rivenduto da Foxtech/aifitlab. BOM Asimov
-  ~$15k target, "shipment in a few months". **CAD STEP intero robot: mechanical/ASV1/ASIMOV_V1.STEP** + mesh STL per
-  giunto in sim-model/assets/meshes -> base CAD. Tally BOM: tally.so/r/jaG0va.
-- IMPORTANTE: hip pitch/knee/ankle = PLANETARI (backdrivable a sufficienza per camminare); SOLO hip/spalla roll-yaw =
-  armonici. Quindi le gambe NON sono rigide-armoniche (mio errore precedente corretto). Per CAMMINARE il planetario
-  25-36:1 basta; il QDD 9:1 (RobStride) serve solo per correre/saltare, che non ci serve.
+**Complete ASIMOV MOTOR MAP (reconstructed 2026-06-16: v0 legs BOM CERTAIN + matching `armature` in the v1 sim model
+sim-model/xmls/asimov.xml -> joints with the same armature = same actuator). Encos naming = EC-A[Ø frame][h]-[P plan /
+H harmonic][reduction]:**
+- Hip pitch: **EC-A6416-P2-25** (Ø64, planetary) | Hip roll: **EC-A5013-H17-100** (Ø50, HARMONIC 100:1) |
+  Hip yaw: **EC-A3814-H14-107** (Ø38, HARMONIC 107:1) | Knee: **EC-A4315-P2-36** (Ø43) |
+  Ankle A+B (parallel RSU pitch+roll): **EC-A4310-P2-36** (Ø43, 377 g) x2  [all CERTAIN from the v0 BOM]
+- CONFIRMED by the Asimov Excel BOM ("Asimov 1 BOM.xlsx" in the folder, the qty add up: A4310x10, A6416x3, A5013x4, A4315x4,
+  A3814x4 = 25): Waist yaw = A6416 (Ø64) | Shoulder pitch = A5013-H harmonic (Ø50) | Shoulder roll = A4315 (Ø43) |
+  Shoulder yaw = A3814-H harmonic (Ø38) | **Elbow + Wrist yaw + Neck = EC-A4310 (Ø43)** [same as the ankle, qty 10 =
+  ankle4+elbow2+wrist2+neck2]. So Asimov uses ONLY 5 MODELS, 4 frame sizes (Ø38/43/50/64); the A4310 Ø43 does the bulk of the work.
+- Real SUPPLIER: **ENCOS = Nanjing Inks Intelligent Technology (Nanjing)**, resold by Foxtech/aifitlab. Asimov BOM
+  ~$15k target, "shipment in a few months". **STEP CAD of the entire robot: mechanical/ASV1/ASIMOV_V1.STEP** + STL meshes per
+  joint in sim-model/assets/meshes -> CAD base. Tally BOM: tally.so/r/jaG0va.
+- IMPORTANT: hip pitch/knee/ankle = PLANETARY (backdrivable enough for walking); ONLY hip/shoulder roll-yaw =
+  harmonic. So the legs are NOT stiff-harmonic (the AI's earlier error, corrected). For WALKING the planetary
+  25-36:1 is enough; the QDD 9:1 (RobStride) is only needed for running/jumping, which we do not need.
 
-**NOSTRO LISTINO TUTTO-ENCOS = 3 MODELLI (scelta utente 2026-06-19, FINALIZZATA; 3a scheda Excel "MOTORI Encos (quote)"; 30 nel robot + 4 trial = 34 acquistati):**
-- **EC-A6416-P2-25 (gambe) x6: hip pitch x2 + hip roll x2 + knee x2.** (Ø88, 805 g, 120 Nm picco)
-- **EC-A4315-P2-36 (mid) x16: caviglia x4 + spalle x6 + gomito x2 + hip yaw x2 + vita x2.** (Ø56, 485 g, 75 Nm picco)
-- **EC-A2806-P2-36 (polso+collo) x8: polso 3 DOF x2 + collo x2.** (Ø44, 162 g, 12 Nm picco, 220 RPM) <- COLLO spostato qui (75 Nm inutili in alto, alleggerisce la testa).
-- **EC-A4310-P2-36 (trial) x4: comprati per PROVARE le caviglie** (planetario lento OK: il robot NON deve correre). Baseline caviglia resta A4315.
-- A4315 = unica taglia mid (Ø56). Caviglia = ibrida FIGURE (pitch a puntone PROSSIMALE nello stinco + roll diretto piede, A4315 tenuta apposta). Vita = yaw+roll.
+**OUR ALL-ENCOS LIST = 3 MODELS (user choice 2026-06-19, FINALIZED; 3rd Excel sheet "MOTORI Encos (quote)"; 30 in the robot + 4 trial = 34 purchased):**
+- **EC-A6416-P2-25 (legs) x6: hip pitch x2 + hip roll x2 + knee x2.** (Ø88, 805 g, 120 Nm peak)
+- **EC-A4315-P2-36 (mid) x16: ankle x4 + shoulders x6 + elbow x2 + hip yaw x2 + waist x2.** (Ø56, 485 g, 75 Nm peak)
+- **EC-A2806-P2-36 (wrist+neck) x8: wrist 3 DOF x2 + neck x2.** (Ø44, 162 g, 12 Nm peak, 220 RPM) <- NECK moved here (75 Nm useless up high, lightens the head).
+- **EC-A4310-P2-36 (trial) x4: bought to TRY OUT the ankles** (slow planetary OK: the robot does NOT have to run). Ankle baseline remains A4315.
+- A4315 = the only mid size (Ø56). Ankle = FIGURE hybrid (pitch via PROXIMAL pushrod in the shin + direct roll at the foot, A4315 kept on purpose). Waist = yaw+roll.
 
-**OPZIONE RIAPERTA 2026-06-20 dall'utente: RobStride LIGHT, NO SENSORI (via Unitree pura).** RS06 (Ø88, 36/11 Nm) su hip/knee/shoulder; RS00 (Ø57, 14/5 Nm) sul resto INCLUSA la caviglia; RS05 collo. **NIENTE sensori di coppia, nemmeno al piede** (= QDD 9:1, corrente=coppia, come Unitree G1 che cammina/corre senza torque-sensor ne' F/T piede). Questa singola scelta CANCELLA tutto il problema vestizione/UKF/sensori piede.
-- RISOLVE 2 problemi storici insieme: (1) caviglia = RS00 Ø57 (piccolo, NON RS06 Ø88) -> via il problema packaging che ci aveva spinti su Encos; (2) sensori -> nessuno (QDD).
-- MATH (robot ~20 kg; i soli motori ~12 kg, struttura PA-CF leggerissima): hip/knee/shoulder RS06 36/11 = OK comodo per cammino piano (RMS << 11). Ankle = l'UNICO punto critico: RS00 diretto 14 Nm < ~16 Nm di equilibrio a 20 kg -> SERVE ~2:1, che pero' lo da' GRATIS il puntone/linkage caviglia (gia' previsto) -> ~28/10 Nm. OK.
-- CAVEAT onesti: tenerlo LEGGERO (~20 kg); e' un CAMMINATORE non accovacciatore (RS06 11 Nm continui NON reggono squat profondo statico/scale); dinamica modesta (ZMP piano, stile Asimo, non Cheetah); = ottimizzazione SEMPLICITA' (~EUR 4k, zero sensori, provato) NON "massima qualita'" (piu' debole/ingombrante di Encos, niente torque-control fine). Scelta consapevole.
-- LINEUP RobStride VERIFICATO (web 2026-06-20): RS05 Ø46/5.5Nm/191g | RS00 Ø57/14Nm/10:1/310g | RS02 Ø78/17Nm/7.75:1/405g | RS06 Ø88/36Nm/9:1/621g | **RS03 Ø106/60Nm/9:1/880g** | RS04 Ø110/120Nm/40 rated/9:1/1400g. (RS01 = encoder singolo, evitare.) **RS03 = scoperta utile = HIP sweet-spot** (tra RS06 36 e RS04 120; piu' leggero di RS04).
-- **CAVIGLIA ASIMMETRICA (idea utente 2026-06-20, VALIDATA):** pitch = RS06 (36 Nm) nello STINCO via puntone (serve ~30: equilibrio M·g·mezza-lunghezza-piede + push-off); roll = RS00 (14 Nm) sul PIEDE diretto (serve solo ~9: piede STRETTO -> mezza-larghezza ~4.5cm = meta' leva del pitch, e NIENTE push-off in roll). RS00 basta col margine. Packaging: motore grosso prossimale (stinco), piccolo distale (piede). Caveat: CoM sul piede d'appoggio (RS00 5 Nm continui sottili in single-leg statico, ok in cammino).
-- "RS05 sull'anca" = REFUSO utente: RS05 e' 5.5 Nm (troppo poco per QUALSIASI DOF d'anca, servono 16-40+). Per l'anca: RS03 (60) o RS04 (120).
-- Mapping HEAVY RobStride: hip pitch/roll RS03 (o RS04) | knee RS03/RS06 | ankle pitch RS06 + roll RS00 | shoulder RS06 | elbow RS00/RS02 | wrist RS05 | neck RS05 | hip-yaw RS00/RS02 | waist RS06/RS03.
+**OPTION REOPENED 2026-06-20 by the user: RobStride LIGHT, NO SENSORS (pure Unitree route).** RS06 (Ø88, 36/11 Nm) on hip/knee/shoulder; RS00 (Ø57, 14/5 Nm) on the rest INCLUDING the ankle; RS05 neck. **NO torque sensors, not even at the foot** (= QDD 9:1, current=torque, like the Unitree G1 which walks/runs without a torque-sensor or foot F/T). This single choice CANCELS the whole instrumentation/UKF/foot sensors problem.
+- SOLVES 2 long-standing problems at once: (1) ankle = RS00 Ø57 (small, NOT RS06 Ø88) -> gone is the packaging problem that had pushed us to Encos; (2) sensors -> none (QDD).
+- MATH (robot ~20 kg; the motors alone ~12 kg, very light PA-CF structure): hip/knee/shoulder RS06 36/11 = comfortably OK for flat-ground walking (RMS << 11). Ankle = the ONLY critical point: RS00 direct 14 Nm < ~16 Nm of balance at 20 kg -> ~2:1 IS NEEDED, which however is provided for FREE by the ankle pushrod/linkage (already planned) -> ~28/10 Nm. OK.
+- Honest CAVEATS: keep it LIGHT (~20 kg); it is a WALKER not a squatter (RS06 11 Nm continuous does NOT hold a deep static squat/stairs); modest dynamics (flat-ground ZMP, Asimo style, not Cheetah); = optimization for SIMPLICITY (~EUR 4k, zero sensors, proven) NOT "maximum quality" (weaker/bulkier than Encos, no fine torque-control). Deliberate choice.
+- RobStride LINEUP VERIFIED (web 2026-06-20): RS05 Ø46/5.5Nm/191g | RS00 Ø57/14Nm/10:1/310g | RS02 Ø78/17Nm/7.75:1/405g | RS06 Ø88/36Nm/9:1/621g | **RS03 Ø106/60Nm/9:1/880g** | RS04 Ø110/120Nm/40 rated/9:1/1400g. (RS01 = single encoder, avoid.) **RS03 = useful discovery = HIP sweet-spot** (between RS06 36 and RS04 120; lighter than RS04).
+- **ASYMMETRIC ANKLE (user idea 2026-06-20, VALIDATED):** pitch = RS06 (36 Nm) in the SHIN via pushrod (~30 needed: balance M·g·half-foot-length + push-off); roll = RS00 (14 Nm) on the FOOT, direct (only ~9 needed: NARROW foot -> half-width ~4.5cm = half the lever arm of pitch, and NO push-off in roll). RS00 is enough, with margin. Packaging: large motor proximal (shin), small one distal (foot). Caveat: CoM over the support foot (RS00 5 Nm continuous is thin in static single-leg, ok while walking).
+- "RS05 on the hip" = user TYPO: RS05 is 5.5 Nm (too little for ANY hip DOF, 16-40+ are needed). For the hip: RS03 (60) or RS04 (120).
+- RobStride HEAVY mapping: hip pitch/roll RS03 (or RS04) | knee RS03/RS06 | ankle pitch RS06 + roll RS00 | shoulder RS06 | elbow RS00/RS02 | wrist RS05 | neck RS05 | hip-yaw RS00/RS02 | waist RS06/RS03.
 
-**ToddlerBot (Stanford 2025, domanda utente): NON QDD.** Usa **Dynamixel XC330/XM** = servo di POSIZIONE ad alta riduzione (~288:1 cicloidale), non backdrivabili, niente force-control da corrente. Robot ~0.5m/3-4kg da tavolo per ML research, piccolo/lento/economico. Angolo opposto del design space rispetto al G1-class dinamico dell'utente -> non e' la nostra via. (Conferma il vecchio appunto: Dynamixel = categoria sbagliata per noi.)
+**ToddlerBot (Stanford 2025, user question): NOT QDD.** It uses **Dynamixel XC330/XM** = high-reduction POSITION servos (~288:1 cycloidal), not backdrivable, no force-control from current. Tabletop robot ~0.5m/3-4kg for ML research, small/slow/cheap. Opposite corner of the design space compared with the user's dynamic G1-class -> it is not our route. (Confirms the old note: Dynamixel = wrong category for us.)
 
-**EMAIL preparate (2026-06-20): ZeroErr, Leaderdrive, Honpine, Laifual** (turnkey torque-sensored harmonic: spec, torque sensor fisico vs encoder, datasheet+STEP, prezzo/MOQ/lead, EtherCAT/CAN, spedizione Italia).
+**EMAILS prepared (2026-06-20): ZeroErr, Leaderdrive, Honpine, Laifual** (turnkey torque-sensored harmonic: spec, physical torque sensor vs encoder, datasheet+STEP, price/MOQ/lead, EtherCAT/CAN, shipping to Italy).
 
-**CHIARIMENTI CONTROLLO (2026-06-20, domande utente):**
-- RL locomotion (Unitree/ToddlerBot/G1) = policy NN (MLP piccolo) con OSSERVAZIONI pos/vel giunto + IMU (NON coppia) -> target di POSIZIONE -> PD -> coppia applicata da corrente. **Nessun sensore di coppia, la coppia NON e' un input della policy.** Runtime = NN deterministico ~50-200 Hz + PD ~1 kHz. (Alternativa deterministica classica = ZMP/MPC model-based, stile ASIMO; il moderno e' la policy NN appresa.)
-- G1 Unitree: NIENTE sensori coppia; robustezza = COMPLIANCE MECCANICA del QDD (backdrivabile), non dati di coppia. RobStride uguale, MA il QDD tiene la PORTA APERTA (corrente=coppia pulita -> puoi aggiungere force control/contact detection dopo). Encos planetario rigido CHIUDE quella porta.
-- ACT / Diffusion Policy (manipolazione): dati = IMMAGINI + posizioni giunto -> azioni di POSIZIONE. Coppia NON usata (solo branch contact-rich la aggiunge). Posizione = spina dorsale, coppia = specializzazione opzionale.
-- Encos "middle 25-36:1": BUONO per controllo di POSIZIONE (rigido a sufficienza, preciso, meno inerzia riflessa di un armonico); AWKWARD MIDDLE solo per FORCE control (troppo rigido per corrente=coppia come QDD, non auto-sensa per deflessione come armonico). Siccome RL cammina in POSIZIONE, Encos e' nel suo regime BUONO.
+**CONTROL CLARIFICATIONS (2026-06-20, user questions):**
+- RL locomotion (Unitree/ToddlerBot/G1) = NN policy (small MLP) with OBSERVATIONS of joint pos/vel + IMU (NOT torque) -> POSITION targets -> PD -> torque applied via current. **No torque sensor, torque is NOT an input of the policy.** Runtime = deterministic NN ~50-200 Hz + PD ~1 kHz. (Classic deterministic alternative = model-based ZMP/MPC, ASIMO style; the modern approach is the learned NN policy.)
+- Unitree G1: NO torque sensors; robustness = MECHANICAL COMPLIANCE of the QDD (backdrivable), not torque data. RobStride is the same, BUT the QDD keeps the DOOR OPEN (current=clean torque -> you can add force control/contact detection later). The stiff planetary Encos CLOSES that door.
+- ACT / Diffusion Policy (manipulation): data = IMAGES + joint positions -> POSITION actions. Torque NOT used (only the contact-rich branch adds it). Position = backbone, torque = optional specialization.
+- Encos "middle 25-36:1": GOOD for POSITION control (stiff enough, precise, less reflected inertia than a harmonic); AWKWARD MIDDLE only for FORCE control (too stiff for current=torque like a QDD, does not self-sense via deflection like a harmonic). Since RL walks in POSITION, Encos is in its GOOD regime.
 
-**RACCOMANDAZIONE AI (2026-06-20) - RAFFINATA dopo che l'utente ha chiarito l'OBIETTIVO: "umanoide che cammina (calmo) + manipola con policy ACT/diffusion".**
-- MECCANISMO (chiarito all'utente): la policy emette sempre POSIZIONE; la differenza QDD vs alta-riduzione = quanto RIGIDO insegue. (1) Servo rigido (Dynamixel/Encos): loop di posizione brute-force, torque-accuracy IRRILEVANTE, giunto RIGIDO. (2) QDD + PD basso guadagno: coppia piccola ∝ errore = MOLLA cedevole; torque-accuracy SERVE (la coppia E' la molla). QDD = puoi DOSARE la rigidezza (rigido o compliant); alta-riduzione = SOLO rigido. ToddlerBot cammina rigido perche' piccolo(3.4kg)+piano+RL.
-- SVOLTA: ACT/Diffusion emettono POSIZIONE e girano su hardware RIGIDO a posizione (ALOHA = bracci Dynamixel rigidi). RIGIDO = PIU' PRECISO in free-space (il QDD compliant CEDE/flette = meno preciso). Quindi per la MANIPOLAZIONE dell'utente, la rigidezza Encos e' un PREGIO. Cammino calmo = ok rigido.
-- **Per l'obiettivo ESATTO dell'utente (cammino calmo + manipolazione ACT/diffusion in ambiente controllato) -> ENCOS e' il fit MIGLIORE**: preciso dove conta (manipolazione), compatto/elegante, zero sensori, cammino sufficiente. (Correzione del lean "RobStride" precedente, che valeva per capacita' DINAMICA non richiesta.)
-- **RobStride SE** vuoi l'OPZIONE futura: locomozione robusta/dinamica (terreno vario, spinte, corsa) o manipolazione CONTACT-RICH (inserimento, contatto sicuro) -> solo il QDD permette di dosare compliance dopo. Bulkier, future-proof.
-- DECISIONE NETTA aperta: massima precisione-manipolazione + compattezza ORA (Encos) vs poter diventare robusto/contact-capable/dinamico DOPO (RobStride). Per "walk + ACT/diffusion" come detto: lean ENCOS. (ZeroErr = fuori: pesante/caro/lento, e la sua compliance/torque non serve a una manipolazione a posizione.)
-- STATO: ipotesi forte, NON ancora BOM. Confronto diretto vs piano Encos da fare. NON ho ancora ricostruito il foglio Excel per questa (offerto).
+**AI RECOMMENDATION (2026-06-20) - REFINED after the user clarified the GOAL: "humanoid that walks (calmly) + manipulates with ACT/diffusion policies".**
+- MECHANISM (clarified to the user): the policy always outputs POSITION; the difference QDD vs high-reduction = how STIFFLY it tracks. (1) Stiff servo (Dynamixel/Encos): brute-force position loop, torque-accuracy IRRELEVANT, STIFF joint. (2) QDD + low-gain PD: small torque ∝ error = compliant SPRING; torque-accuracy IS NEEDED (the torque IS the spring). QDD = you can MODULATE the stiffness (stiff or compliant); high-reduction = stiff ONLY. ToddlerBot walks stiff because small(3.4kg)+flat ground+RL.
+- TURNING POINT: ACT/Diffusion output POSITION and run on STIFF position-controlled hardware (ALOHA = stiff Dynamixel arms). STIFF = MORE PRECISE in free-space (the compliant QDD YIELDS/flexes = less precise). So for the user's MANIPULATION, the Encos stiffness is an ASSET. Calm walking = ok stiff.
+- **For the user's EXACT goal (calm walking + ACT/diffusion manipulation in a controlled environment) -> ENCOS is the BEST fit**: precise where it matters (manipulation), compact/elegant, zero sensors, sufficient walking. (Correction of the earlier "RobStride" lean, which applied to a DYNAMIC capability that is not required.)
+- **RobStride IF** you want the future OPTION: robust/dynamic locomotion (varied terrain, pushes, running) or CONTACT-RICH manipulation (insertion, safe contact) -> only the QDD lets you modulate compliance later. Bulkier, future-proof.
+- CLEAR-CUT DECISION open: maximum manipulation precision + compactness NOW (Encos) vs being able to become robust/contact-capable/dynamic LATER (RobStride). For "walk + ACT/diffusion" as stated: lean ENCOS. (ZeroErr = out: heavy/expensive/slow, and its compliance/torque is of no use to position-based manipulation.)
+- STATUS: strong hypothesis, NOT yet BOM. Direct comparison vs the Encos plan still to be done. The AI has NOT yet rebuilt the Excel sheet for this one (offered).
 
-**OPZIONE RIVISITATA 2026-06-20: ZeroErr eRob (turnkey torque-sensored).** L'utente riapre ZeroErr come via "compra il giunto completo, zero DIY". Modulo eRob = motore frameless + armonico + DOPPIO encoder + TORQUE SENSOR + freno + driver, tutto integrato (CAN/EtherCAT). Lineup verificato (zeroerr.com): 70F Ø70/35Nm/0.77kg, 70I Ø70/70Nm/0.88kg, 80F Ø80/71Nm/0.89kg, 80I Ø80/112Nm/1.09kg, 90I Ø90/191Nm/1.64kg, 110I Ø110/408Nm/2.68kg; max 60 RPM (40 sui grossi). Serie T = versioni ad ANGOLO RETTO (piu' pesanti). **Minimo Ø70 -> NIENTE per il POLSO** (serve piccolo a parte: Steadywin GIM3510 Ø46 / RS05 Ø46 / Encos A2806 Ø44).
-- Mapping utente: 70F caviglia, 80I knee/hip (lo "strong"), 70F/70I spalle/gomito/vita, polso = altro.
-- VERDETTO ONESTO: risolve il sensing turnkey, MA = **opzione PIU' PESANTE e PIU' CARA**: ~19-21 kg di soli attuatori -> robot ~35-40 kg (piu' del G1!), prezzo premium (~$700-1500 cad, ~$20k+). CONTRADDICE il "light humanoid" e il rifiuto di Bota per peso/costo. 60 RPM = ok cammino calmo, borderline ginocchio cadenza normale. Vale solo se l'utente paga peso+soldi per azzerare ogni DIY.
-- ALTERNATIVE stessa categoria (turnkey torque-sensored): **Honpine** (peer diretto, CN, piu' economico), **Leaderdrive** (= supplier RobotEra, gia' contattato), **Laifual**, **HEBI X-series** (US, SEA, API top, premium), **Innfos/DAMIAO SCA** (QDD, piu' leggero). Consiglio: quote Honpine+Leaderdrive prima di ZeroErr.
-- EMAIL preparate per ZeroErr + Leaderdrive (spec+quote: torque sensor fisico vs encoder, datasheet+STEP, prezzo/MOQ/lead, EtherCAT/CAN, spedizione Italia).
+**OPTION REVISITED 2026-06-20: ZeroErr eRob (turnkey torque-sensored).** The user reopens ZeroErr as the "buy the complete joint, zero DIY" route. eRob module = frameless motor + harmonic + DUAL encoder + TORQUE SENSOR + brake + driver, all integrated (CAN/EtherCAT). Lineup verified (zeroerr.com): 70F Ø70/35Nm/0.77kg, 70I Ø70/70Nm/0.88kg, 80F Ø80/71Nm/0.89kg, 80I Ø80/112Nm/1.09kg, 90I Ø90/191Nm/1.64kg, 110I Ø110/408Nm/2.68kg; max 60 RPM (40 on the large ones). T series = RIGHT-ANGLE versions (heavier). **Minimum Ø70 -> NOTHING for the WRIST** (a separate small one is needed: Steadywin GIM3510 Ø46 / RS05 Ø46 / Encos A2806 Ø44).
+- User mapping: 70F ankle, 80I knee/hip (the "strong" one), 70F/70I shoulders/elbow/waist, wrist = other.
+- HONEST VERDICT: it solves turnkey sensing, BUT = **the HEAVIEST and MOST EXPENSIVE option**: ~19-21 kg of actuators alone -> robot ~35-40 kg (more than the G1!), premium price (~$700-1500 each, ~$20k+). It CONTRADICTS the "light humanoid" and the rejection of Bota for weight/cost. 60 RPM = ok for calm walking, borderline for the knee at normal cadence. Worth it only if the user pays weight+money to eliminate all DIY.
+- ALTERNATIVES in the same category (turnkey torque-sensored): **Honpine** (direct peer, CN, cheaper), **Leaderdrive** (= RobotEra supplier, already contacted), **Laifual**, **HEBI X-series** (US, SEA, top API, premium), **Innfos/DAMIAO SCA** (QDD, lighter). Advice: Honpine+Leaderdrive quotes before ZeroErr.
+- EMAILS prepared for ZeroErr + Leaderdrive (spec+quote: physical torque sensor vs encoder, datasheet+STEP, price/MOQ/lead, EtherCAT/CAN, shipping to Italy).
 
-**SPEC ENCOS (decode nome + dati trovati). NOME = EC-A[Ø statore][h statore]-[P plan / H arm][stadi]-[RIDUZIONE]; il numero
-finale e' la RIDUZIONE, non la coppia. Coppia = motore x riduzione.**
-- IMPORTANTE: il Ø nel nome e' lo STATORE; il MODULO reale e' piu' grosso. A6416 -> Ø88 (come RS06); A4310/A4315 -> **Ø56 (= come RS00 Ø57!)**; A2806 -> Ø44.
+**ENCOS SPECS (name decode + data found). NAME = EC-A[Ø stator][h stator]-[P plan / H harm][stages]-[REDUCTION]; the number
+at the end is the REDUCTION, not the torque. Torque = motor x reduction.**
+- IMPORTANT: the Ø in the name is the STATOR; the actual MODULE is larger. A6416 -> Ø88 (like RS06); A4310/A4315 -> **Ø56 (= like RS00 Ø57!)**; A2806 -> Ø44.
 
-**SPEC REALI DAL DATASHEET V3.15EAP (letto 2026-06-19, basta stime):**
-| Modello | Riduz | Ø mod | Lungh | Peso | Nom Nm | Picco Nm | Nom/Picco RPM | Kt | Nm/kg |
+**REAL SPECS FROM THE DATASHEET V3.15EAP (read 2026-06-19, no more estimates):**
+| Model | Reduction | Ø mod | Length | Weight | Rated Nm | Peak Nm | Rated/Peak RPM | Kt | Nm/kg |
 |---|---|---|---|---|---|---|---|---|---|
 | EC-A2806-P2-36 | 36:1 | Ø44 | 44 | 162 g | 3 | 12 | 207/220 | 1.35 | 74 |
 | EC-A4310-P2-36 | 36:1 | Ø56 | 60.5 | 382 g | 12 | 36 | 75/89* | 1.4 | 94 |
 | EC-A4315-P2-36 | 36:1 | Ø56 | 69.5 | 485 g | 25 | 75 | 109/117 | 2.8 | **155** |
 | EC-A6416-P2-25 | 25:1 | Ø88 | 67.5 | 805 g | 40 | 120 | 107/120 | 2.74 | 149 |
 
-Tutti: doppio encoder, CAN/CAN FD 1M, cuscinetto cross-roller in uscita. *(A4310 misurato a 24V -> a 48V vel. ~1.5-2x.)*
-- **3 SCOPERTE dal datasheet:** (1) A4310/A4315 sono **Ø56** (non Ø63 come stimavo) = come un RS00 -> vantaggio caviglia ANCORA piu' netto vs RS06 Ø88.
-  (2) **A4315 = stesso Ø56 dell'A4310, +9mm/+103g, ma DOPPIA coppia (75 vs 36 Nm)** e densita' MAX 155 Nm/kg -> e' LA "2 modelli sempre 43" (A4310 leggero + A4315 forte, stesso diametro).
-  (3) **A2806 esiste** (Ø44, 162g, 12Nm, 220 RPM): NON era a catalogo Foxtech -> opzione polso/mani "piccina" (3a taglia).
-- GAMBE A6416 vs RS04 (datasheet): A6416 piu' piccolo (Ø88 vs Ø106), piu' leggero (805 vs 1420 g = **-3.7 kg sulle 6 giunture**), +coppia continua (40 vs 30 Nm);
-  RS04 piu' veloce (~333 vs 120 RPM) e backdrivable (9:1 vs 25:1, inerzia riflessa ~8x meno). 120 RPM A6416 = 12.6 rad/s = OK cammino (anche trotto leggero), Encos NON e' lento come ZeroErr.
-- DECISIONE TAGLIE APERTA: (A) 2 moduli A6416+A4310 (caviglia con A4310 36Nm al limite, o A6416 Ø88 grosso) | (B) 3 moduli +A4315 caviglia (Ø56/75Nm perfetta). Spec tecniche = ABBIAMO. Da chiedere a Foxtech: solo prezzo cad Italia + CAD STEP + lead time + MOQ.
+All: dual encoder, CAN/CAN FD 1M, cross-roller bearing at the output. *(A4310 measured at 24V -> at 48V speed ~1.5-2x.)*
+- **3 DISCOVERIES from the datasheet:** (1) A4310/A4315 are **Ø56** (not Ø63 as the AI had estimated) = like an RS00 -> ankle advantage EVEN clearer vs RS06 Ø88.
+  (2) **A4315 = same Ø56 as the A4310, +9mm/+103g, but DOUBLE the torque (75 vs 36 Nm)** and MAX density 155 Nm/kg -> it is THE "2 models always 43" (A4310 light + A4315 strong, same diameter).
+  (3) **A2806 exists** (Ø44, 162g, 12Nm, 220 RPM): it was NOT in the Foxtech catalog -> "tiny" wrist/hands option (3rd size).
+- LEGS A6416 vs RS04 (datasheet): A6416 smaller (Ø88 vs Ø106), lighter (805 vs 1420 g = **-3.7 kg over the 6 joints**), +continuous torque (40 vs 30 Nm);
+  RS04 faster (~333 vs 120 RPM) and backdrivable (9:1 vs 25:1, reflected inertia ~8x less). 120 RPM A6416 = 12.6 rad/s = OK for walking (even a light trot), Encos is NOT slow like ZeroErr.
+- SIZE DECISION OPEN: (A) 2 modules A6416+A4310 (ankle with A4310 36Nm at the limit, or A6416 Ø88 large) | (B) 3 modules +A4315 ankle (Ø56/75Nm perfect). Technical specs = WE HAVE THEM. To ask Foxtech: only the per-unit price for Italy + STEP CAD + lead time + MOQ.
 
-**ENCOS ARMONICI (datasheet V3.15, letti 2026-06-19; tutti DOPPIO ENCODER + CAN/CAN-FD, backlash ~10 ARCSEC = 60x meno dei planetari):**
+**ENCOS HARMONICS (datasheet V3.15, read 2026-06-19; all DUAL ENCODER + CAN/CAN-FD, backlash ~10 ARCSEC = 60x less than the planetaries):**
 - A3814-H14-107: 107:1, Ø53x78.5, 434g, 20/60 Nm, 47/52 RPM, Kt 4.2. | A5013-H17-100: 100:1, Ø63x81.5, 630g, 30/90 Nm, 33/38 RPM, Kt 5.9. | A6013-H20-100: 100:1, Ø73x84, 906g, 40/130 Nm, 45/47 RPM, Kt 5.6.
-- PUNTO CHIAVE: il flexspline armonico e' CEDEVOLE -> il doppio encoder PUO' stimare coppia da deflessione (come ZeroErr), cosa che sui planetari Encos (rigidi) NON funziona. MA: armonici LENTI (33-52 RPM, come ZeroErr) e Encos non da' funzione torque turnkey (DIY, marginale con encoder 0.1-0.2 deg). Sono quelli che Asimov usa su hip-roll/yaw/shoulder.
+- KEY POINT: the harmonic flexspline is COMPLIANT -> the dual encoder CAN estimate torque from deflection (like ZeroErr), something that does NOT work on the Encos planetaries (stiff). BUT: harmonics are SLOW (33-52 RPM, like ZeroErr) and Encos does not provide a turnkey torque function (DIY, marginal with 0.1-0.2 deg encoders). They are the ones Asimov uses on hip-roll/yaw/shoulder.
 
-**PAPER "UKF Sensor Fusion for Joint-Torque SENSORLESS Humanoids" (Sorrentino/Romualdi/Pucci, IIT, ICRA 2024; arxiv 2402.18380; letto 2026-06-19) = POSSIBILE SOLUZIONE FORTE:**
-- Stima le coppie di giunto SENZA sensori di coppia, fondendo (UKF) corrente motore + encoder + IMU + **F/T ai PIEDI**. Modella l'attrito del riduttore (Coulomb+viscoso). Gestisce contatti esterni (batte RNEA: 1.96 vs 18.3 Nm sotto contatto). RMSE 0.05-2.5 Nm. Testato su ergoCub. **CODICE OPEN-SOURCE** (github ami-iit).
-- PER NOI: invece di vestire 10-18 giunti, GRF al piede + corrente+encoder Encos (gia' c'e') + IMU -> osservatore stima TUTTE le coppie. Sidestep totale della vestizione. Costo = software + identificazione attrito (i controllisti dell'utente). Caveat: validato su robot su palo (non camminata libera ancora), serve buon modello attrito, accuratezza < sensore dedicato (ok gambe, per manipolazione fine forse sensori dopo). = la "4a carta" ora concreta e provata.
-- REPO (github ami-iit/paper_sorrentino_2024_icra...): Python su **bipedal-locomotion-framework** (IIT), dataset+esempio ergoCub gamba dx. Per portarlo: URDF nostro + framework + dataset loggato dai nostri motori + **identificazione attrito per giunto** + tuning covarianze UKF. Lavoro sw definito (roba da controllisti), MA il pezzo difficile (lo stimatore) e' gia' scritto e open.
-- ergoCub (robot del paper) = ARMONICO + frameless (IIT-custom, come RobotEra; paper attrito armonici arxiv 2410.12685). ATTENZIONE: il modello d'attrito UKF e' per ARMONICI; i nostri Encos sono PLANETARI -> ri-identificare l'attrito (il metodo generalizza: tau_j = rid*tau_m - tau_attrito).
-- **BOTA SCARTATO dall'utente 2026-06-19 (costo + PESO distale).** Sostituto: il paper vuole soprattutto **forza verticale + centro di pressione (ZMP)** al piede -> bastano **4 celle di carico agli angoli del piede**, o meglio **estensimetri sulla PIASTRA del piede** (gia' c'e' -> ~zero massa, ~50 EUR di gauge). Da' Fz+2 momenti (il grosso del wrench); manca lo shear orizzontale (secondario su piano). Approccio humanoid standard (4 load cell).
+**PAPER "UKF Sensor Fusion for Joint-Torque SENSORLESS Humanoids" (Sorrentino/Romualdi/Pucci, IIT, ICRA 2024; arxiv 2402.18380; read 2026-06-19) = POSSIBLE STRONG SOLUTION:**
+- It estimates the joint torques WITHOUT torque sensors, by fusing (UKF) motor current + encoder + IMU + **F/T at the FEET**. It models the gearbox friction (Coulomb+viscous). It handles external contacts (beats RNEA: 1.96 vs 18.3 Nm under contact). RMSE 0.05-2.5 Nm. Tested on ergoCub. **OPEN-SOURCE CODE** (github ami-iit).
+- FOR US: instead of instrumenting 10-18 joints, GRF at the foot + Encos current+encoder (already there) + IMU -> the observer estimates ALL the torques. Total sidestep of the instrumentation. Cost = software + friction identification (the user's control engineers). Caveat: validated on a robot on a pole (not free walking yet), a good friction model is needed, accuracy < dedicated sensor (ok for the legs, for fine manipulation maybe sensors later). = the "4th card" now concrete and proven.
+- REPO (github ami-iit/paper_sorrentino_2024_icra...): Python on **bipedal-locomotion-framework** (IIT), dataset+example ergoCub right leg. To port it: our URDF + framework + dataset logged from our motors + **per-joint friction identification** + UKF covariance tuning. Well-defined sw work (control engineers' stuff), BUT the hard part (the estimator) is already written and open.
+- ergoCub (the paper's robot) = HARMONIC + frameless (IIT-custom, like RobotEra; harmonic friction paper arxiv 2410.12685). WARNING: the UKF friction model is for HARMONICS; our Encos are PLANETARY -> re-identify the friction (the method generalizes: tau_j = rid*tau_m - tau_attrito).
+- **BOTA REJECTED by the user 2026-06-19 (cost + distal WEIGHT).** Substitute: the paper mainly wants **vertical force + center of pressure (ZMP)** at the foot -> **4 load cells at the corners of the foot** are enough, or better **strain gauges on the foot PLATE** (already there -> ~zero mass, ~50 EUR of gauges). It gives Fz+2 moments (the bulk of the wrench); the horizontal shear is missing (secondary on flat ground). Standard humanoid approach (4 load cells).
 
-**CORREZIONE 2026-06-19 "armonici/ZeroErr troppo lenti" = ERA TROPPO ASSOLUTO.** Dipende dalla cadenza. Giunto critico = GINOCCHIO in swing: cadenza NORMALE ~50-67 RPM, cadenza LENTA ~25-40 RPM.
-- ZeroErr 60 RPM = borderline a cadenza normale, ok lento. Encos-H 38-52 RPM = sotto a cadenza normale (ginocchio), ok lento. NON un "troppo lento" piatto.
-- I VERI motivi per NON mettere armonici alle gambe restano: (1) INERZIA RIFLESSA ∝ rid^2: 100:1 armonico riflette ~10.000x (vs 625x del nostro planetario 25:1, 81x del QDD 9:1) -> gambe sorde agli urti/disturbi se non aggiungi una molla SEA (trucco ANYmal); (2) ZeroErr Ø70 troppo grosso/pesante per caviglia. Il nostro A6416 PLANETARIO (120 RPM, 625x) = piu' margine di velocita' E meno inerzia riflessa -> scelta giusta per le gambe.
-- "Stima coppia da doppio-encoder marginale per encoder 0.1-0.2 deg" = FACILE da provare (sw, gratis), DIFFICILE da rendere usabile: segnale (windup armonico 0.2-0.5 deg a coppia piena) / rumore (diff. 2 encoder ~0.15-0.3 deg) = solo 1-3x a pieno carico, SOTTO rumore a coppia bassa/media -> stima grezza (ok collision detection, inutile per force control fine). ZeroErr ci riesce con encoder migliori + calibrazione stiffness/isteresi. Sui PLANETARI Encos non funziona del tutto (rigidi).
+**CORRECTION 2026-06-19 "harmonics/ZeroErr too slow" = IT WAS TOO ABSOLUTE.** It depends on the cadence. Critical joint = KNEE in swing: NORMAL cadence ~50-67 RPM, SLOW cadence ~25-40 RPM.
+- ZeroErr 60 RPM = borderline at normal cadence, ok when slow. Encos-H 38-52 RPM = below at normal cadence (knee), ok when slow. NOT a flat "too slow".
+- The REAL reasons NOT to put harmonics on the legs remain: (1) REFLECTED INERTIA ∝ rid^2: a 100:1 harmonic reflects ~10.000x (vs 625x for our 25:1 planetary, 81x for the QDD 9:1) -> legs deaf to impacts/disturbances unless you add an SEA spring (ANYmal trick); (2) ZeroErr Ø70 too large/heavy for the ankle. Our PLANETARY A6416 (120 RPM, 625x) = more speed margin AND less reflected inertia -> the right choice for the legs.
+- "Torque estimation from dual-encoder marginal for 0.1-0.2 deg encoders" = EASY to try (sw, free), HARD to make usable: signal (harmonic windup 0.2-0.5 deg at full torque) / noise (diff. of 2 encoders ~0.15-0.3 deg) = only 1-3x at full load, BELOW noise at low/medium torque -> rough estimate (ok for collision detection, useless for fine force control). ZeroErr manages it with better encoders + stiffness/hysteresis calibration. On the Encos PLANETARIES it does not work at all (stiff).
 
-**CONFRONTO MARCHE per marca-unica (ricerca 2026-06-17, IMPORTANTE):**
-- **CubeMars HA UN BUCO nel mid ~36 Nm**: salta da AK40-10 (Ø46, 4 Nm) ad AK70-10 (Ø89, 25 Nm) / AK10-9 (Ø98, 50 Nm,
-  940 g!). Niente di compatto a 36 Nm. Il nostro robot ha ~14 giunti da 36 Nm (caviglia4+hip-yaw2+vita2+spalle6) ->
-  con CubeMars sarebbero tutti Ø89-98 = ASSURDO. **All-CubeMars SCARTATO** (buono solo polso AK40 + gambe AKE90).
-- Compattezza a 36 Nm: **Encos A4310 Ø56 < Steadywin GIM6010-36 Ø70 (ma 36:1 rigido) < RobStride RS06 Ø88 < CubeMars Ø98.**
-  Encos vince proprio dove abbiamo piu' motori. RobStride = famiglia COMPLETA senza buchi (RS00->RS06->RS04).
-- CubeMars NON fu scartato per controllo (mia confusione utente): fu tolto per ECOSISTEMA UNICO (riga 215). Il problema
-  di controllo era l'RS01 (encoder SINGOLO). CubeMars con versioni DUAL-encoder (AK10-9 v3) e' ok. Regola universale:
-  prendere SEMPRE la versione a 2 encoder, di qualunque marca (vale RS01 vs RS02, base-AK vs AK-dual, ecc.).
-- FOXTECH RESPONSIVE: ha risposto subito (mail + WhatsApp), datasheet+CAD in arrivo -> il sourcing Encos NON e' il
-  patimento temuto. Resta da valutare solo la RIDUZIONE (sotto).
+**BRAND COMPARISON for single-brand (research 2026-06-17, IMPORTANT):**
+- **CubeMars HAS A GAP in the mid range ~36 Nm**: it jumps from AK40-10 (Ø46, 4 Nm) to AK70-10 (Ø89, 25 Nm) / AK10-9 (Ø98, 50 Nm,
+  940 g!). Nothing compact at 36 Nm. Our robot has ~14 joints at 36 Nm (ankle4+hip-yaw2+waist2+shoulders6) ->
+  with CubeMars they would all be Ø89-98 = ABSURD. **All-CubeMars REJECTED** (good only for wrist AK40 + legs AKE90).
+- Compactness at 36 Nm: **Encos A4310 Ø56 < Steadywin GIM6010-36 Ø70 (but 36:1 stiff) < RobStride RS06 Ø88 < CubeMars Ø98.**
+  Encos wins exactly where we have the most motors. RobStride = COMPLETE family with no gaps (RS00->RS06->RS04).
+- CubeMars was NOT rejected for control reasons (the AI's confusion with the user): it was removed for SINGLE ECOSYSTEM (line 215). The control
+  problem was the RS01 (SINGLE encoder). CubeMars with DUAL-encoder versions (AK10-9 v3) is ok. Universal rule:
+  ALWAYS take the 2-encoder version, of whatever brand (applies to RS01 vs RS02, base-AK vs AK-dual, etc.).
+- FOXTECH RESPONSIVE: they replied right away (mail + WhatsApp), datasheet+CAD on the way -> Encos sourcing is NOT the
+  ordeal that was feared. Only the REDUCTION remains to be evaluated (below).
 
-**MIT CHEETAH = origine del QDD (background per l'intervista utente, 2026-06-19):** Lab = MIT Biomimetic Robotics, PI **Sangbae Kim**.
-Robot Cheetah 1/2/3 -> **Mini Cheetah (2019)**. Idea pionieristica = "ATTUAZIONE PROPRIOCETTIVA": motore BLDC ad alto raggio di traferro +
-riduzione SINGOLA bassa (~6:1, "quasi"-direct-drive) -> trasmissione BACKDRIVABLE, inerzia riflessa minima (∝ N^2) = mitiga gli urti, e
-**coppia di giunto = Kt*I*N letta dalla CORRENTE, senza sensore di coppia**. Paper canonico = **Wensing, Wang, Seok, Otten, Lang, Kim,
-"Proprioceptive Actuator Design in the MIT Cheetah", IEEE T-RO 2017** (+ Seok et al. T-Mech 2015 sull'efficienza). **Ben Katz (tesi MS 2018)**
-= attuatore QDD modulare low-cost + il "MIT mode" CAN (pacchetto pos/vel/torque-ff/Kp/Kd). DA LI' discendono CubeMars/T-Motor AK, **RobStride**,
-Damiao, MyActuator e i motori Unitree - e tutti parlano il "MIT mode" (anche l'Encos lo implementa). PUNCHLINE intervista: RobStride (~9:1) =
-la filosofia MIT-Cheetah pura (corrente=coppia); Encos (25-36:1) = ALLONTANAMENTO dal QDD (compatto) che per riavere il force control deve
-RI-AGGIUNGERE il sensore di coppia (come Tesla: alta riduzione + torque sensor). OpenTorque (Gabrael Levine) = lo schema MIT QDD + molla SEA.
+**MIT CHEETAH = origin of the QDD (background for the user's interview, 2026-06-19):** Lab = MIT Biomimetic Robotics, PI **Sangbae Kim**.
+Cheetah 1/2/3 robots -> **Mini Cheetah (2019)**. Pioneering idea = "PROPRIOCEPTIVE ACTUATION": BLDC motor with a large air-gap radius +
+a low SINGLE-stage reduction (~6:1, "quasi"-direct-drive) -> BACKDRIVABLE transmission, minimal reflected inertia (∝ N^2) = mitigates impacts, and
+**joint torque = Kt*I*N read from the CURRENT, without a torque sensor**. Canonical paper = **Wensing, Wang, Seok, Otten, Lang, Kim,
+"Proprioceptive Actuator Design in the MIT Cheetah", IEEE T-RO 2017** (+ Seok et al. T-Mech 2015 on efficiency). **Ben Katz (MS thesis 2018)**
+= low-cost modular QDD actuator + the CAN "MIT mode" (pos/vel/torque-ff/Kp/Kd packet). FROM THERE descend CubeMars/T-Motor AK, **RobStride**,
+Damiao, MyActuator and the Unitree motors - and they all speak "MIT mode" (the Encos implements it too). Interview PUNCHLINE: RobStride (~9:1) =
+the pure MIT-Cheetah philosophy (current=torque); Encos (25-36:1) = a DEPARTURE from the QDD (compact) which, to get force control back, must
+RE-ADD the torque sensor (like Tesla: high reduction + torque sensor). OpenTorque (Gabrael Levine) = the MIT QDD scheme + SEA spring.
 
-**VERDETTO RIDUZIONE per la CAMMINATA (ricerca 2026-06-17, paper QDD/biomimetics MIT) - DECISIVO:**
-- QDD sweet-spot = **6-9:1**; RobStride (~9:1) e' proprio li'. La ricerca dice "9:1 = equilibrio tra densita' di coppia
-  e mitigazione impatti per la camminata dinamica".
-- **Inerzia riflessa ∝ riduzione².** Quindi vs RobStride 9:1: **Encos 25:1 = ~8x inerzia riflessa, 36:1 = ~16x.** NON marginale.
-- Effetto: piu' riduzione -> meno backdrivable, meno responsivo agli urti, peggio a regolare il contatto. La ricerca:
-  "20-30:1 aumenta molto l'inerzia riflessa e riduce la risposta agli impatti".
-- VERDETTO: Encos 25-36:1 **PUO' camminare** (lenta, piana, tethered = il nostro caso) ma e' un **vero passo indietro
-  vs 9:1, non marginale.** Il punto PEGGIORE = la **caviglia a 36:1** (giunto d'impatto/contatto: heel-strike, terreno).
-  -> Per QUALITA' di camminata RobStride 9:1 e' genuinamente meglio; la compattezza Encos la paghi in compliance/impatti.
-  Se vai Encos, valuta un motore a BASSA riduzione almeno sulla CAVIGLIA (RobStride o opzione 1-stadio), li' i 36:1 fanno male.
+**REDUCTION VERDICT for WALKING (research 2026-06-17, MIT QDD/biomimetics papers) - DECISIVE:**
+- QDD sweet-spot = **6-9:1**; RobStride (~9:1) is right there. The research says "9:1 = balance between torque density
+  and impact mitigation for dynamic walking".
+- **Reflected inertia ∝ reduction².** So vs RobStride 9:1: **Encos 25:1 = ~8x reflected inertia, 36:1 = ~16x.** NOT marginal.
+- Effect: more reduction -> less backdrivable, less responsive to impacts, worse at regulating contact. The research:
+  "20-30:1 greatly increases the reflected inertia and reduces the response to impacts".
+- VERDICT: Encos 25-36:1 **CAN walk** (slow, flat-ground, tethered = our case) but it is a **real step backwards
+  vs 9:1, not marginal.** The WORST point = the **ankle at 36:1** (impact/contact joint: heel-strike, terrain).
+  -> For walking QUALITY RobStride 9:1 is genuinely better; you pay for the Encos compactness in compliance/impacts.
+  If you go Encos, consider a LOW-reduction motor at least on the ANKLE (RobStride or a 1-stage option), that is where the 36:1 hurts.
 
-**RISOLUZIONE "ma Tesla cammina da Dio con alta riduzione!" (2026-06-17, VERIFICATO) - chiude la scelta marca:**
-Tesla Optimus = alta riduzione (vite a rulli, NON backdrivable) MA con **SENSORE DI COPPIA non-contact in OGNI attuatore**
-+ sensori di posizione in INGRESSO e USCITA -> force control ATTIVO (misura la forza reale all'uscita, controlla veloce).
-Quindi ci sono DUE strade per camminare bene: (a) **QDD bassa riduzione** (RobStride ~9:1 / Unitree / MIT) = force control
-per TRASPARENZA, GRATIS, niente sensore; (b) **alta riduzione + SENSORE di coppia** (Tesla) = force control attivo.
-ENCOS e' alta riduzione (25-36:1) **MA SENZA sensore di coppia** (solo dual-encoder, scarso per stimare coppia su un
-planetario rigido) -> non puo' fare NE' l'uno NE' l'altro = il compromesso che cammina PEGGIO dei due.
-**CONCLUSIONE (decisiva, un po' ironica):** per "camminare come gli umanoidi del FUTURO" con roba ACCESSIBILE (niente
-team di controllo Tesla, approccio RL), la strada e' il **QDD bassa-riduzione = RobStride (9:1)**, che e' ESATTAMENTE
-cio' che usano **Unitree G1/H2** (i migliori camminatori accessibili: capriole, corsa, tutto RL). Il "futuribile che
-cammina bene" si ottiene con RobStride, NON con l'Encos. Encos = solo se vuoi compatto e accetti camminata meno morbida.
-La via Tesla (alta riduzione + sensore di coppia integrato) NON e' accessibile: attuatori col torque-sensor costano un
-occhio e l'Encos non li ha.
+**RESOLUTION of "but Tesla walks like a dream with high reduction!" (2026-06-17, VERIFIED) - closes the brand choice:**
+Tesla Optimus = high reduction (roller screw, NOT backdrivable) BUT with a **non-contact TORQUE SENSOR in EVERY actuator**
++ position sensors at INPUT and OUTPUT -> ACTIVE force control (measures the real force at the output, controls fast).
+So there are TWO routes to walking well: (a) **low-reduction QDD** (RobStride ~9:1 / Unitree / MIT) = force control
+through TRANSPARENCY, for FREE, no sensor; (b) **high reduction + torque SENSOR** (Tesla) = active force control.
+ENCOS is high reduction (25-36:1) **BUT WITHOUT a torque sensor** (dual-encoder only, poor for estimating torque on a
+stiff planetary) -> it can do NEITHER the one NOR the other = the compromise that walks WORSE than both.
+**CONCLUSION (decisive, somewhat ironic):** to "walk like the humanoids of the FUTURE" with ACCESSIBLE stuff (no
+Tesla control team, RL approach), the route is the **low-reduction QDD = RobStride (9:1)**, which is EXACTLY
+what **Unitree G1/H2** use (the best accessible walkers: somersaults, running, all RL). The "futuristic one that
+walks well" is obtained with RobStride, NOT with the Encos. Encos = only if you want compact and accept a less smooth walk.
+The Tesla route (high reduction + integrated torque sensor) is NOT accessible: actuators with a torque-sensor cost an
+arm and a leg and the Encos does not have them.
 
-**AGGIORNAMENTO 2026-06-19 (intervista utente + scelta sensore) - "magnetico" sono DUE cose diverse, distinzione CHIAVE:**
-- TESLA confermato (web): rotary = motore frameless + **riduttore ARMONICO** + **torque sensor non-contact** + encoder + cross-roller;
-  linear = vite a rulli planetaria. Quindi Tesla = ALTA RIDUZIONE (NON QDD) + sensore di coppia non-contact (famiglia MAGNETOELASTICA).
-  E' ESATTAMENTE il campo dove va l'utente con Encos+sensore: l'Encos+magnetico = versione DIY/economica della ricetta Tesla.
-- FIGURE: architettura attuatori NON divulgata; fonti secondarie dicono "QDD" ma poco affidabili (le stesse sbagliano dicendo Tesla=QDD). Non affermare numeri.
-- QDD camp (corrente=coppia, niente sensore) = Unitree G1/H1 (= lineage RobStride), MIT Cheetah. POLO opposto a Tesla.
-- **"MAGNETICO" = 2 sensori diversi:** (a) **doppio encoder magnetico su flexure di torsione** = LEGGERO/ECONOMICO/DIY (~$30-50/giunto,
-  AS5047/MT6701), MA per avere segnale serve twist ~1-2 deg a fondo scala -> flexure CEDEVOLE (~2000 Nm/rad) -> il giunto diventa un
-  **SEA rigido** (compliance ok/utile per camminare, NON per manipolazione rigida). (b) **MAGNETOELASTICO** (NCTE/Magcanica, = Tesla):
-  non-contact, shaft RIGIDO (niente compliance), elegante MA DIY = ricerca (magnetizzazione shaft, fluxgate, temp/isteresi) -> di fatto si COMPRA.
-- L'utente ha capito bene: i sensori ready-made grossi (Bota/FUTEK flangia) RI-BLOATANO i giunti in-linea (knee/hip) = rovinano il vantaggio Encos.
-  ECCEZIONE = il PIEDE: li' vuoi F/T 6-assi comunque (GRF/ZMP), monta SOTTO la caviglia, e sono solo 2 -> Bota Rokubi ai piedi resta giustificato.
-- LEAN UTENTE = via magnetica (a) = SEA rigido leggero/economico sui giunti gamba. 4a CARTA (controllisti): stima coppia MODEL/LEARNING-based dal
-  solo dual-encoder + modello attrito (zero hardware, arxiv 2410.16591) -> prototipare A/B vs il flexure. NB: la (a) e' SEA, non il sensore rigido di Tesla.
+**UPDATE 2026-06-19 (user's interview + sensor choice) - "magnetic" means TWO different things, KEY distinction:**
+- TESLA confirmed (web): rotary = frameless motor + **HARMONIC reducer** + **non-contact torque sensor** + encoder + cross-roller;
+  linear = planetary roller screw. So Tesla = HIGH REDUCTION (NOT QDD) + non-contact torque sensor (MAGNETOELASTIC family).
+  It is EXACTLY the camp the user is heading into with Encos+sensor: Encos+magnetic = DIY/low-cost version of the Tesla recipe.
+- FIGURE: actuator architecture NOT disclosed; secondary sources say "QDD" but are not very reliable (the same ones get it wrong by saying Tesla=QDD). Do not state numbers.
+- QDD camp (current=torque, no sensor) = Unitree G1/H1 (= RobStride lineage), MIT Cheetah. Opposite POLE to Tesla.
+- **"MAGNETIC" = 2 different sensors:** (a) **dual magnetic encoder on a torsion flexure** = LIGHT/CHEAP/DIY (~$30-50/joint,
+  AS5047/MT6701), BUT to get a signal a twist of ~1-2 deg at full scale is needed -> COMPLIANT flexure (~2000 Nm/rad) -> the joint becomes a
+  **stiff SEA** (compliance ok/useful for walking, NOT for stiff manipulation). (b) **MAGNETOELASTIC** (NCTE/Magcanica, = Tesla):
+  non-contact, STIFF shaft (no compliance), elegant BUT DIY = research (shaft magnetization, fluxgate, temp/hysteresis) -> in practice you BUY it.
+- The user understood correctly: the bulky ready-made sensors (Bota/FUTEK flange) RE-BLOAT the in-line joints (knee/hip) = they ruin the Encos advantage.
+  EXCEPTION = the FOOT: there you want a 6-axis F/T anyway (GRF/ZMP), it mounts BELOW the ankle, and there are only 2 -> Bota Rokubi at the feet remains justified.
+- USER'S LEAN = magnetic route (a) = light/cheap stiff SEA on the leg joints. 4th CARD (control engineers): MODEL/LEARNING-based torque estimation from the
+  dual-encoder alone + friction model (zero hardware, arxiv 2410.16591) -> prototype A/B vs the flexure. NB: (a) is a SEA, not Tesla's stiff sensor.
 
-**CHI USA COSA - sensing di coppia per marca (web 2026-06-19). CORREZIONE di una mia SOVRA-GENERALIZZAZIONE: NON e' vero che "quasi tutti i giunti premium usano estensimetri".**
-- ESTENSIMETRI su elemento dedicato all'uscita harmonic = standard nei BRACCI COLLABORATIVI premium: **DLR LWR -> KUKA LBR iiwa, Franka Emika Panda** (torque sensor in OGNI giunto);
-  UR/Yaskawa/Fanuc (F/T a flangia/base). Sono BRACCI, non umanoidi. (NON instrumentano un pezzo a caso: razza/anello DEDICATO all'uscita del riduttore.)
-- **ANYmal (ANYbotics/ETH) = SEA, NON estensimetri**: motore + harmonic + MOLLA in serie + 2 encoder assoluti (pos uscita + deflessione molla) -> coppia da deflessione.
-  Ris. coppia ~8 mNm, pos 0.025 deg, +protezione impatti. = analogo PIU' VICINO al piano Encos+magnetico-deflessione dell'utente (alta riduzione + lettura deflessione).
+**WHO USES WHAT - torque sensing by brand (web 2026-06-19). CORRECTION of the AI's OVER-GENERALIZATION: it is NOT true that "almost all premium joints use strain gauges".**
+- STRAIN GAUGES on a dedicated element at the harmonic output = standard in premium COLLABORATIVE ARMS: **DLR LWR -> KUKA LBR iiwa, Franka Emika Panda** (torque sensor in EVERY joint);
+  UR/Yaskawa/Fanuc (F/T at flange/base). They are ARMS, not humanoids. (They do NOT instrument a random part: a DEDICATED spoke/ring at the reducer output.)
+- **ANYmal (ANYbotics/ETH) = SEA, NOT strain gauges**: motor + harmonic + SPRING in series + 2 absolute encoders (output pos + spring deflection) -> torque from deflection.
+  Torque res. ~8 mNm, pos 0.025 deg, +impact protection. = the CLOSEST analogue to the user's Encos+magnetic-deflection plan (high reduction + deflection readout).
   PAPER: Hutter et al., "ANYmal - A Highly Mobile and Dynamic Quadrupedal Robot", IROS 2016 (DOI 10.1109/IROS.2016.7758092; open access SciSpace/ETH). Bonus: arxiv 2511.06796 "Human-Level Actuation for Humanoids".
-- TESLA = magnetoelastico non-contact. UNITREE(G1/H1)/MIT = QDD da corrente (NESSUN sensore). Molti umanoidi = SENSORLESS (stima da osservatore/learning: UKF arxiv 2402.18380, PINN 2507.10105).
-- **RobotEra = motori LEADERDRIVE (detto dall'utente, che POSSIEDE il robot; web 2026-06-19 conferma): Leaderdrive = ARMONICO (strain-wave), uno dei 2 big cinesi con Laifual.**
-  Rapporti 30-500:1 (moduli giunto tipici 50-160:1) -> RobotEra = ALTA RIDUZIONE ARMONICA = campo GEARED (Tesla/ANYmal/DLR), NON QDD Unitree. Conferma: l'utente sente i giunti
-  (a motore spento) "muovibili ma con resistenza, non liberi" = coerente con armonico, NON col QDD 9:1 (che gira quasi libero). NB: il test a motore SPENTO dice solo la MECCANICA
-  (geared vs QDD), NON se c'e' un sensore di coppia (= comportamento attivo, a motore ACCESO). Leaderdrive offre moduli con torque-sensor INTEGRATO opzionale; inoltre il flexspline armonico
-  e' cedevole -> stima coppia da doppio-encoder FUNZIONA (a differenza del planetario Encos rigido). Sensore RobotEra = da confermare col MODELLO esatto / SDK (campo coppia misurata vs corrente).
-  IMPLICAZIONE per noi: RobotEra valida la via compatta ad alta riduzione per un umanoide serio, MA loro = ARMONICO (torque-sensing facile via flexspline) vs noi = PLANETARIO rigido (sensore da AGGIUNGERE). Tradeoff reale.
-- **X-Humanoid/Tiangong(TienKung): tipo di sensore NON pubblico** (cercato, non trovato; NON inventare). Tiangong parz. OPEN-SOURCE -> si puo' cercare nei loro repo/SDK.
-- NET: non esiste "lo fanno tutti cosi'". Bracci->gauge; ANYmal->SEA; Tesla->magnetoelastico; Unitree->niente. I 3 metodi candidati hanno ciascuno un precedente premium -> scegliere sui NOSTRI vincoli, non per imitazione.
+- TESLA = non-contact magnetoelastic. UNITREE(G1/H1)/MIT = QDD from current (NO sensor). Many humanoids = SENSORLESS (estimation by observer/learning: UKF arxiv 2402.18380, PINN 2507.10105).
+- **RobotEra = LEADERDRIVE motors (stated by the user, who OWNS the robot; web 2026-06-19 confirms): Leaderdrive = HARMONIC (strain-wave), one of the 2 Chinese majors together with Laifual.**
+  Ratios 30-500:1 (typical joint modules 50-160:1) -> RobotEra = HIGH HARMONIC REDUCTION = GEARED camp (Tesla/ANYmal/DLR), NOT Unitree QDD. Confirmation: the user feels the joints
+  (with the motor off) as "movable but with resistance, not free" = consistent with a harmonic, NOT with the 9:1 QDD (which turns almost freely). NB: the test with the motor OFF only tells you the MECHANICS
+  (geared vs QDD), NOT whether there is a torque sensor (= active behaviour, with the motor ON). Leaderdrive offers modules with an optional INTEGRATED torque-sensor; moreover the harmonic flexspline
+  is compliant -> torque estimation from dual-encoder WORKS (unlike the stiff Encos planetary). RobotEra sensor = to be confirmed with the exact MODEL / SDK (measured-torque field vs current).
+  IMPLICATION for us: RobotEra validates the compact high-reduction route for a serious humanoid, BUT they = HARMONIC (easy torque-sensing via flexspline) vs us = stiff PLANETARY (sensor to be ADDED). Real tradeoff.
+- **X-Humanoid/Tiangong(TienKung): sensor type NOT public** (searched, not found; do NOT invent). Tiangong partly OPEN-SOURCE -> one can search in their repos/SDK.
+- NET: there is no such thing as "everyone does it this way". Arms->gauge; ANYmal->SEA; Tesla->magnetoelastic; Unitree->nothing. The 3 candidate methods each have a premium precedent -> choose on OUR constraints, not by imitation.
 
-**CORREZIONE 2026-06-17 (l'utente dice di poter avere i controllisti): riapre l'Encos.** (1) Ero troppo tranchant su
-"Encos senza sensore": il DUAL-ENCODER e' proprio per stimare la coppia (posizione motore vs uscita -> deflessione sul
-riduttore = coppia). Su planetario rigido il segnale e' rumoroso ma C'E', ed e' cio' che un bravo controllista sfrutta
-(+ modelli attrito). (2) SPETTRO: Encos+sola corrente = force control scarso; Encos+dual-encoder+bravi controllisti =
-DECENTE (cammina bene); Encos + SENSORE di coppia dedicato aggiunto = Tesla-grade. RobStride QDD 9:1 = buono out-of-the-box
-con poco sforzo di controllo. (3) Per Tesla-grade aggiungere coppia VERA: load-cell di reazione a ogni giunto, OPPURE
-SEA (elemento elastico in serie -> il dual-encoder legge la molla = coppia pulita, costa banda/rigidezza), OPPURE attuatori
-col torque-sensor integrato (cari, non Encos). (4) CONCLUSIONE aggiornata: SE l'utente ha davvero il team di controllo,
-l'Encos compatto + dual-encoder + controllo torna scelta valida per "piccolo + cammina bene"; i torque-sensor si aggiungono
-al passaggio HW. In sim (adesso) il force control si modella comunque -> si puo' procedere col CAD senza decidere oggi i
-sensori. Resta il bivio: QDD/RobStride (semplice, grosso) vs Encos+controllo (compatto, piu' lavoro di controllo).
+**CORRECTION 2026-06-17 (the user reports being able to get the control engineers): reopens the Encos.** (1) The AI was too categorical about
+"Encos without sensor": the DUAL-ENCODER is there precisely to estimate torque (motor position vs output -> deflection across the
+reducer = torque). On a stiff planetary the signal is noisy but it IS THERE, and it is what a good control engineer exploits
+(+ friction models). (2) SPECTRUM: Encos+current only = poor force control; Encos+dual-encoder+good control engineers =
+DECENT (walks well); Encos + added dedicated torque SENSOR = Tesla-grade. RobStride QDD 9:1 = good out-of-the-box
+with little control effort. (3) For Tesla-grade add TRUE torque: a reaction load-cell at every joint, OR
+SEA (series elastic element -> the dual-encoder reads the spring = clean torque, costs bandwidth/stiffness), OR actuators
+with an integrated torque-sensor (expensive, not Encos). (4) Updated CONCLUSION: IF the user really has the control team,
+the compact Encos + dual-encoder + control becomes a valid choice again for "small + walks well"; the torque-sensors get added
+at the transition to HW. In sim (now) force control is modelled anyway -> we can proceed with the CAD without deciding the
+sensors today. The fork remains: QDD/RobStride (simple, bulky) vs Encos+control (compact, more control work).
 
-**APPROFONDIMENTO 2026-06-17 (verificato, RIDIMENSIONA la stima da dual-encoder):** la ricerca conferma che sulle ALTE
-riduzioni l'attrito del riduttore rende INAFFIDABILE la stima di coppia da corrente -> servono estensimetri dedicati. Il
-dual-encoder stima la coppia dalla DEFLESSIONE: decente su ARMONICO (flexspline cedevole), **SCARSO su PLANETARIO rigido**
-(A4310/A6416 = quasi tutti i nostri: deflessione minima + non cattura l'attrito). Quindi il dual-encoder Encos **NON
-sostituisce un sensore di coppia** sui planetari (avevo sovrastimato). Steadywin GIM3510 = dual-encoder SI + **8:1 bassa
-riduzione** -> li' la stima da CORRENTE funziona (quasi QDD), force control ok. Vs sensore vero: estensimetro ~1-2% errore,
-banda alta, cattura l'attrito; la deflessione su planetario e' rumorosa e sistematicamente sbagliata -> non paragonabile.
-**MOTORI gia' col sensore di coppia INTEGRATO (trovati ma PREMIUM, ~1000-3000 EUR/giunto -> 30 giunti = 30-90k):**
-SensoDrive SENSO-Joint (DE: sensore+HarmonicDrive+motore+driver, certificato, 5 taglie), TQ-RoboDrive ILM (DE, eredita'
-DLR), Kinova (torque-sensored ma venduti come bracci), Harmonic Drive FHA. **NON esiste un attuatore col torque-sensor
-integrato ED economico** (CubeMars/Unitree/RobStride/Encos = corrente+encoder, niente sensore).
-**REGOLA FINALE - pick 2 su 3:** piccolo+economico = force control MEDIOCRE; piccolo+force-control-TOP = CARO (Encos+sensori
-o SensoDrive); economico+force-control-BUONO = piu' GROSSO (RobStride QDD 9:1, corrente basta come Unitree). I controllisti
-dell'utente NON bastano da soli: serve il SEGNALE di coppia = HARDWARE (sensore), o caro o DIY estensimetri x30.
+**DEEP DIVE 2026-06-17 (verified, SCALES BACK the dual-encoder estimation):** the research confirms that at HIGH
+reductions the reducer friction makes torque estimation from current UNRELIABLE -> dedicated strain gauges are needed. The
+dual-encoder estimates torque from DEFLECTION: decent on a HARMONIC (compliant flexspline), **POOR on a stiff PLANETARY**
+(A4310/A6416 = almost all of ours: minimal deflection + it does not capture friction). So the Encos dual-encoder **does NOT
+replace a torque sensor** on planetaries (the AI had overestimated it). Steadywin GIM3510 = dual-encoder YES + **8:1 low
+reduction** -> there the estimation from CURRENT works (almost QDD), force control ok. Vs a real sensor: strain gauge ~1-2% error,
+high bandwidth, captures friction; the deflection on a planetary is noisy and systematically wrong -> not comparable.
+**MOTORS already with an INTEGRATED torque sensor (found but PREMIUM, ~1000-3000 EUR/joint -> 30 joints = 30-90k):**
+SensoDrive SENSO-Joint (DE: sensor+HarmonicDrive+motor+driver, certified, 5 sizes), TQ-RoboDrive ILM (DE, heritage from
+DLR), Kinova (torque-sensored but sold as arms), Harmonic Drive FHA. **There is NO actuator with a torque-sensor that is
+integrated AND cheap** (CubeMars/Unitree/RobStride/Encos = current+encoder, no sensor).
+**FINAL RULE - pick 2 out of 3:** small+cheap = MEDIOCRE force control; small+TOP-force-control = EXPENSIVE (Encos+sensors
+or SensoDrive); cheap+GOOD-force-control = BULKIER (RobStride QDD 9:1, current is enough as with Unitree). The user's control
+engineers are NOT enough on their own: the torque SIGNAL is needed = HARDWARE (sensor), either expensive or DIY strain gauges x30.
 
-**OPZIONE 1 PREFERITA dall'utente (2026-06-17): ENCOS compatto + VESTIZIONE coppia DIY (l'utente conosce ragazzi che la
-sanno fare, da confermare).** Non servono 30 sensori, solo i giunti GAMBA dove il force control conta. PRIORITA':
-1) CAVIGLIA (4: pitch+roll x2) = giunto di contatto + il piu' rigido (36:1), il piu' importante. Meglio ancora un SEA
-(elemento elastico in serie): il dual-encoder legge la molla = coppia pulita E assorbe l'urto -> 2 piccioni. 2) GINOCCHIO
-(2) + HIP PITCH (2). 3) HIP ROLL (2). -> set "cammina bene" = 10 giunti (gambe escluso hip yaw). NON sensorizzare: hip
-yaw (gravita 0), POLSO (Steadywin 8:1 bassa riduzione, la corrente gia' basta), collo, spalle/gomito (opzionali per
-manipolazione fine, dopo). Componenti sensore DIY: Bota Systems (F/T 6 assi), FUTEK (torque sensor).
+**OPTION 1 PREFERRED by the user (2026-06-17): compact ENCOS + DIY torque OUTFITTING (the user knows guys who know how to
+do it, to be confirmed).** 30 sensors are not needed, only the LEG joints where force control matters. PRIORITIES:
+1) ANKLE (4: pitch+roll x2) = contact joint + the stiffest (36:1), the most important. Better still a SEA
+(series elastic element): the dual-encoder reads the spring = clean torque AND it absorbs the impact -> 2 birds with one stone. 2) KNEE
+(2) + HIP PITCH (2). 3) HIP ROLL (2). -> "walks well" set = 10 joints (legs excluding hip yaw). Do NOT sensorize: hip
+yaw (gravity 0), WRIST (Steadywin 8:1 low reduction, current is already enough), neck, shoulders/elbow (optional for
+fine manipulation, later). DIY sensor components: Bota Systems (6-axis F/T), FUTEK (torque sensor).
 
-**VESTIZIONE - METODI DIY concreti (2026-06-19, domanda utente "se voglio farlo da solo come si fa"):** principio = aggiungere
-un elemento che si deforma in modo MISURABILE tra uscita riduttore e link (il dual-encoder interno NON basta: deflessione < rumore). 3 vie:
-1) FLANGIA ESTENSIMETRICA: disco a razze (taglio), 4 gauge a +-45 in ponte di Wheatstone COMPLETO (rigetta flex/assiale/temp),
-   dim. per ~1000-1500 ue a fondo scala; ampli INA826/AD8421 + ADC 24-bit (ADS1235/1262) a >=1 kHz -> CAN. Rigido, banda alta;
-   incollaggio = arte. Niente slip-ring se ROM limitato (ansa cavo). E' cio' che intendono i suoi amici. (HX711 solo proto, lento.)
-2) SEA (molla nota + 2 encoder, tipo ANYmal ANYdrive): molla torsionale -> a fondo scala 5-15 deg = deflessione GRANDE, letta da
-   2 encoder magnetici 14-bit (AS5047/MT6701), niente gauge. +PROTEZIONE IMPATTI (oro su gamba). Costa banda posizione + risonanza.
-   RIFERIMENTO DIY perfetto: **OpenTorque Actuator** (Gabrael Levine, open-source QDD+SEA per gambe).
-3) TORSIONE MAGNETICA NON-CONTATTO: barra di torsione + encoder magnetico ai 2 capi, differenza angoli = twist (tara ~1-3 deg a
-   fondo scala). Via di mezzo (no incollaggi/slip-ring); sensibile a concentricita'/temperatura. E' la "via Tesla" semplificata.
-INTEGRAZIONE: l'Encos in MIT-mode NON regala il loop di coppia -> lo chiudi TU (leggi stato via CAN + sensore -> comandi corrente/Tff)
-a ~1 kHz, bassa latenza, sensore sincronizzato con la telemetria. DIFFICOLTA': 1 giunto = 1-2 settimane (chi sa estensimetrare);
-~18 giunti = sotto-progetto da mesi = IL lavoro che RobStride 9:1 si risparmia. Strategia solo: prototipa 1 giunto gamba, SEA sulle
-gambe, braccia a corrente all'inizio. Massa distale del sensore conta (sul piede).
-**READY-TO-MOUNT (buy & bolt-on, NO DIY; richiesti dall'utente 2026-06-19):** PRIMA SCELTA = **Bota Systems (CH, spin-off ETH)**: F/T 6-assi
-robot-grade, CAN-FD/EtherCAT/ROS -> **Rokubi** (gambe/caviglia = forza di reazione al suolo; manipolazione), **PixONE** (giunti umanoidi),
-**MiniONE** (30 g, polpastrelli/mani). Al PIEDE e alle MANI vuoi comunque F/T a 6 assi (GRF/ZMP, contatto) -> Bota li'. Per coppia 1-asse a
-ginocchio/anca/vita = flangia cava: **Sunrise Instruments** (CN, valore) / **FUTEK** (US, facile da ordinare) / **ME-Mess.** (DE) / **HBK-Kistler**
-(metrologia premium). Non-contatto magnetoelastico (no molla/incollaggio): **NCTE** (DE) / **Magcanica** (US). Costo ready-made ~$1-3k/giunto x ~10 = $10-30k.
+**OUTFITTING - concrete DIY METHODS (2026-06-19, user's question "if I want to do it on my own, how is it done"):** principle = add
+an element that deforms in a MEASURABLE way between the reducer output and the link (the internal dual-encoder is NOT enough: deflection < noise). 3 routes:
+1) STRAIN-GAUGE FLANGE: spoked disc (shear), 4 gauges at +-45 in a FULL Wheatstone bridge (rejects bending/axial/temp),
+   sized for ~1000-1500 ue at full scale; amp INA826/AD8421 + 24-bit ADC (ADS1235/1262) at >=1 kHz -> CAN. Stiff, high bandwidth;
+   bonding = an art. No slip-ring if ROM is limited (cable loop). It is what the user's friends mean. (HX711 for proto only, slow.)
+2) SEA (known spring + 2 encoders, ANYmal ANYdrive type): torsional spring -> at full scale 5-15 deg = LARGE deflection, read by
+   2 magnetic 14-bit encoders (AS5047/MT6701), no gauges. +IMPACT PROTECTION (gold on a leg). Costs position bandwidth + resonance.
+   Perfect DIY REFERENCE: **OpenTorque Actuator** (Gabrael Levine, open-source QDD+SEA for legs).
+3) NON-CONTACT MAGNETIC TORSION: torsion bar + magnetic encoder at the 2 ends, angle difference = twist (tune for ~1-3 deg at
+   full scale). Middle way (no bonding/slip-ring); sensitive to concentricity/temperature. It is the simplified "Tesla route".
+INTEGRATION: the Encos in MIT-mode does NOT hand you the torque loop -> YOU close it (read state via CAN + sensor -> command current/Tff)
+at ~1 kHz, low latency, sensor synchronized with the telemetry. DIFFICULTY: 1 joint = 1-2 weeks (for someone who knows how to strain-gauge);
+~18 joints = a sub-project lasting months = THE work that RobStride 9:1 saves you. Solo strategy: prototype 1 leg joint, SEA on the
+legs, arms current-based at first. The distal mass of the sensor matters (on the foot).
+**READY-TO-MOUNT (buy & bolt-on, NO DIY; requested by the user 2026-06-19):** FIRST CHOICE = **Bota Systems (CH, ETH spin-off)**: 6-axis F/T
+robot-grade, CAN-FD/EtherCAT/ROS -> **Rokubi** (legs/ankle = ground reaction force; manipulation), **PixONE** (humanoid joints),
+**MiniONE** (30 g, fingertips/hands). At the FOOT and at the HANDS you want a 6-axis F/T anyway (GRF/ZMP, contact) -> Bota there. For 1-axis torque at
+knee/hip/waist = hollow flange: **Sunrise Instruments** (CN, value) / **FUTEK** (US, easy to order) / **ME-Mess.** (DE) / **HBK-Kistler**
+(premium metrology). Non-contact magnetoelastic (no spring/bonding): **NCTE** (DE) / **Magcanica** (US). Ready-made cost ~$1-3k/joint x ~10 = $10-30k.
 
-**MOTORI GIA' "VESTITI" col sensore di coppia, ready-made (2026-06-17, scoperti con l'utente):**
-- **ZeroErr eRob** (I-type, taglie 70I/80I/90I/110I = Ø70-110): ARMONICO + dual-encoder + "VIRTUAL torque sensor"
-  (stima coppia da deflessione flexspline + modello stiffness/hysteresis). EU-cert + prima CR-cert per giunti umanoidi.
-  PLUG-AND-PLAY, niente DIY. INSIGHT chiave: il virtual-torque-sensor da dual-encoder FUNZIONA sull'ARMONICO (flexspline
-  cedevole = deflessione misurabile), ed e' SCARSO sul planetario rigido -> quindi gli ARMONICI (ZeroErr, o gli Encos-H
-  A3814/A5013) danno torque sensing "gratis"; i planetari (A4310/A6416) no. PERO' armonico = alta riduzione = alta inerzia
-  riflessa = camminata CONTROLLATA/precisa (stile Tesla/Figure/DLR-HRP), NON dinamica come il QDD. Premium di prezzo.
-- Honpine / Makongear / Oz Robotics: armonici cinesi con torque-sensor FISICO ma customizable (MOQ, non a scaffale), piu'
-  economici di ZeroErr, meno plug-and-play. SensoDrive/TQ/Kinova/HarmonicDrive = premium tedeschi (gia' in lista sopra).
-- DAMIAO (Dynamic-Motion) DM-J4310-2EC: QDD economico ($116) dual-encoder MIT-mode -> e' nel campo QDD (come RobStride),
-  NON ha sensore di coppia fisico. (Damiao era gia' stato escluso per ecosistema-unico.)
+**MOTORS ALREADY "OUTFITTED" with the torque sensor, ready-made (2026-06-17, discovered with the user):**
+- **ZeroErr eRob** (I-type, sizes 70I/80I/90I/110I = Ø70-110): HARMONIC + dual-encoder + "VIRTUAL torque sensor"
+  (torque estimation from flexspline deflection + stiffness/hysteresis model). EU-cert + first CR-cert for humanoid joints.
+  PLUG-AND-PLAY, no DIY. Key INSIGHT: the virtual-torque-sensor from dual-encoder WORKS on the HARMONIC (compliant
+  flexspline = measurable deflection), and is POOR on the stiff planetary -> so the HARMONICS (ZeroErr, or the Encos-H
+  A3814/A5013) give torque sensing "for free"; the planetaries (A4310/A6416) do not. HOWEVER harmonic = high reduction = high reflected
+  inertia = CONTROLLED/precise walking (Tesla/Figure/DLR-HRP style), NOT dynamic like the QDD. Price premium.
+- Honpine / Makongear / Oz Robotics: Chinese harmonics with a PHYSICAL torque-sensor but customizable (MOQ, not off-the-shelf),
+  cheaper than ZeroErr, less plug-and-play. SensoDrive/TQ/Kinova/HarmonicDrive = German premium (already in the list above).
+- DAMIAO (Dynamic-Motion) DM-J4310-2EC: cheap QDD ($116) dual-encoder MIT-mode -> it is in the QDD camp (like RobStride),
+  it does NOT have a physical torque sensor. (Damiao had already been excluded for single-ecosystem.)
 
-**SCHEDE EXCEL: ora 4 fogli motori - "umanoide" (BOM RobStride completo), "MOTORI RobStride" (lista motori pulita),
-"MOTORI Encos (quote)" (3 modelli: A6416/A4315/A2806), "MOTORI premium" (mix CubeMars/Encos).**
-**VERSIONE INGLESE (per intervista utente lun 2026-06-22): script SEPARATO build_umanoide_en.py -> "BOM umanoide G1 - EN.xlsx",**
-**5 fogli: Summary | Joint map (30 DOF) | Motors-Encos (chosen) | Motors-RobStride (alt) | Torque sensing. Da tenere in sync a mano con quello IT.**
+**EXCEL SHEETS: now 4 motor sheets - "umanoide" (complete RobStride BOM), "MOTORI RobStride" (clean motor list),
+"MOTORI Encos (quote)" (3 models: A6416/A4315/A2806), "MOTORI premium" (CubeMars/Encos mix).**
+**ENGLISH VERSION (for the user's interview Mon 2026-06-22): SEPARATE script build_umanoide_en.py -> "BOM umanoide G1 - EN.xlsx",**
+**5 sheets: Summary | Joint map (30 DOF) | Motors-Encos (chosen) | Motors-RobStride (alt) | Torque sensing. To be kept in sync by hand with the IT one.**
 
-**TRE CAMPI DI CAMMINATA (sintesi):** (a) QDD bassa-rid (RobStride/Unitree) = dinamico/agile, force control da corrente,
-economico, piu' grosso; (b) ARMONICO+virtual-torque (ZeroErr / Encos-H) = camminata controllata-precisa stile Tesla/
-Figure, ready-made ma premium, meno dinamico (inerzia riflessa); (c) PLANETARIO+DIY-sensori (Encos-P + estensimetri) =
-compatto ma tanto lavoro. Per "Unitree-dinamico" -> (a). Per "Tesla/Figure-controllato compatto" -> (b) ZeroErr.
+**THREE WALKING CAMPS (summary):** (a) low-red QDD (RobStride/Unitree) = dynamic/agile, force control from current,
+cheap, bulkier; (b) HARMONIC+virtual-torque (ZeroErr / Encos-H) = controlled-precise walking in the style of Tesla/
+Figure, ready-made but premium, less dynamic (reflected inertia); (c) PLANETARY+DIY-sensors (Encos-P + strain gauges) =
+compact but a lot of work. For "Unitree-dynamic" -> (a). For "Tesla/Figure-controlled compact" -> (b) ZeroErr.
 
-**ZeroErr CADUTO per le GAMBE (2026-06-17, dalla pagina ufficiale eRob):** lineup eRob 70F(Ø70,35Nm,0.77kg)/70I(70Nm,
-0.88kg)/80I(Ø80,112Nm,1.09kg)/90I(Ø90,191Nm,1.64kg)/110I(Ø110,408Nm,2.68kg)... MA **velocita' MAX = 60 RPM** (tutti).
-Il ginocchio in camminata normale tocca ~300-400 gradi/s = 50-67 RPM -> ZeroErr e' GIA' al limite per camminare piano,
-troppo lento per dinamica. Sono attuatori da COBOT di precisione, NON da locomozione. E sotto Ø70 non esiste (niente polso).
-Inoltre ZeroErr != Tesla: Tesla usa VITI A RULLI (veloci) + sensore; ZeroErr usa ARMONICO (lento). -> ZeroErr fuori dalle
-gambe. Per camminare serve VELOCITA' = bassa riduzione = QDD. CONCLUSIONE: il default sano e' RobStride QDD (veloce/dinamico,
-force control da corrente, economico, completo); l'unica alternativa = Encos+sensori-DIY se il compatto vale il lavoro.
+**ZeroErr DROPPED for the LEGS (2026-06-17, from the official eRob page):** eRob lineup 70F(Ø70,35Nm,0.77kg)/70I(70Nm,
+0.88kg)/80I(Ø80,112Nm,1.09kg)/90I(Ø90,191Nm,1.64kg)/110I(Ø110,408Nm,2.68kg)... BUT **MAX speed = 60 RPM** (all of them).
+The knee in normal walking reaches ~300-400 degrees/s = 50-67 RPM -> ZeroErr is ALREADY at the limit for walking slowly,
+too slow for dynamics. They are actuators for precision COBOTS, NOT for locomotion. And below Ø70 it does not exist (no wrist).
+Moreover ZeroErr != Tesla: Tesla uses ROLLER SCREWS (fast) + sensor; ZeroErr uses a HARMONIC (slow). -> ZeroErr out of the
+legs. To walk you need SPEED = low reduction = QDD. CONCLUSION: the sane default is RobStride QDD (fast/dynamic,
+force control from current, cheap, complete); the only alternative = Encos+DIY-sensors if compactness is worth the work.
 
-**MANUALE UFFICIALE ENCOS letto (Motor Debugging Manual V1.18, 2026-06-17) - CONFERMA e RAFFORZA:**
-- ENCODER: doppio (motore + uscita), 14-bit, MA accuratezza reale solo **0.1-0.2 gradi** ("quality issues"). -> la
-  deflessione su un planetario rigido (a coppia nominale) e' minima e VIENE SOMMERSA dall'errore encoder (0.1-0.2 deg) ->
-  **la stima di coppia da dual-encoder NON e' usabile sull'Encos planetario** (confermato: avevo ragione a ridimensionarla).
-  Output encoder single-turn (perde i giri allo spegnimento).
-- CONTROLLO: ha MIT mode (Power-Position Mixed: i=(Kp*(p_des-p)+Kd*(v_des-v)+Tff)/Kt, "per foot-type robots") + Current/
-  Torque mode + Servo pos/speed. MA la **coppia e' SEMPRE da CORRENTE x Kt (open-loop), NESSUN sensore di coppia**. Force
-  control = come RobStride (da corrente) -> sull'alta riduzione e' inaffidabile per l'attrito -> per coppia vera SERVE un
-  sensore FISICO aggiunto (la vestizione DIY e' obbligatoria, il dual-encoder NON la sostituisce). CAN 1M, 2 kHz, fb 0.4ms.
-- TERMICO: derating coppia sopra 105 gradi C bobina (max 120 stop); l'alta coppia continua scalda -> derating. XT30 15A/30A
-  picco; SERVONO condensatori per l'energy-return (regen) o si brucia il driver. Tensione 20-57V.
-- MODELLI nel manuale = EC-4310 / 8112 / 10020-24 / 13715 / 13720 (serie P planetaria). Gli A6416/A4315/A5013-H/A3814-H di
-  Asimov NON sono nel manuale -> potrebbero essere CUSTOM/non-standard: VERIFICARE disponibilita' con Foxtech (il catalogo
-  standard gambe e' A8112 94Nm / A10020 150Nm). Per il debug VESC serve cacciavite M2 per aprire il retro su 4310/8112/10020/13715/13720.
+**OFFICIAL ENCOS MANUAL read (Motor Debugging Manual V1.18, 2026-06-17) - CONFIRMS and REINFORCES:**
+- ENCODER: dual (motor + output), 14-bit, BUT real accuracy only **0.1-0.2 degrees** ("quality issues"). -> the
+  deflection on a stiff planetary (at rated torque) is minimal and GETS SWAMPED by the encoder error (0.1-0.2 deg) ->
+  **torque estimation from dual-encoder is NOT usable on the planetary Encos** (confirmed: the AI was right to scale it back).
+  Output encoder single-turn (loses the turn count at power-off).
+- CONTROL: it has MIT mode (Power-Position Mixed: i=(Kp*(p_des-p)+Kd*(v_des-v)+Tff)/Kt, "for foot-type robots") + Current/
+  Torque mode + Servo pos/speed. BUT the **torque is ALWAYS from CURRENT x Kt (open-loop), NO torque sensor**. Force
+  control = like RobStride (from current) -> at high reduction it is unreliable because of friction -> for true torque you NEED an
+  added PHYSICAL sensor (the DIY outfitting is mandatory, the dual-encoder does NOT replace it). CAN 1M, 2 kHz, fb 0.4ms.
+- THERMAL: torque derating above 105 degrees C coil (max 120 stop); high continuous torque heats it up -> derating. XT30 15A/30A
+  peak; capacitors ARE NEEDED for the energy-return (regen) or the driver burns out. Voltage 20-57V.
+- MODELS in the manual = EC-4310 / 8112 / 10020-24 / 13715 / 13720 (planetary P series). The A6416/A4315/A5013-H/A3814-H of
+  Asimov are NOT in the manual -> they could be CUSTOM/non-standard: VERIFY availability with Foxtech (the standard
+  leg catalogue is A8112 94Nm / A10020 150Nm). For VESC debugging an M2 screwdriver is needed to open the back on 4310/8112/10020/13715/13720.
 
-**CORREZIONE "gambe = Ø100 obbligato" (ERRATA):** Asimov fa hip pitch + waist in **Ø64** (A6416, planetario 25:1) su
-35 kg, "fino a 120 Nm picco". Le gambe NON devono essere Ø100: con riduzione piu' alta (25:1 o armonico) si fanno
-~120 Nm in **Ø64**, meno backdrivable ma OK per SOLO CAMMINO. Il nostro tethered (~28-30 kg) ci sta. -> gambe eleganti
-Ø64 possibili. L'armonico (H) Encos da' alta riduzione + ZERO gioco in frame piccoli (Ø38-50): ottimo per giunti compatti.
+**CORRECTION "legs = Ø100 mandatory" (WRONG):** Asimov does hip pitch + waist in **Ø64** (A6416, planetary 25:1) on
+35 kg, "up to 120 Nm peak". The legs do NOT have to be Ø100: with a higher reduction (25:1 or harmonic) you get
+~120 Nm in **Ø64**, less backdrivable but OK for WALKING ONLY. Our tethered robot (~28-30 kg) fits within that. -> elegant legs
+in Ø64 are possible. The Encos harmonic (H) gives high reduction + ZERO backlash in small frames (Ø38-50): excellent for compact joints.
 
-**Range giunti Asimov (dal sim):** hip pitch -120/+57, hip roll/yaw ±45, knee 0-86, ankle pitch ±20 / roll ±5.7 (PICCOLI),
-waist yaw ±90, shoulder pitch -50/+180, elbow 0-140, wrist yaw ±180 (gradi). NB la caviglia Asimov ha range piu' ridotto del nostro.
+**Asimov joint ranges (from the sim):** hip pitch -120/+57, hip roll/yaw ±45, knee 0-86, ankle pitch ±20 / roll ±5.7 (SMALL),
+waist yaw ±90, shoulder pitch -50/+180, elbow 0-140, wrist yaw ±180 (degrees). NB the Asimov ankle has a smaller range than ours.
 
-## Metodo di calcolo coppie + verifica finale post-downsizing (2026-06-08)
+## Torque calculation method + final post-downsizing check (2026-06-08)
 
-**Come calcolare la coppia richiesta a un giunto (per AI e per ogni ricalcolo).** Regola base: hold continuo ->
-confronta col NOMINALE; movimento/picco breve -> confronta col PICCO. Un motore "regge" se statico < nominale E
-dinamico < picco.
+**How to calculate the torque required at a joint (for the other AI session and for every recalculation).** Basic rule: continuous hold ->
+compare with the RATED value; motion/short peak -> compare with the PEAK value. A motor "holds up" if static < rated AND
+dynamic < peak.
 
-1. STATICO (tenere fermo nella posa peggiore): `tau_stat = g * SOMMA(m_i * b_i)`, con `b_i` = braccio di leva
-   ORIZZONTALE della massa i dall'asse del giunto nella posa peggiore. g = 9.81.
-2. DINAMICO (bang-bang: accelera meta corsa, decelera meta): `tau_dyn = tau_stat + I*alpha`, con `I = SOMMA(m_i * b_i^2)`
-   e `alpha = 4*theta / t^2` (theta = ampiezza in rad, t = tempo). Velocita realistiche: 90 gradi in 0.5 s = moderato;
-   0.3 s = veloce (la manipolazione non lo richiede); 0.8 s = lento.
-3. ASSI VERTICALI (yaw): gravita ~= 0 -> solo dinamica (inerzia attorno alla verticale).
-4. LEVERAGGI (caviglia, vita a puntoni): la coppia al GIUNTO e fissa dal carico; `tau_motore = tau_giunto *
-   (crank_motore/crank_piede)`, poi / n motori che condividono. A 1:1 con 2 motori -> tau_giunto/2 a motore.
+1. STATIC (holding still in the worst pose): `tau_stat = g * SUM(m_i * b_i)`, with `b_i` = HORIZONTAL
+   lever arm of mass i from the joint axis in the worst pose. g = 9.81.
+2. DYNAMIC (bang-bang: accelerate for half the travel, decelerate for half): `tau_dyn = tau_stat + I*alpha`, with `I = SUM(m_i * b_i^2)`
+   and `alpha = 4*theta / t^2` (theta = amplitude in rad, t = time). Realistic speeds: 90 degrees in 0.5 s = moderate;
+   0.3 s = fast (manipulation does not require it); 0.8 s = slow.
+3. VERTICAL AXES (yaw): gravity ~= 0 -> dynamics only (inertia about the vertical).
+4. LINKAGES (ankle, pushrod-driven waist): the torque at the JOINT is fixed by the load; `tau_motor = tau_joint *
+   (crank_motor/crank_foot)`, then / n motors sharing it. At 1:1 with 2 motors -> tau_joint/2 per motor.
 
-**Input usati.**
-- Masse motori (diventano bracci di leva quando sono distali): RS00 0.310, RS02 0.405, RS04 1.420, RS05 0.191,
+**Inputs used.**
+- Motor masses (they become lever-arm loads when they are distal): RS00 0.310, RS02 0.405, RS04 1.420, RS05 0.191,
   RS06 0.621 kg.
-- POSIZIONI GIUNTI dal G1 mode_11 (`g1_joints.csv`) -> danno i bracci. Es. braccio: spalla->spalla_yaw 0.106,
-  spalla->gomito **0.187** (proiezione a braccio TESO, non i 16 mm a riposo!), spalla->polsi 0.287/0.325/0.371,
-  spalla->mano 0.412 m; gomito->payload 0.22 m.
-- Masse segmenti stimate PA-CF: omero ~0.30, avambraccio ~0.25, mano ~0.30 kg.
-- Masse globali: robot ~35 kg; gamba sotto il pitch ~7.0 kg (CoM 0.305 m sotto l'asse); upper body sopra la vita
-  ~10-14 kg (dipende dalla batteria, CoM ~0.25 m sopra il giunto); braccio sotto la spalla ~2.9 kg.
+- JOINT POSITIONS from the G1 mode_11 (`g1_joints.csv`) -> they give the lever arms. E.g. arm: shoulder->shoulder_yaw 0.106,
+  shoulder->elbow **0.187** (projection with the arm EXTENDED, not the 16 mm at rest!), shoulder->wrists 0.287/0.325/0.371,
+  shoulder->hand 0.412 m; elbow->payload 0.22 m.
+- Estimated PA-CF segment masses: upper arm ~0.30, forearm ~0.25, hand ~0.30 kg.
+- Global masses: robot ~35 kg; leg below the pitch ~7.0 kg (CoM 0.305 m below the axis); upper body above the waist
+  ~10-14 kg (depends on the battery, CoM ~0.25 m above the joint); arm below the shoulder ~2.9 kg.
 
-**Pose peggiori considerate per giunto (cosa entra nel conto).**
-- Spalla pitch: BRACCIO DISTESO ORIZZONTALE in avanti, ogni massa al suo braccio, incluso il motore gomito (0.405 kg
-  a 0.187 m: si solleva) -> 6.3 Nm statici.
-- Spalla roll: braccio disteso orizzontale di lato (abduzione) = uguale al pitch.
-- Spalla yaw: braccio ALZATO, payload 2 kg a 0.20 m dall'asse omero (a braccio basso la gravita e 0).
-- Gomito: avambraccio a 90 gradi, payload a 0.22 m dal gomito.
-- Hip pitch: gamba a sbalzo orizzontale, CoM gamba 0.305 m sotto l'asse.
-- Hip roll: monoappoggio, massa sopra l'anca ~28 kg x offset laterale 0.10 m.
-- Knee: squat, peso robot x braccio (0.04 dritto / 0.15 mezzo / 0.22 profondo).
-- Ankle: ribaltamento, peso robot x leva caviglia-punta 0.13 m = ~46 Nm al giunto, /2 motori (a 1:1).
-- Waist pitch/roll: upper body x 0.25 m x sin(piega), /2 puntoni.
-- Yaw (hip/waist/shoulder): gravita 0, solo dinamica (girata/torsione).
+**Worst poses considered per joint (what goes into the calculation).**
+- Shoulder pitch: ARM EXTENDED HORIZONTALLY forward, each mass at its own lever arm, including the elbow motor (0.405 kg
+  at 0.187 m: it gets lifted) -> 6.3 Nm static.
+- Shoulder roll: arm extended horizontally to the side (abduction) = same as pitch.
+- Shoulder yaw: arm RAISED, payload 2 kg at 0.20 m from the upper-arm axis (with the arm down gravity is 0).
+- Elbow: forearm at 90 degrees, payload at 0.22 m from the elbow.
+- Hip pitch: leg cantilevered horizontally, leg CoM 0.305 m below the axis.
+- Hip roll: single support, mass above the hip ~28 kg x lateral offset 0.10 m.
+- Knee: squat, robot weight x lever arm (0.04 straight / 0.15 half / 0.22 deep).
+- Ankle: tipping over, robot weight x ankle-to-toe lever 0.13 m = ~46 Nm at the joint, /2 motors (at 1:1).
+- Waist pitch/roll: upper body x 0.25 m x sin(bend angle), /2 pushrods.
+- Yaw (hip/waist/shoulder): gravity 0, dynamics only (turning/twisting).
 
-**Esiti coi motori finali** (stat% sul nominale, din% sul picco):
+**Results with the final motors** (stat% relative to rated, dyn% relative to peak):
 
-| Giunto | Motore | Esito | Numeri |
+| Joint | Motor | Result | Numbers |
 |---|---|---|---|
-| Hip pitch/roll | RS04 | OK | stat 52-69%, din 58-75% (max RobStride, 86% del G1) |
-| Hip yaw | RS06 | OK/TIGHT | ~28 Nm a massa G1 = 78% picco; ~37 Nm se scalato a 46 kg = oltre il picco |
-| Knee | RS04 | ATTENZIONE | in piedi/cammina OK (34%); squat profondo TENUTO 129-189% nom (max motor, limite inerente) |
-| Ankle pitch/roll | RS06, uno per asse | OK con CAD | 36 Nm picco vs 35 G1; cammino normale stimato 17-32 Nm. Caso bordo punta 45-59 Nm: serve vantaggio meccanico o va evitato |
-| Waist yaw | RS06 | OK/TIGHT | ~28 Nm a massa G1 < 36 picco; asse verticale, nessun carico gravitazionale |
-| Waist roll | RS03 | OK | 12-17 Nm stimati a 30 gradi < 20 nominali; 21-30 Nm a 60 gradi solo intermittenti < 60 picco |
-| Waist pitch | nessuno | RIMOSSO | il pitch del busto viene dagli hip pitch, scelta Figure-like |
-| Spalla pitch/roll | RS06 | OK/TIGHT | ~10.8 Nm statici con braccio orizzontale + payload 1 kg, appena sotto 11 nominali; 36 picco > 25 G1 |
-| Spalla yaw | RS00 | OK per 1 kg | ~21 N per mano continui al braccio G1 da 0.24 m; circa 1 kg di box affidabile con attrito e SF2 |
-| Gomito | RS06 | OK | ~4.4 Nm statici con 1 kg, ~6.6 Nm con 2 kg < 11 nominali |
-| Polso x3 | RS00 | OK | 51% nom con 2 kg in mano |
-| Collo x2 | RS05 | OK | testa 1.5 kg, 46% nom |
+| Hip pitch/roll | RS04 | OK | stat 52-69%, dyn 58-75% (max RobStride, 86% of the G1) |
+| Hip yaw | RS06 | OK/TIGHT | ~28 Nm at G1 mass = 78% peak; ~37 Nm if scaled to 46 kg = beyond peak |
+| Knee | RS04 | WARNING | standing/walking OK (34%); deep squat HELD 129-189% rated (max motor, inherent limit) |
+| Ankle pitch/roll | RS06, one per axis | OK with CAD | 36 Nm peak vs 35 G1; normal walking estimated 17-32 Nm. Toe-edge case 45-59 Nm: needs mechanical advantage or must be avoided |
+| Waist yaw | RS06 | OK/TIGHT | ~28 Nm at G1 mass < 36 peak; vertical axis, no gravitational load |
+| Waist roll | RS03 | OK | 12-17 Nm estimated at 30 degrees < 20 rated; 21-30 Nm at 60 degrees only intermittent < 60 peak |
+| Waist pitch | none | REMOVED | torso pitch comes from the hip pitch joints, Figure-like choice |
+| Shoulder pitch/roll | RS06 | OK/TIGHT | ~10.8 Nm static with arm horizontal + payload 1 kg, just below 11 rated; 36 peak > 25 G1 |
+| Shoulder yaw | RS00 | OK for 1 kg | ~21 N per hand continuous at the G1 lever arm of 0.24 m; about 1 kg of box reliably, with friction and SF2 |
+| Elbow | RS06 | OK | ~4.4 Nm static with 1 kg, ~6.6 Nm with 2 kg < 11 rated |
+| Wrist x3 | RS00 | OK | 51% rated with 2 kg in hand |
+| Neck x2 | RS05 | OK | head 1.5 kg, 46% rated |
 
-**3 regole d'uso perche tutto regga:** (1) gambe quasi dritte, niente squat profondo tenuto; (2) batteria BASSA nel
-bacino + non tenere il busto piegato a lungo; (3) braccia <=1.5 kg comodi / 2 kg a velocita moderata, niente fling.
+**3 usage rules so that everything holds up:** (1) legs almost straight, no held deep squat; (2) battery LOW in the
+pelvis + do not keep the torso bent for long; (3) arms <=1.5 kg comfortably / 2 kg at moderate speed, no flinging.
 
-**2 verifiche obbligatorie in CAD:** (a) rapporto crank caviglia >=1:1; (b) rapporto crank vita pitch/roll + posizione
-batteria (decidono se RS06 basta o serve RS03). Riserve gia in BOM: vita->RS03, gomito->RS06. Nessun motore e bocciato
-per l'uso non-acrobatico previsto; le gambe (RS04 non declassati) reggono in piedi e in camminata.
+**2 mandatory checks in CAD:** (a) ankle crank ratio >=1:1; (b) waist pitch/roll crank ratio + battery
+position (they decide whether RS06 is enough or RS03 is needed). Fallbacks already in the BOM: waist->RS03, elbow->RS06. No motor is rejected
+for the intended non-acrobatic use; the legs (RS04 not downgraded) hold up when standing and when walking.
 
-## Regola montaggio motori (decisione utente 2026-06-08)
+## Motor mounting rule (user decision 2026-06-08)
 
-**TUTTI i motori si montano dal DAVANTI (faccia uscita).** Universale: ogni QDD esce dal davanti, solo alcuni offrono
-anche il retro -> standardizzando sul davanti vai bene con qualsiasi marca (RobStride/CubeMars/MyActuator). Schema:
-l'osso fisso e' un piatto avvitato ai fori STATORE della faccia uscita, con foro centrale di luce; il corpo motore sta
-dietro il piatto; l'uscita (rotore) sporge attraverso il foro; l'osso mobile si avvita al rotore davanti. Il retro NON
-e' interfaccia di montaggio (sul disegno RS06 il Ø70 retro e' tra parentesi = riferimento/coperchio; le viti retro
-tengono insieme il motore, non si usano). Interfaccia quotata RS06 = faccia uscita: 6xM4 (rotore) + 8xM3 su Ø82
-(statore) + 3xØ4 spine.
+**ALL motors are mounted from the FRONT (output face).** Universal: every QDD has its output at the front, only some also offer
+the rear -> by standardizing on the front you are fine with any brand (RobStride/CubeMars/MyActuator). Scheme:
+the fixed bone is a plate screwed to the STATOR holes of the output face, with a central clearance hole; the motor body sits
+behind the plate; the output (rotor) protrudes through the hole; the moving bone is screwed to the rotor at the front. The rear is NOT
+a mounting interface (on the RS06 drawing the rear Ø70 is in parentheses = reference/cover; the rear screws
+hold the motor together, they are not to be used). RS06 dimensioned interface = output face: 6xM4 (rotor) + 8xM3 on Ø82
+(stator) + 3xØ4 dowel pins.
 
-NIENTE adattatori o pezzi in piu' (l'utente ristampa volentieri; ingombri maggiori non sono un problema). Le POSIZIONI
-DEI GIUNTI le fissano i MOTORI col loro ingombro (packing), come nel G1: cambiando motore i giunti si spostano, e va
-bene -> l'RL si rifa' DA ZERO (scelta utente accettata, non e' una tragedia). NON si congela l'asse del giunto: si
-impacchettano i motori reali e i giunti cadono dove cadono. Le coordinate giunti G1 mode_11 (`g1_joints.csv`) sono un
-RIFERIMENTO di proporzioni (lunghezza gamba, larghezza bacino...), NON un target rigido da centrare (erano per motori
-~80 mm). L'UNICA cosa che resta fissa e' la TOPOLOGIA di montaggio: front-mount per tutti -> un cambio motore resta
-"ri-impacchetta lo stesso tipo di scheletro + RL da zero", mai un mount che flippa davanti/dietro e stravolge la forma
-delle ossa.
+NO adapters or extra parts (the user is happy to reprint; larger envelopes are not a problem). The POSITIONS
+OF THE JOINTS are set by the MOTORS with their envelope (packing), as in the G1: changing a motor moves the joints, and that is
+fine -> the RL gets redone FROM SCRATCH (user choice accepted, it is not a tragedy). The joint axis is NOT frozen: the
+real motors are packed and the joints fall where they fall. The G1 mode_11 joint coordinates (`g1_joints.csv`) are a
+REFERENCE for proportions (leg length, pelvis width...), NOT a rigid target to hit (they were for motors of
+~80 mm). The ONLY thing that stays fixed is the mounting TOPOLOGY: front-mount for all -> a motor change remains
+"re-pack the same type of skeleton + RL from scratch", never a mount that flips front/rear and completely upsets the shape
+of the bones.
 
-Link acquisto e schede:
+Purchase links and spec sheets:
 
 - RS04: <https://www.seeedstudio.com/Robostride-04-Actuator-p-6775.html>
 - RS03: <https://www.seeedstudio.com/Robostride-03-Actuator-p-6774.html>
@@ -1118,509 +1119,509 @@ Link acquisto e schede:
 - RS02: <https://www.seeedstudio.com/Robostride-02-Actuator-p-6665.html>
 - RS05: <https://www.seeedstudio.com/Robostride-05-Actuator-p-6666.html>
 - RS00: <https://www.seeedstudio.com/Robostride-00-Actuator-p-6664.html>
-- Debug USB-CAN RobStride: <https://www.seeedstudio.com/Robostride-CAN-USB-Driver-Board-p-6708.html>
-- Specifica famiglia RobStride con prezzi CNY: <https://files.seeedstudio.com/products/RobStride/%E7%81%B5%E8%B6%B3%E6%97%B6%E4%BB%A3%E4%BA%A7%E5%93%81%E8%A7%84%E6%A0%BC%E4%BB%8B%E7%BB%8D%20RobStride%20Product%20Specification%20Document%2020250626.pdf>
+- RobStride USB-CAN debug: <https://www.seeedstudio.com/Robostride-CAN-USB-Driver-Board-p-6708.html>
+- RobStride family specification with CNY prices: <https://files.seeedstudio.com/products/RobStride/%E7%81%B5%E8%B6%B3%E6%97%B6%E4%BB%A3%E4%BA%A7%E5%93%81%E8%A7%84%E6%A0%BC%E4%BB%8B%E7%BB%8D%20RobStride%20Product%20Specification%20Document%2020250626.pdf>
 
-## Prezzi RobStride: chiarimento
+## RobStride prices: clarification
 
-Il `1199` visibile per RS04 nella specifica RobStride e in yuan cinesi (`CNY`), non in dollari USA. Il PDF riporta anche
-RS06 a `849 CNY`, RS05 a `499 CNY` e RS00 a `598 CNY`. Per un ordine reale non usare automaticamente il valore piu basso visto su
-AliExpress: verificare SKU, versione, accessori, IVA, spedizione, dazio, reso e garanzia.
+The `1199` shown for RS04 in the RobStride specification is in Chinese yuan (`CNY`), not in US dollars. The PDF also lists
+RS06 at `849 CNY`, RS05 at `499 CNY` and RS00 at `598 CNY`. For a real order do not automatically use the lowest value seen on
+AliExpress: verify SKU, version, accessories, VAT, shipping, customs duty, returns and warranty.
 
-Prezzi retail Seeed verificati il 2026-06-02:
+Seeed retail prices verified on 2026-06-02:
 
-| Modello | Prezzo retail |
+| Model | Retail price |
 |---|---:|
-| RS04 | USD 255, sconto quantita USD 242 |
-| RS03 | USD 225, sconto quantita USD 214 |
-| RS06 | USD 210, sconto quantita USD 200 |
-| RS02 | USD 145, sconto quantita USD 138 |
-| RS05 | USD 110, sconto quantita USD 105 |
-| RS00 | USD 125, sconto quantita USD 119 |
+| RS04 | USD 255, quantity discount USD 242 |
+| RS03 | USD 225, quantity discount USD 214 |
+| RS06 | USD 210, quantity discount USD 200 |
+| RS02 | USD 145, quantity discount USD 138 |
+| RS05 | USD 110, quantity discount USD 105 |
+| RS00 | USD 125, quantity discount USD 119 |
 | Debug USB-CAN | USD 15 |
 
-La BOM usa stime EUR nette prudenti, poi applica IVA al 22%. Rivalutare il preventivo prima dell'ordine.
+The BOM uses conservative net EUR estimates, then applies VAT at 22%. Re-evaluate the quotation before ordering.
 
-## Elettrico e sicurezza
+## Electrical and safety
 
-> **ATTENZIONE 2026-07-17: SEZIONE STORICA.** Descrive l'architettura bench 2026-06 (SW200/SW80, timer Eaton, selettore
-> a chiave, bobine 48 V, condensatori KEMET, bleeder RobStride, ED250, SD-200C/RSD-300C) superata dal lock 2026-07-12
-> e dalla decisione mani-su-WEHO 2026-07-17. La fonte corrente sono i blocchi datati in testa a questo file, il
-> README e la BOM Excel. Non ordinare componenti da questa sezione.
+> **WARNING 2026-07-17: HISTORICAL SECTION.** It describes the 2026-06 bench architecture (SW200/SW80, Eaton timer, key
+> selector switch, 48 V coils, KEMET capacitors, RobStride bleeder, ED250, SD-200C/RSD-300C) superseded by the 2026-07-12 lock
+> and by the 2026-07-17 hands-on-WEHO decision. The current source is the dated blocks at the top of this file, the
+> README and the Excel BOM. Do not order components from this section.
 
-La parte elettrica non e un elenco decorativo: prima del primo power-up va realizzato e controllato un pannello 48 V.
-La BOM contiene ora una baseline elettrica concreta con SKU specifici, fusibili e sezioni cavo. E dimensionata sulla
-sorgente bench da `62,5 A`; la baseline mobile candidata e ora P45B 13S2P con BMS `45 A continui / 100 A massimo`, con durata del massimo ancora da
-confermare per iscritto. Non sommare le
-correnti di fase massime dei singoli RobStride come se fossero tutte correnti DC assorbite contemporaneamente dal pacco.
+The electrical part is not a decorative list: before the first power-up a 48 V panel must be built and checked.
+The BOM now contains a concrete electrical baseline with specific SKUs, fuses and cable cross-sections. It is sized on the
+bench source of `62,5 A`; the candidate mobile baseline is now P45B 13S2P with BMS `45 A continuous / 100 A maximum`, with the duration of the maximum still to be
+confirmed in writing. Do not add up the
+maximum phase currents of the individual RobStride units as if they were all DC currents drawn simultaneously from the pack.
 
-Questa e una baseline prototipo per bring-up e prove progressive, non una certificazione di sicurezza macchina. Prima
-della camminata dinamica misurare correnti, cadute di tensione e temperature dei fasci; verificare serraggi e isolamento;
-confermare con il fornitore del pacco corrente di corto prospettica, soglie di trip e comportamento del BMS. Il fusibile principale BF1 scelto ha
-interrupting rating `1 kA`: non dichiararlo sufficiente al corto del pacco senza la conferma del costruttore.
+This is a prototype baseline for bring-up and progressive tests, not a machine safety certification. Before
+dynamic walking, measure currents, voltage drops and harness temperatures; verify fastener tightness and insulation;
+confirm with the pack supplier the prospective short-circuit current, trip thresholds and BMS behavior. The selected BF1 main fuse has
+an interrupting rating of `1 kA`: do not declare it sufficient for a pack short circuit without the manufacturer's confirmation.
 
-Catena di potenza, in ordine:
+Power chain, in order:
 
-1. A banco il `MEAN WELL RSP-3000-48` converte 230 VAC in 48 VDC. Usa morsetti L/N/terra, non una presa IEC C13.
-2. Sul positivo 48 V mettere vicino alla sorgente il fusibile principale `Littelfuse BF1 142.5631.5702`, `70 A 58 VDC
-   M5`, nel portafusibile isolato `04980921GXM5`. Il tronco principale positivo e negativo e da `25 mm2`.
-3. L'e-stop `Schneider XB5AS8442` e il selettore a chiave `Schneider XB5AG21` portano solo il circuito di comando. La
-   chiave evita che il semplice rilascio del fungo riaccenda automaticamente il bus. Il contattore DC `Albright SW200-20`
-   con bobina 48 V e blowouts apre fisicamente il positivo motori. In mobile aggiungere il sezionatore manuale
-   `Albright ED250B-1`, `250 A 96 VDC`, per manutenzione e distacco fisico di emergenza: non sostituisce il contattore.
-4. Prima della chiusura piena del contattore serve precarica. Il rele `CIT A2K1CSQ48VDC1.6` collega la resistenza chassis
-   `Vishay Dale RHA050100R0FE02`, `100 ohm 50 W`, in parallelo allo SW200. Il timer ON-delay `Eaton 262684 / ETR2-11`,
-   alimentato a 48 VDC e impostato a circa `10 s`, abilita poi la bobina dello SW200, che bypassa la resistenza. Con i due
-   condensatori gia scelti: `C = 24.000 uF`, `Vmax = 54,6 V`, `I0 = 0,546 A`, `P0 = 29,8 W`, `tau = 2,4 s`; dopo `10 s`
-   il bus e circa al `98,5%`. Montare la resistenza sul pannello metallico. I TVS `Littelfuse 1.5KE68CA` vanno direttamente
-   ai terminali delle bobine SW200 e CIT.
-5. Il blocco distribuzione `Eaton Bussmann 16220-2` riceve positivo e negativo e divide sei rami: gamba sinistra, gamba
-   destra, vita-collo, braccio sinistro, braccio destro e servizi/DC-DC Thor. I portafusibili non restano sospesi ai cavi:
-   fissarli sul pannello sotto una cover isolante ventilata.
-6. Due condensatori bulk `KEMET ALS80A123KE100` da 12000 uF 100 V con terminali a vite vanno in parallelo vicino alla
-   distribuzione, con tratte corte e capicorda ad anello. Non stanno sospesi: ciascuno usa clamp `KEMET V4`, pannello
-   rigido e cover isolante ventilata da progettare. Il rating 100 V lascia margine rispetto ai 54.6 V della batteria piena
-   e ai transitori rigenerativi; sono stati scelti al posto degli snap-in per evitare una PCB potenza.
-7. Il `ROBSTRIDE Bleeder Module` limita la sovratensione rigenerativa dissipando energia quando i motori frenano.
-   L'alimentatore Mean Well da banco non va assunto capace di assorbire rigenerazione.
-8. In mobile il candidato selezionato/order-gated e Bicycle Motor Works `13S2P P45B`: 46.8 V nominali, 54.6 V piena,
-   9 Ah / 421.2 Wh, BMS 45 A continui / 100 A massimo, 165.1 x 101.6 x 76.2 mm, massa CAD prudente 2.27 kg.
-   Non ordinarlo prima della conferma su spedizione Italia, massa esatta, durata del massimo, trip BMS, regen e charger.
-   Tõuksi Vabrik e il fallback UE da 60 A / 2.04 kg se garantisce per disegno lo stesso envelope. `ENERprof TN13S5P`
-   resta qty 0: 1200 Wh e 5.2 kg sono eccessivi rispetto al G1 per il prototipo corrente.
-9. Thor non va collegato al bus 48 V: il `MEAN WELL SD-200C-24` crea il rail 24 V. Thor accetta `9-28 V DC` al Micro-fit.
-10. Le due mani RH56DFX usano un secondo convertitore `MEAN WELL RSD-300C-24`, 24 V / 12.5 A / 300 W, su ramo 48 V
-    dedicato e fusibile MINI 10 A. Non usare il ramo Thor da 10 A per entrambi i convertitori. Il punto di split servizi
-    positivo/negativo deve essere un componente dimensionato e fissato, non due conduttori infilati nello stesso morsetto.
+1. On the bench the `MEAN WELL RSP-3000-48` converts 230 VAC to 48 VDC. It uses L/N/earth terminals, not an IEC C13 socket.
+2. On the 48 V positive, place near the source the main fuse `Littelfuse BF1 142.5631.5702`, `70 A 58 VDC
+   M5`, in the insulated fuse holder `04980921GXM5`. The main positive and negative trunk is `25 mm2`.
+3. The e-stop `Schneider XB5AS8442` and the key selector switch `Schneider XB5AG21` carry only the control circuit. The
+   key prevents the mere release of the mushroom button from automatically re-powering the bus. The DC contactor `Albright SW200-20`
+   with 48 V coil and blowouts physically opens the motor positive. In mobile use add the manual disconnect switch
+   `Albright ED250B-1`, `250 A 96 VDC`, for maintenance and emergency physical disconnection: it does not replace the contactor.
+4. Before the contactor closes fully, precharge is needed. The relay `CIT A2K1CSQ48VDC1.6` connects the chassis-mount resistor
+   `Vishay Dale RHA050100R0FE02`, `100 ohm 50 W`, in parallel with the SW200. The ON-delay timer `Eaton 262684 / ETR2-11`,
+   powered at 48 VDC and set to about `10 s`, then enables the SW200 coil, which bypasses the resistor. With the two
+   capacitors already chosen: `C = 24.000 uF`, `Vmax = 54,6 V`, `I0 = 0,546 A`, `P0 = 29,8 W`, `tau = 2,4 s`; after `10 s`
+   the bus is at about `98,5%`. Mount the resistor on the metal panel. The TVS `Littelfuse 1.5KE68CA` go directly
+   on the terminals of the SW200 and CIT coils.
+5. The distribution block `Eaton Bussmann 16220-2` receives positive and negative and splits into six branches: left leg, right
+   leg, waist-neck, left arm, right arm and services/Thor DC-DC. The fuse holders must not be left hanging from the cables:
+   fix them to the panel under a ventilated insulating cover.
+6. Two bulk capacitors `KEMET ALS80A123KE100`, 12000 uF 100 V with screw terminals, go in parallel near the
+   distribution, with short runs and ring terminals. They are not left hanging: each uses a `KEMET V4` clamp, a rigid
+   panel and a ventilated insulating cover to be designed. The 100 V rating leaves margin over the 54.6 V of the full battery
+   and over regenerative transients; they were chosen instead of snap-in types to avoid a power PCB.
+7. The `ROBSTRIDE Bleeder Module` limits regenerative overvoltage by dissipating energy when the motors brake.
+   The Mean Well bench power supply must not be assumed capable of absorbing regeneration.
+8. For mobile use the selected/order-gated candidate is Bicycle Motor Works `13S2P P45B`: 46.8 V nominal, 54.6 V full,
+   9 Ah / 421.2 Wh, BMS 45 A continuous / 100 A maximum, 165.1 x 101.6 x 76.2 mm, conservative CAD mass 2.27 kg.
+   Do not order it before confirmation of shipping to Italy, exact mass, duration of the maximum, BMS trip, regen and charger.
+   Tõuksi Vabrik is the EU fallback at 60 A / 2.04 kg if it guarantees the same envelope by drawing. `ENERprof TN13S5P`
+   remains qty 0: 1200 Wh and 5.2 kg are excessive compared with the G1 for the current prototype.
+9. Thor must not be connected to the 48 V bus: the `MEAN WELL SD-200C-24` creates the 24 V rail. Thor accepts `9-28 V DC` at the Micro-fit.
+10. The two RH56DFX hands use a second converter `MEAN WELL RSD-300C-24`, 24 V / 12.5 A / 300 W, on a dedicated 48 V
+    branch with a MINI 10 A fuse. Do not use the 10 A Thor branch for both converters. The split point for the services
+    positive/negative must be a properly sized and secured component, not two conductors pushed into the same terminal.
 
-Segmentazione positiva selezionata:
+Selected positive segmentation:
 
-| Ramo | Fusibile | Cavo | Nota |
+| Branch | Fuse | Cable | Note |
 |---|---|---|---|
-| Principale | `BF1 142.5631.5702`, 70 A 58 VDC | `25 mm2` | baseline P45B; ricontrollare coordinamento con BMS 45/100 A prima del mobile |
-| Comando safety | `MINI 0997002.WXN`, 2 A 58 VDC | pigtail `12 AWG` del portafusibile `0FHM0002XP` | e-stop, chiave, timer e bobine |
-| Gamba sinistra | `BF1 142.5631.5702`, 70 A 58 VDC | `16 mm2` | verificare temperatura in prova |
-| Gamba destra | `BF1 142.5631.5702`, 70 A 58 VDC | `16 mm2` | verificare temperatura in prova |
-| Vita-collo | `BF1 142.5631.5402`, 40 A 58 VDC | `6 mm2` | attivo in fase 3 |
-| Braccio sinistro | `BF1 142.5631.5302`, 30 A 58 VDC | `6 mm2` | attivo in fase 3 |
-| Braccio destro | `BF1 142.5631.5302`, 30 A 58 VDC | `6 mm2` | attivo in fase 3 |
-| Servizi Thor | `MINI 0997010.WXN`, 10 A 58 VDC | pigtail `12 AWG` | solo SD-200C-24 |
-| Servizi mani | `MINI 0997010.WXN`, 10 A 58 VDC | pigtail `12 AWG` | solo RSD-300C-24; split servizi da definire |
-La somma dei fusibili di ramo puo superare `70 A`: ciascun fusibile protegge il proprio cavo e isola il guasto del ramo;
-non costituisce una riserva di potenza contemporanea. Il limite complessivo resta il ramo principale e, in mobile, il BMS.
+| Main | `BF1 142.5631.5702`, 70 A 58 VDC | `25 mm2` | P45B baseline; re-check coordination with the 45/100 A BMS before mobile use |
+| Safety control | `MINI 0997002.WXN`, 2 A 58 VDC | `12 AWG` pigtail of the fuse holder `0FHM0002XP` | e-stop, key, timer and coils |
+| Left leg | `BF1 142.5631.5702`, 70 A 58 VDC | `16 mm2` | verify temperature during testing |
+| Right leg | `BF1 142.5631.5702`, 70 A 58 VDC | `16 mm2` | verify temperature during testing |
+| Waist-neck | `BF1 142.5631.5402`, 40 A 58 VDC | `6 mm2` | active in phase 3 |
+| Left arm | `BF1 142.5631.5302`, 30 A 58 VDC | `6 mm2` | active in phase 3 |
+| Right arm | `BF1 142.5631.5302`, 30 A 58 VDC | `6 mm2` | active in phase 3 |
+| Thor services | `MINI 0997010.WXN`, 10 A 58 VDC | `12 AWG` pigtail | SD-200C-24 only |
+| Hand services | `MINI 0997010.WXN`, 10 A 58 VDC | `12 AWG` pigtail | RSD-300C-24 only; services split to be defined |
+The sum of the branch fuses can exceed `70 A`: each fuse protects its own cable and isolates the fault of its branch;
+it does not constitute a simultaneous power reserve. The overall limit remains the main branch and, in mobile use, the BMS.
 
-Schema funzionale minimo del pannello:
+Minimal functional diagram of the panel:
 
 ```text
-BENCH: 230 VAC -> RSP-3000-48 -> BF1 principale 70 A -----------\
-                                                                  +-> nodo sorgente protetto -> SW200-20 -> bus motori
-MOBILE: batteria -> BF1 principale 70 A -> ED250B sezionatore ---/
+BENCH: 230 VAC -> RSP-3000-48 -> main BF1 70 A -----------\
+                                                                  +-> protected source node -> SW200-20 -> motor bus
+MOBILE: battery -> main BF1 70 A -> ED250B disconnect ---/
 
-nodo sorgente protetto -> fusibile MINI 2 A -> e-stop NC -> chiave enable NO
-                                              +-> rele CIT -> resistenza 100 ohm -> bus motori
-                                              +-> timer Eaton 10 s -> bobina SW200-20
+protected source node -> MINI 2 A fuse -> e-stop NC -> enable key NO
+                                              +-> CIT relay -> 100 ohm resistor -> motor bus
+                                              +-> timer Eaton 10 s -> SW200-20 coil
 
-bus motori -> bleeder + due condensatori KEMET + PDU Eaton
-PDU -> BF1 70 A gamba sx / BF1 70 A gamba dx / BF1 40 A vita-collo
-    -> BF1 30 A braccio sx / BF1 30 A braccio dx / MINI 10 A servizi Thor
+motor bus -> bleeder + two KEMET capacitors + PDU Eaton
+PDU -> BF1 70 A left leg / BF1 70 A right leg / BF1 40 A waist-neck
+    -> BF1 30 A left arm / BF1 30 A right arm / MINI 10 A Thor services
 ```
 
-La resistenza e il rele CIT costituiscono il percorso temporaneo di precarica in parallelo allo SW200: non vanno messi
-permanentemente in serie con i motori. Premendo l'e-stop cadono sia il CIT sia lo SW200. In mobile il fusibile principale
-deve restare il piu vicino possibile alla batteria; il sezionatore manuale ED250B viene dopo il fusibile.
+The resistor and the CIT relay form the temporary precharge path in parallel with the SW200: they must not be placed
+permanently in series with the motors. Pressing the e-stop drops out both the CIT and the SW200. In mobile use the main fuse
+must stay as close as possible to the battery; the ED250B manual disconnect switch comes after the fuse.
 
-I cavi potenza selezionati sono Nautica Illiano `CABATR25/CABATN25`, `CABATR16/CABATN16` e `CABATR06/CABATN06`. I capicorda
-sono scelti per conduttore flessibile e foro reale: Klauke `704F5`, `704F10`, `703F5`, `101R5`; la crimpatrice e
-`Klauke K05`, range `6-50 mm2`. Le quantita BOM dei capicorda includono due pezzi di scorta per le prove di crimpatura.
+The selected power cables are Nautica Illiano `CABATR25/CABATN25`, `CABATR16/CABATN16` and `CABATR06/CABATN06`. The cable lugs
+are chosen for flexible conductor and actual hole size: Klauke `704F5`, `704F10`, `703F5`, `101R5`; the crimping tool is
+`Klauke K05`, range `6-50 mm2`. The BOM quantities of the cable lugs include two spare pieces for crimping trials.
 
-Ingombri principali gia riportati anche nelle note Excel per disegnare il pannello: RSP-3000-48 `278 x 177,8 x 63,5 mm`
-solo banco; PDU Eaton `76,2 x 50,8 x 25,4 mm`; condensatori KEMET `diametro 51 x H84 mm` ciascuno; resistenza RHA050
-`circa 50,0 x 21,4 x 16,0 mm`, interassi montaggio `circa 70,6 mm`; timer Eaton `17,5 x 63 x 70 mm`; CIT A2K
-`26,5 x 32,0 x 33,5 mm`; DC/DC Thor `215 x 115 x 50 mm`; Jetson AGX Thor dev kit `243,19 x 112,40 x 56,88 mm`,
-con modulo T5000 configurabile `40-130 W`.
+Main envelope sizes, already recorded in the Excel notes as well, for drawing the panel: RSP-3000-48 `278 x 177,8 x 63,5 mm`
+bench only; Eaton PDU `76,2 x 50,8 x 25,4 mm`; KEMET capacitors `diameter 51 x H84 mm` each; RHA050 resistor
+`about 50,0 x 21,4 x 16,0 mm`, mounting hole spacing `about 70,6 mm`; Eaton timer `17,5 x 63 x 70 mm`; CIT A2K
+`26,5 x 32,0 x 33,5 mm`; Thor DC/DC `215 x 115 x 50 mm`; Jetson AGX Thor dev kit `243,19 x 112,40 x 56,88 mm`,
+with T5000 module configurable `40-130 W`.
 
-Nota datasheet importante per il passaggio di consegne: per il portafusibile `04980921GXM5` circola ancora un vecchio PDF
-Littelfuse che riporta `32 V DC`. La pagina ufficiale Littelfuse corrente identifica invece la stessa parte come
-`MIDI 498-IL Series 58 V In-Line Fuse Holder`, compatibile BF1/MIDI M5. Usare come fonte corrente:
+Important datasheet note for the handover: for the fuse holder `04980921GXM5` there is still in circulation an old PDF from
+Littelfuse that states `32 V DC`. The current official Littelfuse page instead identifies the same part as
+`MIDI 498-IL Series 58 V In-Line Fuse Holder`, BF1/MIDI M5 compatible. Use as the current source:
 <https://www.littelfuse.com/products/fuse-blocks-fuseholders-and-fuse-accessories/automotive-and-commercial-vehicle-fuse-holders/midi-498-il/04980921gxm5.aspx>.
 
-Cablaggio e CAN:
+Wiring and CAN:
 
-- RS03 e RS04 usano lato linea potenza `AMASS XT30UW-F` e CAN `GH1.25-T`. In BOM ci sono SKU acquistabili
-  `AMASS XT30UW-F.G.Y`, housing `JST GHR-02V-S` e contatti `JST MINI-SSHL-002T-P0.2`; comprare un campione e verificare
-  fisicamente l'accoppiamento GH prima del lotto, perche esistono cloni non intercambiabili.
-- RS02, RS05 e RS06 usano il cavo pronto Seeed `BCCA4011`, XT30 `(2+2)` femmina-femmina da 300 mm con un capo diritto e
-  uno a 90 gradi. Il vecchio BCCA4009 e stato rimosso perche la pagina Seeed restituisce 404. Verificare nel CAD
-  orientamento, raggio di piega ed eventuali estensioni con strain relief.
-- Non esiste un harness completo acquistabile per questo umanoide: i fasci RS03/RS04 vanno progettati e costruiti su
-  misura dopo il CAD. La vecchia riga generica "Harness RobStride XT30 + GH1.25 CAN" era fuorviante ed e stata eliminata.
-  Per i microcontatti JST GH commissionare preferibilmente i fasci a un cablatore con prova di trazione e test continuita:
-  la pinza ufficiale JST `YRS-1590` e elencata qty 0 per trasparenza ma costa oltre EUR 1.500.
-- RobStride usa CAN 2.0B a 1 Mbps. Usare doppino schermato 120 ohm `Belden 9841LSZH`, topologia a bus e una resistenza
-  `YAGEO MFR-25FBF52-120R` alle sole due estremita fisiche di ogni bus.
-- Thor Dev Kit espone due bus CANH/CANL sul connettore J47: non servono transceiver SN65HVD230 esterni sul kit. Harness
-  J47 e cavo Micro-fit Thor restano qty 0 finche mating connector e pinout non sono verificati sul kit fisico.
-- [CORREZIONE 2026-07-17: questa riga e' SUPERATA. Usare esattamente `MKS CANable Pro / CANable-MKS 1.0` con
-  STM32F072 (candleLight/gs_usb); NON il "V2.0" STM32G431, non supportato dal firmware candleLight upstream —
-  vedi nota ELECTRONICS 2026-07-12 in testa al file.] Vecchio testo: per i bus aggiuntivi del corpo superiore usare
-  `MKS Makerbase CANable Pro V2.0`: isolato, disponibile e compatibile
-  `candleLight / SocketCAN`. Sostituisce il CANable OpenLight non ordinabile dal sito ufficiale non raggiungibile.
+- RS03 and RS04 use, on the line side, power `AMASS XT30UW-F` and CAN `GH1.25-T`. The BOM contains purchasable SKUs
+  `AMASS XT30UW-F.G.Y`, housing `JST GHR-02V-S` and contacts `JST MINI-SSHL-002T-P0.2`; buy a sample and physically
+  verify the GH mating before the batch, because non-interchangeable clones exist.
+- RS02, RS05 and RS06 use the ready-made Seeed cable `BCCA4011`, XT30 `(2+2)` female-female, 300 mm, with one straight end and
+  one at 90 degrees. The old BCCA4009 was removed because the Seeed page returns 404. Verify in the CAD
+  the orientation, bend radius and any extensions with strain relief.
+- There is no complete purchasable harness for this humanoid: the RS03/RS04 harnesses must be designed and built to
+  measure after the CAD. The old generic line "Harness RobStride XT30 + GH1.25 CAN" was misleading and has been deleted.
+  For the JST GH micro-contacts, preferably commission the harnesses from a cable assembly shop with pull test and continuity test:
+  the official JST crimping tool `YRS-1590` is listed at qty 0 for transparency but costs over EUR 1.500.
+- RobStride uses CAN 2.0B at 1 Mbps. Use 120 ohm shielded twisted pair `Belden 9841LSZH`, bus topology and one resistor
+  `YAGEO MFR-25FBF52-120R` at only the two physical ends of each bus.
+- The Thor Dev Kit exposes two CANH/CANL buses on connector J47: no external SN65HVD230 transceivers are needed on the kit. The harness for
+  J47 and the Thor Micro-fit cable remain qty 0 until the mating connector and pinout are verified on the physical kit.
+- [CORRECTION 2026-07-17: this line is SUPERSEDED. Use exactly `MKS CANable Pro / CANable-MKS 1.0` with
+  STM32F072 (candleLight/gs_usb); NOT the "V2.0" STM32G431, not supported by the upstream candleLight firmware —
+  see the ELECTRONICS 2026-07-12 note at the top of the file.] Old text: for the additional upper-body buses use
+  `MKS Makerbase CANable Pro V2.0`: isolated, available and compatible with
+  `candleLight / SocketCAN`. It replaces the CANable OpenLight, which cannot be ordered from the unreachable official site.
 
-### Architettura controllo: baseline Thor-only, controller low-level opzionale
+### Control architecture: Thor-only baseline, optional low-level controller
 
-I RobStride contengono gia i loop locali dell'attuatore: il computer di bordo non deve implementare direttamente il
-controllo di corrente del motore. Deve leggere feedback e IMU, eseguire la policy o il controllo articolare e inviare
-setpoint periodici via CAN con limiti, heartbeat e watchdog.
+The RobStride units already contain the local actuator loops: the on-board computer does not have to directly implement the
+motor current control. It must read feedback and IMU, run the policy or the joint control and send
+periodic setpoints over CAN with limits, heartbeat and watchdog.
 
-Per ridurre componenti, la baseline iniziale usa solo `NVIDIA Jetson AGX Thor`: processo realtime isolato, SocketCAN
-diretto, priorita realtime, core CPU dedicati e safety hardware indipendente dal software. Thor dispone di due controller
-CAN nativi e NVIDIA fornisce un kernel realtime per Jetson Thor, ma nella documentazione corrente il supporto RT e
-indicato come Developer Preview. Non assumere quindi che l'esecuzione Linux condivisa con AI, telecamere e logging sia
-automaticamente deterministica.
+To reduce components, the initial baseline uses only `NVIDIA Jetson AGX Thor`: isolated realtime process, direct
+SocketCAN, realtime priority, dedicated CPU cores and hardware safety independent of the software. Thor has two native
+CAN controllers and NVIDIA provides a realtime kernel for Jetson Thor, but in the current documentation RT support is
+listed as Developer Preview. So do not assume that Linux execution shared with AI, cameras and logging is
+automatically deterministic.
 
-Un computer low-level separato non e obbligatorio per il primo prototipo ed e presente in BOM come `OPZIONE qty0`.
-Diventa raccomandabile se i test Thor-only mostrano jitter, latenze non accettabili, saturazione dei bus, dipendenza da
-interfacce USB-CAN non abbastanza robuste oppure se si vuole mantenere damping/watchdog e gestione attuatori isolati da
-crash, reboot o aggiornamenti del software AI. Non scegliere ancora Raspberry Pi, MCU o SBC: prima misurare frequenza
-loop, latenza e jitter con tutti i 31 assi e definire numero di bus, IMU, I/O e strategia safety.
+A separate low-level computer is not mandatory for the first prototype and is present in the BOM as `OPZIONE qty0`.
+It becomes advisable if the Thor-only tests show jitter, unacceptable latencies, bus saturation, dependence on
+USB-CAN interfaces that are not robust enough, or if one wants to keep damping/watchdog and actuator management isolated from
+crashes, reboots or updates of the AI software. Do not choose Raspberry Pi, MCU or SBC yet: first measure loop
+frequency, latency and jitter with all 31 axes and define the number of buses, IMU, I/O and safety strategy.
 
-NODO "1 o 2 computer?" RISOLTO 2026-06-14 (dopo ToddlerBot, Stanford CoRL 2025, arXiv 2502.00893). ToddlerBot e' un
-umanoide open-source 30 DoF con UN SOLO computer (Jetson Orin NX, 2.5 TFLOPS) che gira locomozione E manipolazione/vista
-con "concurrent policy inferences" sullo stesso acceleratore CUDA: NON due computer. Il low-level lo fanno gli attuatori
-(Dynamixel smart-servo col loop interno) come da noi i RobStride (FOC interno + CAN); a bordo c'e' solo Orin NX + una
-"comm board" (interfaccia bus, NON un secondo cervello) + IMU/power. LEZIONE: l'asse vero non e' "computer locomozione
-vs computer manipolazione" (loco-RL e manip-VLA sono due reti che girano insieme su 1 GPU), ma CERVELLO high-level
-(percezione + RL loco + VLA manip, 10-200 Hz) vs LOOP real-time low-level (~1 kHz giunti + safety). Quel low-level puo'
-stare sullo STESSO Thor come processo RT isolato, oppure su un piccolo co-controller dedicato (= la nostra OPZIONE qty0),
-ma NON e' un secondo computer AI. DECISIONE "massima qualita'": UN solo Thor come cervello (gira loco+manip+vista con
-margine enorme: Thor >> Orin NX, e se un Orin NX da 2.5 TFLOPS basta per ToddlerBot, Thor ci sta larghissimo); NIENTE
-secondo computer per la manipolazione; il co-controller RT/safety resta opzione da attivare solo a misura su HW reale.
-Caveat: ToddlerBot e' piccolo/lento (3.4 kg, servo di posizione) -> esigenze RT piu' leggere di un clone G1 dinamico,
-quindi il rischio jitter sul loop RT va comunque misurato. Per il PROTOTIPO VIRTUALE e' irrilevante: in sim non conta il
-compute di bordo, mettere 1 Thor e non far condizionare il CAD dal suo ingombro. (Supera la spinta di AI a togliere
-il Thor: sotto "massima qualita'" il Thor singolo si tiene come cervello unico e futuro-VLA a bordo.)
+"1 or 2 computers?" ISSUE RESOLVED 2026-06-14 (after ToddlerBot, Stanford CoRL 2025, arXiv 2502.00893). ToddlerBot is an
+open-source 30 DoF humanoid with ONLY ONE computer (Jetson Orin NX, 2.5 TFLOPS) that runs locomotion AND manipulation/vision
+with "concurrent policy inferences" on the same CUDA accelerator: NOT two computers. The low-level is done by the actuators
+(Dynamixel smart-servos with the internal loop) just as in our case by the RobStride (internal FOC + CAN); on board there is only Orin NX + a
+"comm board" (bus interface, NOT a second brain) + IMU/power. LESSON: the real axis is not "locomotion computer
+vs manipulation computer" (loco-RL and manip-VLA are two networks that run together on 1 GPU), but high-level BRAIN
+(perception + RL loco + VLA manip, 10-200 Hz) vs low-level real-time LOOP (~1 kHz joints + safety). That low-level can
+sit on the SAME Thor as an isolated RT process, or on a small dedicated co-controller (= our OPTION qty0),
+but it is NOT a second AI computer. "Maximum quality" DECISION: ONE single Thor as brain (runs loco+manip+vision with
+huge margin: Thor >> Orin NX, and if a 2.5 TFLOPS Orin NX is enough for ToddlerBot, Thor fits with very ample room); NO
+second computer for manipulation; the RT/safety co-controller remains an option to be activated only upon measurement on real HW.
+Caveat: ToddlerBot is small/slow (3.4 kg, position servos) -> lighter RT requirements than a dynamic G1 clone,
+so the jitter risk on the RT loop must be measured anyway. For the VIRTUAL PROTOTYPE it is irrelevant: in sim the on-board
+compute does not matter, put in 1 Thor and do not let the CAD be conditioned by its size. (Supersedes the push by the other AI session to remove
+the Thor: under "maximum quality" the single Thor is kept as the only brain and future on-board VLA.)
 
-Fonti NVIDIA:
+NVIDIA sources:
 
 - CAN Jetson: <https://docs.nvidia.com/jetson/archives/r38.2.1/DeveloperGuide/HR/ControllerAreaNetworkCan.html>
-- Layout Thor e ingresso Micro-fit: <https://docs.nvidia.com/jetson/agx-thor-devkit-4fed1671/user-guide/latest/hardware_layout.html>
+- Thor layout and Micro-fit input: <https://docs.nvidia.com/jetson/agx-thor-devkit-4fed1671/user-guide/latest/hardware_layout.html>
 
-## Modifiche effettuate in questa sessione
+## Changes made in this session
 
-- Unificati i motori su RobStride; rimossi Damiao e CubeMars dalla selezione.
-- Corretta la baseline G1 passando al modello ufficiale corrente `g1_29dof_mode_11`.
-- Corretta l'interpretazione meccanica della vita: RS04 yaw verticale + RS03 x2 su puntoni per pitch/roll.
-- Ripristinati cardano vita, due puntoni M10 e perno condiviso lato busto nella BOM.
-- Ripristinati i 7 DOF per braccio della variante G1 29 DOF.
-- Scelti RS05 x2 per collo pan/tilt usando come riferimento la pagina ufficiale G1-Comp; coppia collo da validare.
-- Differenziata la ladder braccia per ridurre la massa distale: RS03 shoulder pitch/roll, RS06 shoulder yaw e gomito,
-  RS02 wrist roll, RS05 wrist pitch/yaw. RS06 wrist roll resta alternativa qty 0.
-- Uniformate tutte le righe motore Excel: dimensioni, peso, coppia nominale/picco RobStride e riferimento G1 obbligatori.
-- Corretta la formattazione Excel: il grigio chiaro si applica solo alle righe con quantita numerica zero, non ai titoli blu.
-- Rimosse le ipotesi premature `6001-2RS` e `6801-2RS` per il giunto caviglia: supporti, ritegni e lunghezze perni restano
-  qty 0 fino al CAD.
-- Spostata la catena di sicurezza in fase 1 bench.
-- Rimossi RUBIK LINK CubeMars e transceiver Thor esterni; aggiunto debugger USB-CAN RobStride.
-- Chiusa una baseline elettrica acquistabile: tronco `25 mm2`, fusibile principale BF1 `125 A`, comando safety `2 A`,
-  rami gambe `70 A / 16 mm2`, vita-collo `40 A / 6 mm2`, braccia `30 A / 6 mm2`, servizi Thor `10 A`; aggiunti
-  portafusibili 58 VDC specifici.
-- Dimensionata la precarica sui due condensatori KEMET: Vishay `100 ohm 50 W`, rele CIT 48 V, timer Eaton ON-delay
-  impostato a circa 10 s, selettore a chiave Schneider e TVS bobine. Aggiunto sezionatore batteria manuale ED250B-1.
-- Eliminati cavo generico 12 AWG e XT90 generico: aggiunti cavi Nautica Illiano per sezione, capicorda Klauke per foro
-  reale e crimpatrice K05. Il connettore estraibile ENERprof resta qty 0 finche il produttore non conferma la controparte.
-- Eliminati i falsi harness completi: aggiunti cavi Seeed BCCA4011, connettori XT30UW-F, housing/terminali JST GH,
-  cavo CAN Belden e terminatori YAGEO; harness custom e J47 restano qty 0.
-- Auditati i link selezionati: corretti il vecchio cavo Seeed BCCA4009 rimosso, il caricatore ENERprof ritirato e il
-  CANable OpenLight non raggiungibile. Il caricatore nuovo resta candidato qty 0 finche ENERprof non approva interfaccia.
-- Sostituita la batteria generica Danenergy con il link diretto al pacco ENERprof selezionato; aggiunta alternativa
-  Dan-Tech Energy softpack qty 0 con nota obbligatoria Smart BMS + AS150U.
-- Rimossi i link a categorie RS dalle righe acquistabili e reso `umanoide` il foglio attivo all'apertura Excel.
-- Ribadito che Unitree G1 e l'unica baseline: K-Bot resta solo una nota open hardware secondaria per packaging e
-  cablaggio, non va usato per dimensionare geometrie, caviglia o motori.
-- Chiarita la caviglia: i due perni ortogonali diametro 12 mm per caviglia sono esclusivamente assi di rotazione del
-  giunto piede-stinco; il perno trasversale diametro 8 mm riceve invece le due teste dei puntoni M8. Restano selezionati
-  sei puntoni totali, quattro M8 alle caviglie e due M10 alla vita.
-- Aggiunti esempi `qty 0` di boccole radenti standard SKF e igus Q2 e tre provini custom stampati in iglidur `i150`,
-  `i190` e `J260-PF`; la scelta finale resta subordinata a CAD e prove sul perno reale.
-- Chiarita la struttura dei supporti caviglia: perno diametro 12 mm fisso nelle orecchie, supporto radiale nel pezzo
-  centrale mobile, ralla assiale dedicata e registrata per lato, inserto metallico flangiato fisso nelle orecchie come
-  controfaccia sostituibile. Aggiunte alternative `qty 0` igus `Q2FM`, `GTM`, SKF `HK`, `NKI`, `AXK`, `AS`, rasamento
-  DIN 988 e famiglia Elesa+Ganter `DIN 172`; non attivare nessuna variante prima delle quote CAD.
-- Documentata la prima pila di serraggio per la variante semplice `NKI 12/16`: rondelle larghe, spallamenti integrati
-  delle orecchie che serrano solo l'anello interno, parte mobile esclusa dalla compressione e bullone a colletto RS PRO
-  `292-417` `12 x 60 mm` come riferimento preliminare `qty 0`. Recuperati in BOM i cataloghi per perni e ritegni.
-- 2026-06-03: chiusa la DECISIONE FINALE caviglia (vedi blocco dedicato in "Gambe, fase 1"). Architettura radente la piu
-  semplice: vite a colletto ISO 7379 `Ø12-M10` come perno/pista (solidale alle orecchie via serraggio assiale, non
-  piantaggio), due boccole flangiate igus `GFM-1214` piantate nel pezzo mobile con la flangia che fa l'assiale (eliminate
-  ralle separate, manicotto/colonna e reggispinta), dado M10 + rondella larga. Bussola flangiata metallica nell'orecchia
-  (`DIN 172-B12-20`) resa OPZIONALE come upgrade anti-usura se la flangia igus consuma il PA-CF. NKI 12/16 e
-  manicotto/colonna archiviati come alternative. Aggiunti fornitori multipli verificati. Boccola PRIMARIA = STAMPATA
-  multimateriale J260+PA-CF integrale al pezzo mobile (filamento gia acquistato), `GFM-1214` acquistata come fallback;
-  partenza assiale con spallamento PA-CF dalle orecchie che striscia sulla flangia igus stampata. Allineate le righe BOM
-  caviglia (tag SCELTO/PRIMARIO/FALLBACK/ARCHIVIATO/OPZIONALE) e rigenerato l'Excel. Disegni di sezione non piu mantenuti.
-- 2026-06-04: vita yaw declassata da RS04 a RS03 (scelta utente) -> BOM 8 RS04 + 7 RS03, totale EUR 16.228,27, massa
-  40,355 kg. Aggiunta colonna "CAD 3D" con i link Seeed (STEP scaricabile) per ogni motore. Estratte e loggate le posizioni
-  esatte dei 29 giunti G1 dall'URDF (`g1_joints.csv` + `g1_29dof_mode_11.urdf` nel workspace). Documentato il nodo densita
-  di coppia RobStride vs Unitree: motori gamba (RS04 vs RS06) da decidere con l'utente in base all'ambizione.
-- 2026-06-05: aggiunta e poi corretta la regola skeleton Onshape. La scheda `G1 joints CAD` contiene `exact_*`, `cad_*`
-  e `pose_down_*`: `cad_x` viene portata a zero, `cad_y` viene allineata nelle catene verticali a `hip_roll` per la gamba
-  e `shoulder_yaw` per il braccio, `cad_z` resta la quota G1. Gli assi di rotazione non vengono semplificati. `pose_down_*`
-  resta solo un aiuto visivo per braccia lungo corpo. Il trattino `-` significa "uguale al riferimento", non zero.
-- 2026-06-05: il workbook e stato ripulito da tab inutili. Il generatore ora elimina intenzionalmente `ARTES4.0@Olbia_`,
-  `Speso-Impegnato`, `pivot-finali`, `Acquisti` e `Budget`; `umanoide` viene inserito dopo `ARTES4.0@Olbia_NoIVA` e
-  `G1 joints CAD` subito dopo `umanoide`.
-- 2026-06-05 (AI): consolidamento arretrato di piu giri.
-  (1) MOTORI BRACCIA: polso ora 3 assi UNIFORMI RS02 (era roll RS02 + pitch/yaw RS05; Unitree fa il polso uniforme).
-  Spalla yaw resta RS06 (piu leggera dei pitch/roll RS03, ridotta massa distale). BOM = 8 RS04, 8 RS06, 7 RS03, 6 RS02,
-  2 RS05 = 31 assi; totale EUR 16.399,07; massa 41,211 kg. Riserve grigie [SECONDA SCELTA qty0]: RS03 spalla-yaw uniforme,
-  RS06 polso potente, RS05 polso pitch/yaw leggero.
-  (2) ASSI SEMPLIFICATI: aggiunta colonna `axis_cad_semplif` alla scheda `G1 joints CAD` (hip_roll->X, hip_yaw->Z,
-  shoulder_pitch->Y, resto principale) su richiesta utente. Skeleton CAD = posizioni `cad_*` + assi `axis_cad_semplif`
-  (coerente, ortogonale). Supera la nota AI "assi non semplificati".
-  (3) VERIFICA G1 (workflow 5 agenti): posizioni/assi/massa SOLIDI, triplo-confermati (<0,1 mm; massa totale 33,340 kg;
-  coscia 336,6 / stinco 317,6 / gamba 654,2 mm; cant anca 10,021 deg). Coppie: combaciano col file `mode_11` ma DIVERGONO
-  dall'URDF pubblico `unitree_rl_gym` su 3 giunti: hip pitch/roll mode_11=139 vs rl_gym=88; ankle 35 vs 50; waist roll/pitch
-  35 vs 50. Knee 139 in entrambi. wrist pitch/yaw=5 confermato (il "8" trovato dall'utente era errato). Per dimensionare i
-  motori usare il valore PIU ALTO (139 hip/knee, 50 ankle/waist) con margine. Vero collo di bottiglia = GINOCCHIO (139,
-  RS04 14% sotto). Caviglia 2xRS06 confermata giusta (reale ~50, non 35). Le posizioni sono identiche tra le due release.
-  (4) COMPUTE: raccomandata architettura G1-style = controller real-time piccolo (uC o SBC RT-Linux) per policy + loop CAN
-  + safety, PIU computer AI (Orin NX class, NON Thor) aggiunto DOPO per la vista. La policy RL per camminare e minuscola:
-  non serve Thor per il bring-up. Riconsiderare/togliere Thor dalla baseline; non far condizionare il CAD dal suo ingombro.
-  (5) POSA e LIMITI: disegnare e assemblare a BRACCIA LUNGO IL CORPO (home); la posa e solo la default config in sim, non
-  e incisa nella geometria (link length pose-indipendenti). Limiti giunto = SOFTWARE, ricavati dal proprio CAD
-  (auto-collisione ruotando i giunti in assieme + avvolgimento cavi per gli yaw), non copiati dal G1. Fermi fisici solo
-  dove critico per sicurezza. CAD motori: scaricabili dalle pagine Seeed (colonna "CAD 3D" in BOM) o AIFITLAB (STEP per modello).
-- 2026-06-05 (AI): hip yaw gamba declassato da RS04 a RS03 (scelta utente: in CAD gli RS04 risultano troppo
-  grossi/pesanti). Pitch, roll e ginocchio restano RS04 — il roll e l'asse dell'equilibrio laterale (critico) e il robot
-  a 41 kg e piu pesante del G1 (33 kg), quindi non si declassa. BOM ora: 6 RS04 + 9 RS03 + 8 RS06 + 6 RS02 + 2 RS05 = 31
-  assi; totale EUR 16.330,75; massa 40,131 kg (-1,08 kg). Hip yaw RS03 = 60 Nm picco vs G1 88: accettabile perche lo yaw
-  e l'asse anca meno sollecitato (non combatte la gravita, domanda reale bassa).
-- 2026-06-05 (AI): spalla pitch/roll declassata da RS03 a RS06 (spalla ora tutta uniforme RS06), VERIFICATO a calcolo
-  (non solo G1): braccio 3.26 kg, CoM 0.236 m -> statico 7.5 Nm, picco su gesto veloce ~22 Nm. RS06 (36/11) copre con 1.6x
-  sul picco e regge il braccio teso in continuo (7.5 < 11 nom); RS02 troppo debole (non tiene il teso, scalda); RS03 era
-  2.7x = sovradimensionato. BOM ora: 6 RS04 + 5 RS03 + 12 RS06 + 6 RS02 + 2 RS05 = 31 assi; totale EUR 16.296,59; massa
-  39,095 kg. VITA invece NON ridotta (verificata a calcolo): regge tutto il corpo superiore ~15-20 kg; pitch/roll ~32-64 Nm
-  al GIUNTO (gravita + dinamico, secondo inclinazione busto e posizione batteria) e passano per i 2 puntoni (coppia motore
-  != coppia giunto, serve geometria leve dal CAD) -> resta RS03, non si tocca. Waist yaw ~9-31 Nm (solo inerziale): in
-  teoria RS06 ma margine troppo risicato (single motore, ruolo equilibrio) -> tenuto RS03, rivedere dopo CAD + batteria.
-- 2026-06-05 (AI): shoulder yaw declassato da RS06 a RS02, verificato col PAYLOAD nella postura reale. Chiarimento
-  utente: il carico si tiene a braccio PIEGATO (omero verticale, avambraccio a 90 gradi), non disteso. Conseguenze a
-  calcolo: (a) lo shoulder yaw ha l'asse omero verticale -> gravita 0, solo inerzia -> ~4-11 Nm anche con 3 kg in mano ->
-  RS02 (17 picco) basta con margine; (b) spalla pitch/roll e gomito tengono il carico alla leva dell'AVAMBRACCIO ~0.20 m
-  (non 0.37 m di braccio teso) -> RS06 regge ~4.3 kg a braccio piegato, quindi NON serve RS03 sulla spalla (resta RS06) e
-  il gomito RS06 va bene cosi. Il braccio porta ~4 kg in postura carico. BOM: 6 RS04 + 5 RS03 + 10 RS06 + 8 RS02 + 2 RS05
-  = 31 assi; totale EUR 16.137,99; massa 38,663 kg [snapshot 06-05, SUPERATO dal 2026-06-08, vedi sotto]. Le riduzioni
-  verificate a calcolo (spalla pitch/roll, hip yaw, shoulder yaw) hanno tolto ~2,5 kg restando sopra i fabbisogni reali.
-- Impostato Thor-only come baseline iniziale; il computer low-level separato resta un'opzione `qty 0` da attivare solo
-  se le misure mostrano jitter, bus insufficienti o la necessita di isolamento dai crash del software AI.
-- Consolidata la documentazione in questo singolo file; `STATO.md` eliminato.
-- 2026-06-08 (AI): revisione motori completa con le specifiche RobStride REALI (tabella verificata via Seeed/AIFITLAB/
-  OpenELAB). Polso 3 assi RS02->RS00 (dual encoder, 57 mm, 5 nom/14 picco, regge 2 kg in mano). Spalla yaw RS02->RS00.
-  Spalla pitch/roll RS06->RS02 e gomito RS06->RS02 -- NON RS01: trovato che RS01 ha encoder SINGOLO (solo 36V, niente IP),
-  RS02 ha DUAL encoder (feedback in uscita, serve per RL/manipolazione); RS01 scartato ovunque. Hip yaw gamba RS03->RS06;
-  vita yaw e vita pitch/roll RS03->RS06 (assi verticali / a domanda dinamica bassa, robot non acrobatico, verif ~28 Nm <
-  36 picco). Caviglia resta 2x RS06: correzione utente -> caviglia e vita pitch/roll sono LEVERAGGI, la coppia giunto e'
-  fissa dal carico ma la coppia motore dipende dal rapporto crank (in CAD); RS06 = tetto sicuro. BOM ora: 6 RS04 + 9 RS06
-  + 6 RS02 + 8 RS00 + 2 RS05 = 31 assi (spariti tutti gli RS03 e RS01 dagli attivi). Totale EUR 15.434,05; massa 35,312 kg
-  (-3,35 kg sui motori vs 06-05). Sorgente py + MEMORY aggiornati; Excel rigenerato e CONFERMATO: completo 15.434,05,
-  Fase1 10.519,00, Fase2 1.465,45, Fase3 3.449,60, massa 35,312 kg, 31 motori (RS00x8, RS02x6, RS04x6, RS05x2, RS06x9).
-- 2026-06-08 (AI): VERIFICA COPPIE completa post-downsizing (metodo + numeri nella sezione dedicata sopra). Esito:
-  nessun motore bocciato per uso non-acrobatico; gambe RS04 (non declassate) reggono in piedi e camminata. 3 ATTENZIONE
-  recuperabili: ginocchio (no squat profondo tenuto, e' il max motor), vita pitch (batteria bassa + leveraggio),
-  gomito (<=1.5 kg comodo / 2 kg solo a velocita moderata). 2 verifiche CAD: rapporto crank caviglia e vita >=1:1.
-  Scritto il METODO di calcolo (statico g*Sum(m*b), dinamico I*alpha bang-bang, yaw=solo inerzia, leveraggi) + input
-  (masse motori come bracci, posizioni giunti G1, braccio disteso) cosi AI puo' rifare i conti.
-- 2026-06-09 (two AI sessions): cross-check AI sulla SPALLA -> AI ha ragione, mio numero era ottimista. Errore mio:
-  avevo usato mano 0,30 kg; in realta' e' 0,50 kg col CoM oltre il polso (~0,48 m). Corretto: braccio TESO orizzontale
-  ~7,8-8,6 Nm > 6 nominale -> RS02 NON tiene il braccio disteso in CONTINUO (ok solo qualche s sotto i 17 picco); 2 kg a
-  reach pieno sfora anche il picco. A gomito PIEGATO invece ok (~2,6 senza payload / ~6,9 con 2 kg). AI ha anche
-  alzato la MASSA reale: lui usa ~46 kg (telaio PA-CF ~10 kg incluso), io avevo verificato a 35 (senza telaio). A 46 kg
-  le GAMBE RS04 (gia' il max) vanno SOPRA il nominale camminando (~45 vs 40) -> la leva e' la MASSA, non il motore.
-  Conclusioni: tenere braccia leggere (no upsize spalla, peggiorerebbe le gambe) + CONTROLLARE la massa (target telaio
-  ~6 kg, robot ~40 kg). Decisioni aperte: ruolo del braccio (solo piegato vs reggere disteso) e target massa telaio.
-- 2026-06-09 (utente) [SUPERATO in parte 2026-06-27: caviglia e vita hanno nuova ferramenta attiva]: swap ferramenta puntoni. Puntoni caviglia E vita -> rod-end ALLUMINIO M8 regolabili varie
-  lunghezze (AliExpress 1005008935554718), su perni Ø8xM6. Viti a colletto NERE AliExpress (set tutte le misure,
-  1005007481484485) usate per TUTTO: Ø12xM10 per gli assi rotazione (caviglia + cardano vita), Ø8xM6 per i perni dove
-  spingono i puntoni (caviglia + vita). RS PRO 292-417 retrocesso ad alternativa. Lunghezze al CAD. Regen: completo
-  15.425,51 EUR, massa 35,012 kg.
-- 2026-06-09 (utente) [SUPERATO in parte 2026-06-27: corrente = Ø8/M6 x45 gimbal caviglia, KARM destro qty2 + KALM sinistro qty2, no cardano vita]: definito l'ASSIEME giunti. CAVIGLIA (pitch+roll) = pezzo centrale stampato 3D a croce con igus
-  integrale (foro cilindrico pitch in alto, foro perpendicolare roll in basso), 2 viti a colletto Ø12xM10 come assi +
-  dadi M10 neri che serrano le orecchie; pezzo centrale con leggero gioco. Fallback igus: cilindri flangiati stampati
-  separati -> boccole igus flangiate comprate. PERNO PUNTONI piede = vite a colletto Ø8xM6 trasversale + 1 dado M6 nero,
-  2 teste a snodo dei puntoni + parte centrale stampata 3D. Dadi neri nylock aggiunti al BOM (Amazon B0C8ZCR6B1, set
-  M3-M16): M6 (perni puntoni) e M10 (assi caviglia+vita). NOTA CRITICA (AI): i rod-end devono restare LIBERI di
-  oscillare (la caviglia fa 2 DOF, il roll richiede lo snodo sferico) -> il colletto Ø8 va in BATTUTA cosi il dado
-  precarica sul metallo e NON schiaccia le sfere; la parte centrale stampata fa solo da spaziatore (il colletto regge il
-  carico, cosi non va in creep). Spaziatori alu OD13 scartati: OD troppo grande, toccherebbero il corpo del rod-end.
-- 2026-06-09 (AI+utente): CINEMATICA caviglia parallela. G1 (da URDF): pitch -50/+30 = 80 deg, ROLL solo +/-15 = 30
-  deg. Rod-end: il PITCH (80 deg) usa la rotazione ILLIMITATA attorno al perno (perni lungo l'asse pitch/trasversale) ->
-  zero disallineamento; il ROLL (+/-15) usa il TILT della sfera, LIMITATO. Tilt richiesto ~ ordine dell'angolo di roll
-  ma RIDUCIBILE con geometria (puntoni LUNGHI + attacco vicino al piano dell'asse roll). Rod-end economici ~+/-12-16 deg
-  -> marginali a +/-15; usare high-misalignment (+/-20-25) o verificare il tilt reale in CAD. LEVE: roll = moto piccolo,
-  puntone resta ~perpendicolare -> rapporto ~COSTANTE, progettare crank=foot per 1:1; pitch = moto grande, sweep ->
-  rapporto VARIA (nonlineare ~1.5-2x), dimensionare sul caso peggiore. CRANK/lancetta motore = pezzo PIU' CARICATO
-  (~1+ kN forza asta a leva corta): farlo TOZZO o in METALLO, non sottile stampato. Motori impilati (uno su/uno giu) ->
-  rod di lunghezze diverse + accoppiamento pitch/roll (matrice non diagonale); side-by-side stessa quota = piu' pulito.
-- 2026-06-09 (AI): COSA C'E' NELL'URDF per i giunti a puntoni. L'URDF e' un ALBERO seriale: la caviglia e' 2 giunti
-  revolute VIRTUALI (ankle_pitch + ankle_roll, effort 35 Nm ciascuno), la vita 3 (yaw 88, roll 35, pitch 35). NON ci sono
-  posizioni motori, aste, crank, ne mimic/transmission/loop (verificato a grep). La sim NON simula la trasmissione: muove
-  giunti ideali, l'RL comanda le coppie ai GIUNTI virtuali; le masse motori sono incluse nell'inerzia del link padre
-  (stinco), non come corpi separati. La mappa coppia-giunto -> coppia-motore (Jacobiano del leveraggio) sta nel
-  CONTROLLER del robot, NON nell'URDF. Conseguenza: NON si possono ricavare i bracci del G1 dall'URDF. Distinzione utile:
-  giunti DIRETTI (hip/knee/yaw/spalle/gomito) -> effort URDF = coppia MOTORE (usabile diretta); giunti a LEVERAGGIO
-  (caviglia, vita roll/pitch) -> effort URDF = coppia GIUNTO, la coppia motore = giunto/rapporto, rapporto = scelta tua.
-  Si dimensiona il leveraggio per erogare la coppia GIUNTO dai propri motori: target caviglia ~46 Nm (robot 46 kg, piu'
-  del G1 33 kg che chiede 35!), 2x RS06 = 72 Nm a 1:1 -> coperto con margine. NON copiare i 35 del G1 (e' piu' leggero).
-- 2026-06-09 (utente): organizzazione BOM. (1) Colore testo righe AUTOMATICO: NERO se qty>0 oppure tag [SCELTO];
-  GRIGIO (A6A6A6) se alternativa/catalogo/archiviata a qty0. Niente grassetto. Logica in build_umanoide_tab.py
-  (is_active = unita>0 or "[SCELTO" in nome). (2) TUTTA la ferramenta meccanica dei giunti (perni, viti a colletto,
-  dadi, rod-end, cuscinetti) sta in sezione "1 - PROTOTIPIA MECCANICA", inclusa quella della VITA (spostata da 2b);
-  le sezioni motori contengono SOLO motori. La ferramenta vita mantiene fase=Fase 3 (costo corretto), cambia solo
-  la posizione visiva. Totali invariati 15.425,51 EUR / 35,012 kg.
-- 2026-06-11 (AI+utente): STUDIO altri robot + motori premium (budget potenzialmente rilassato, "massima qualita'",
-  fara' un prototipo virtuale). ARCHITETTURA: (a) VITA -> [SUPERATO il 2026-06-14: l'R1 in serie e' stato SCARTATO per
-  geometria, si resta sui PUNTONI G1 yaw+pitch+roll; vedi bullet 2026-06-14] l'ipotesi era schema UNITREE R1 = yaw +
-  roll (NO pitch), 2 motori diretti. R1 confermato yaw +-150 / roll +-30. Tesla: ~2 DOF torso, assi non pubblici (mi
-  ero sbilanciato a dire 'solo yaw', ritrattato). Figure: niente pitch torso (brevetto WO2025213141A1), HA
-  leg-twist/hip-yaw cantato in basso (NON toglie l'hip yaw). Asimov (gemello 35kg, github asimovinc/asimov-1): 6
-  DOF/gamba CON hip yaw, vita solo yaw.
-  -> CONCLUSIONE: TIENI hip yaw (tutti ce l'hanno), vita = SERIALE yaw+roll diretta (vedi 2026-06-16, i puntoni vita SUPERATI), pitch anca FUORI (G1/R1) non dentro (Figure) perche'
-  i QDD grossi (Ø88-107) si scontrano nell'inguine e bloccano l'adduzione. (b) MOTORI premium: CubeMars AKE90-8 (170 Nm,
-  1.4 kg, 9 arcmin, ~$484 nudo) supera il G1 sulle gambe (via lo 0.86x). MA il PESO lo taglia ENCOS, non CubeMars:
-  Encos EC-A4310-P2-36 = 36 Nm in 377 g vs RS06 621 g -> -244 g/motore. CubeMars piu' DISPONIBILE (retail) e piu'
-  economico, Encos piu' LEGGERO ma a preventivo (Foxtech). Specifiche: AKE80-8 30Nm/570g/Ø87x32/$340; AK10-9 53Nm/dual
-  enc/$699; Encos A10020 150Nm/1.35kg/$2250, A13715 320Nm/$2250. Encos/CubeMars > RobStride in densita' ma RobStride
-  resta il piu' leggero SOTTO i ~20 Nm (RS00 310g, RS05 191g) -> sui piccoli si tiene RobStride anche nel premium.
-  Creata 2a scheda Excel "MOTORI premium" (mix ottimale: AKE90-8 gambe + Encos A4310 sui 36Nm + RobStride piccoli):
-  16,14 kg vs 18,21 RobStride = -2,07 kg (TUTTI da Encos), ~$8504 + 1824 EUR (30 assi, vita seriale, braccio RS00).
-  Affianca il BOM RobStride, non sostituisce.
-- 2026-06-16 (AI+utente): LOWER-BODY BLOCCATO per il CAD, dopo studio Tien Kung 2.0/3.0, Unitree H2, ToddlerBot.
-  (a) VITA = SERIALE DIRETTA yaw(basso) + roll(alto sopra lo yaw, asse X), NIENTE pitch, NIENTE puntoni. Supera i
-  puntoni del 2026-06-14. Motivo: RL-FRIENDLY (Unitree stessa e' passata dai puntoni del G1 al seriale Z-Y-X sull'H2,
-  "more RL-friendly"; noi facciamo RL in Isaac Lab; i meccanismi paralleli = catena chiusa + gioco rod-end = gap
-  sim-to-real). Stack 2 DOF ~130-150 mm accettato (Tien Kung 3.0 lo fa). Pitch del busto lo fanno le ANCHE. -1 RS06 ->
-  30 motori. Totali (dopo RS02->RS00 punto d E caviglia->RS00 punto e): completo 14.594,69 EUR (Fase1 10.113,96 /
-  Fase3 3.015,28), massa 32,227 kg, lineup RS00x18 / RS04x6 / RS05x2 / RS06x4 (RS06 solo hip-yaw+vita; RS02 ELIMINATO).
-  (b) ANCA = F-A-R ortogonale (Flexion-Abduction-Rotation, come H2), pitch nel BACINO verso l'ESTERNO (G1/R1), assi
-  ortogonali puliti, NIENTE canting. Idea utente "stella 60°" (cantare i pitch gamba) valutata a fondo e scartata MA
-  con onesta': se canti ENTRAMBI gli assi i due motori SI SOMMANO sul pitch puro (regione di coppia a ROMBO: pitch puro
-  fino a 2*tau*cos(phi), es. 208 Nm a 30deg, > ortogonale; ma il combinato pitch+roll cade dentro il rombo, peggio del
-  quadrato ortogonale). Il caso che dimensiona = gamba d'appoggio = pitch+roll INSIEME -> vince l'ortogonale. E noi
-  siamo torque-starved (RS04 0,86x), non possiamo scommettere; l'H2 canta perche' ha 360 Nm di surplus, noi no. Per
-  uccidere il collo di bottiglia dei 139 la via pulita = motore piu' grosso (AKE90-8 170 Nm), non il canting. DA
-  VALIDARE in sim: loggare la traiettoria di coppia (pitch,roll) all'anca; se i gait risultano pitch-dominanti, il
-  canting si riapre. Per ora CAD ortogonale (reversibile: cambia solo l'orientamento sedi motore).
-  (c) CAVIGLIA = PARALLELA, motori NELLO STINCO. Motore = RS00 a riduzione ~2:1 [AGGIORNATO 2026-06-16, vedi punto e:
-  prima avevo messo RS06 1:1 "per la potenza", ma il REQUISITO e' solo CAMMINO + 1 kg/braccio, NIENTE salti/corsa ->
-  potenza caviglia modesta, RS00 basta; gli RS06 Ø88 impilati sotto il ginocchio arrivavano quasi a terra]. Precedente
-  forte: RoboEra ~70 kg usa motori piccoli con riduzione ~2:1 roll / ~1.5:1 pitch e SALTA. A ~2:1 i 2 RS00 sommano:
-  2x14x2=56 Nm picco (ok 33-40 kg; a 46 kg ~2.5:1->70). RS06 1:1 resta alt qty0 SE servono gait dinamici/salti. Asse
-  motore lungo X (stile G1), scelta utente. Rod-end: con gli SPHERICAL gia' scelti (igubal ±35°) basta orientare il perno cosi' che il
-  PITCH grande = rotazione LIBERA attorno al perno (illimitata) e il ROLL piccolo (±15°) = tilt entro ±35°. NON fare
-  teste revolute-revolute pure (si impunta = sovravincolo spaziale); ricetta sicura = RSU (Revolute-Spherical-Universal,
-  come il paper IIT), tenere almeno uno snodo sferico/universale. Bloccaggio lunghezza puntone: controdado sottile
-  (mezzo spessore M8 ~4 mm) + Loctite 243; se manca spazio, tarare con la regolabile poi SOSTITUIRE con asta FISSA
-  tagliata a misura (piu' rigida, meno gioco -> meglio sim-to-real). Ibrida "roll diretto nel piede" = Piano B solo se
-  il sim-to-real del 2-DOF parallelo si rivela un incubo (e in tal caso roll con motore leggero Encos 377 g).
-  (d) RS02 ELIMINATO da tutto il BOM (scelta utente 2026-06-16). Insight utente (CORRETTO): nella gamma RobStride l'RS02
-  e' DOMINATO. Quote: RS00 Ø57 / 5 nom-14 picco / 310 g; RS02 Ø78.5 / 6 nom-17 picco / 405 g; RS06 Ø88 / 11 nom-36
-  picco / 621 g. Da RS00->RS02 paghi +21,5 mm di Ø per soli +3 Nm picco; da RS02->RS06 paghi solo +9,5 mm per +19 Nm
-  (2x). Quindi RS02 e' quasi grosso come RS06 ma con meta' coppia: REGOLA = "se basta RS00 metti RS00 (molto piu'
-  piccolo), senno' salta a RS06; mai RS02". Applicato: BRACCIO tutto RS00 (spalla pitch/roll + gomito declassati da RS02;
-  spalla yaw + polso gia' RS00). Tien Kung (70 kg) ha motori ~Ø60 = TAGLIA di un RS00 ma sono ENCOS DENSI (~36 Nm), NON
-  un RS00 (14 Nm): taglia != coppia. CAVIGLIA: RS00 NO (giunto di POTENZA) -> resta RS06 a 1:1 (la coppia si moltiplica
-  con la riduzione, la POTENZA no: un motore piccolo + riduzione da' tanta coppia ma a bassa velocita', e al toe-off
-  serve coppia E velocita' insieme = potenza, che solo un motore fisicamente piu' grande -RS06- o denso -Encos- ha). Per
-  caviglia compatta E potente = Encos A4310 premium (la via di Tien Kung). Spalla con RS00 OK: e' giunto LENTO, conta
-  solo la coppia, e RS00 (14 picco) copre il dinamico ~12; l'hold orizzontale continuo non lo faceva nemmeno l'RS02
-  (6<6.8 nom). Gomito: RS00 ~1,2 kg continui / 2 kg picco (poco meno dell'RS02); RS06 solo se serve 2 kg continui.
-  Lineup finale: vedi punto (e).
-  (e) CAVIGLIA -> RS00 a ~2:1 + CATALOGO ENCOS + MIXING (2026-06-16). REQUISITO confermato dall'utente: cammino normale
-  + stare in piedi stabile + 1 kg per braccio, NIENTE salti/corsa. Con questo la caviglia NON e' un giunto ad alta
-  potenza -> RS00 a riduzione ~2:1 basta (vedi punto c). LINEUP FINALE: RS00x18 (braccio 14 + caviglia 4) / RS04x6
-  (gambe) / RS05x2 (collo) / RS06x4 (SOLO hip-yaw 2 + vita 2). 30 motori, 32,227 kg, 14.594,69 EUR.
-  CATALOGO ENCOS spulciato (Foxtech): il piu' piccolo e' l'EC-A4310-P2-36 (36 Nm, 377 g, ~Ø60, frame Ø43). Sotto i
-  43 mm Encos NON ha niente -> per polso/braccio (5-14 Nm) nessun Encos: l'A4310 sarebbe overkill, piu' pesante
-  dell'RS00 (377 vs 310 g) e ~6x il prezzo. Gli altri Encos sono tutti PIU' GROSSI: A6408 (Ø64), A8112 (Ø81, ~94 Nm,
-  830 g), A10020 (Ø100, ~150 Nm), A13715/A13720 (Ø137, ~320 Nm). Quindi l'UNICO Encos utile = A4310, e solo dove c'e'
-  l'RS06 (hip-yaw/vita) o per una caviglia DINAMICA. CASCATA: con "solo cammino" la caviglia va a RS00 (310 g, piu'
-  leggero E piu' economico dell'A4310 377 g/$700) -> l'Encos perde la sua applicazione migliore (la massa distale della
-  caviglia). Restano hip-yaw+vita (4 motori): -244 g x4 = ~1 kg, ma ~$2800 + 3a marca. Quindi per il NOSTRO uso il
-  premium Encos e' poco interessante. MIXING Encos+RobStride: FATTIBILE (entrambi CAN), ma costo SOFTWARE non nullo =
-  2 driver di protocollo + 2 modelli attuatore in sim + 2 calibrazioni + connettori diversi; ~GRATIS in sim (basta
-  parametri diversi per giunto), pesa solo sull'HW reale. "Tutto uguale" e' nettamente piu' semplice per build e
-  sim-to-real (1 driver, 1 modello, ricambi uniformi). Conclusione: tutto RobStride (RS00/04/05/06) -> niente mixing,
-  problema evitato. Scheda premium: aggiunta colonna DIMENSIONI per tutti i motori (richiesta utente).
-- 2026-06-14 (AI+utente) [SUPERATO il 2026-06-16: vita ora SERIALE diretta, NON piu' puntoni - vedi bullet sotto]: VITA - R1 in serie VALUTATO e SCARTATO, si resta sui PUNTONI (schema G1). Motivo
-  geometrico (numeri veri dal BOM): il roll vita e' un RS06 Ø88; in serie roll-sotto-yaw il DIAMETRO Ø88 mangia
-  altezza -> base busto/yaw a ~190 mm sopra l'asse anca = torso mozzo per batteria+compute. R1 se lo permette solo
-  perche' ha motori minuscoli, noi no. Scartata anche la "bomba dietro" stile Figure (abbassa lo yaw ma da' solo
-  ROLL, niente pitch, e la staffa a sbalzo porta tutto il momento flettente del busto). PUNTONI = scelta giusta per
-  motori grandi: stessa logica della caviglia (motori pesanti BASSI nel bacino, asse trasversale, zero stack
-  verticale, massa giu' per CoM) e in piu' si riprende il PITCH del busto (chinarsi/raccogliere da terra; R1 non
-  ce l'ha). Costo: vita resta a 3 motori (yaw + 2 puntoni), 31 assi totali, 35,012 kg. BOM e scheda premium gia'
-  ri-allineati ai puntoni. NB: confermato anche hip pitch nel bacino verso l'ESTERNO (schema G1/R1, non Figure).
-- 2026-06-10 (AI+utente): BUDGET DISALLINEAMENTO rod-end caviglia (da foto giunti X-Humanoid ~±45° e RobotEra ~±30°,
-  che pero' usano BALL-STUD automotive, non rod-end). Fisica: il perno piede ROLLA col piede -> il tilt richiesto agli
-  occhi LATO PIEDE e' ~1:1 col roll (+~3 margine); il pitch costa 0 (rotazione attorno al perno); gli occhi in alto
-  (lancetta) ~0-2. CORREZIONE: i puntoni lunghi tolgono solo la parte fuori piano (~1-2 deg), non la componente
-  principale. Rod-end economici AliExpress: tilt tipico ±12-15 (MISURARE all'arrivo con inclinometro). Piano: (1) partire
-  con limite roll ±12 nei fine-corsa e nell'URDF (camminata piana usa ±5-10 -> basta); (2) upgrade quasi gratis =
-  spaziatori conici high-misalignment sui 2 occhi lato piede -> ±20-25, copre target G1 ±15 con margine, compatibile col
-  passante M6; (3) upgrade estremo = ball-stud (perno conico verticale nel piede, ridisegno locale) -> ±30-45, non ora.
-- 2026-06-10 (AI): SUPERATO il punto (3) sopra — trovato in catalogo igus l'igubal **KBRM-08 CL** (2a gen, corpo
-  esagonale + controdado): **pivot ±35 gradi**, foro sfera Ø8 E10, filetto femmina M8, 8.6 g, carichi 2.1 kN breve /
-  1.05 kN continuo (aste nostre ~0.6-1.2 kN picco breve -> OK). Drop-in TOTALE: stesse aste alluminio M8 + stesso perno
-  vite a colletto Ø8xM6, da montare solo sui 2 occhi LATO PIEDE (lato lancetta tilt ~0-2 -> resta standard). Eguaglia i
-  ball-stud RobotEra (±30) restando a catalogo; KBLM-08 CL = filetto sinistro. Nota 2026-06-27: BOM corrente usa invece
-  **KARM-08 CL / KARM_08_CL_1 maschio M8 destro qty2 + KALM-08 CL maschio M8 sinistro qty2**; questa vecchia nota resta
-  solo come storia della selezione. Il vecchio percorso qty0 era: spaziatori conici M8->M6 (Competition Supplies/McGill, ±20-25)
-  sui rod-end metallici. Scoperta collaterale: gli
-  snodi angolari industriali DIN 71802 fanno solo 15-18 gradi, NON sono i giunti delle foto RobotEra/X-Humanoid.
-  Scaletta roll caviglia: ±13 stock -> ±20-25 spacers -> ±35 igubal CL. Nota igubal: e' plastica igumid G, verificare
-  prezzo dal configuratore e niente alte temperature.
-- 2026-06-10 (AI+utente): ARCHITETTURA PUNTONE definitiva (domande: perno a 10? barra filettata come corpo?).
-  (a) Il PERNO resta Ø8xM6: non e' l'anello debole (flessione ~70-90 MPa vs >900 snervamento 12.9; il limite e' la
-  testa plastica igubal). Salire a Ø10 NON rinforza la testa e costringe filetti M10 -> corpo asta M10 piu' pesante.
-  Riserva: KARM-10 CL (2.5 kN breve, ±35) solo se il CAD tiene bracci piede mini e il caso peggiore supera 1.2 kN.
-  (b) NIENTE barra filettata come corpo del puntone: M8 acciaio filettata (anima ~6.5) a 250 mm ha Pcr ~2.7 kN -> SF
-  ~2.3 sul picco 1.15 kN, MA e' 4x meno rigida a flessione dell'esagono alluminio (EI 1.7e7 vs 7.1e7 Nmm2) = 'ballerina'
-  (vibra/flette), filetto = intaglio a fatica, peso simile. Il corpo GIUSTO e' l'esagono ALLUMINIO del kit AliExpress
-  (femmina M8 DX+SX, Pcr ~10+ kN, SF ~9-18): si tiene quello.
-  (c) Testa lato piede = igubal KARM-08 CL MASCHIO M8 (±35, 1.7 kN breve / 0.85 continuo, 6.2 g): si avvita nel corpo
-  alluminio al posto della testa metallica stock. Lato lancetta = testa stock (tilt ~0-2), che fa anche da lato
-  sinistro per la regolazione (KALM CL 'in preparation' a catalogo, disponibilita' da verificare). BOM aggiornata
-  2026-06-27: `2 x KARM-08 CL` maschio destro + `2 x KALM-08 CL` maschio sinistro, con `4 x` controdadi sottili DIN
-  439 M8. KBRM/KBLM femmina resta solo variante storica/catalogo e non va usata senza cambiare il corpo puntone.
+- Unified the motors on RobStride; removed Damiao and CubeMars from the selection.
+- Corrected the G1 baseline by switching to the current official model `g1_29dof_mode_11`.
+- Corrected the mechanical interpretation of the waist: RS04 vertical yaw + RS03 x2 on pushrods for pitch/roll.
+- Restored waist gimbal (cardan), two M10 pushrods and shared pin on the torso side in the BOM.
+- Restored the 7 DOF per arm of the G1 29 DOF variant.
+- Chose RS05 x2 for neck pan/tilt using the official G1-Comp page as reference; neck torque to be validated.
+- Differentiated the arm ladder to reduce distal mass: RS03 shoulder pitch/roll, RS06 shoulder yaw and elbow,
+  RS02 wrist roll, RS05 wrist pitch/yaw. RS06 wrist roll remains a qty 0 alternative.
+- Made all Excel motor rows uniform: dimensions, weight, RobStride rated/peak torque and G1 reference mandatory.
+- Corrected the Excel formatting: the light grey applies only to rows with a numeric quantity of zero, not to the blue titles.
+- Removed the premature assumptions `6001-2RS` and `6801-2RS` for the ankle joint: supports, retainers and pin lengths remain
+  qty 0 until the CAD.
+- Moved the safety chain to phase 1 bench.
+- Removed CubeMars RUBIK LINK and external Thor transceivers; added RobStride USB-CAN debugger.
+- Closed a purchasable electrical baseline: trunk `25 mm2`, main fuse BF1 `125 A`, safety control `2 A`,
+  leg branches `70 A / 16 mm2`, waist-neck `40 A / 6 mm2`, arms `30 A / 6 mm2`, Thor services `10 A`; added
+  specific 58 VDC fuse holders.
+- Sized the precharge on the two KEMET capacitors: Vishay `100 ohm 50 W`, CIT 48 V relay, Eaton ON-delay timer
+  set to about 10 s, Schneider key selector switch and coil TVS. Added manual battery disconnect switch ED250B-1.
+- Eliminated generic 12 AWG cable and generic XT90: added Nautica Illiano cables by cross-section, Klauke cable lugs for the actual
+  hole and K05 crimping tool. The ENERprof pluggable connector remains qty 0 until the manufacturer confirms the mating part.
+- Eliminated the fake complete harnesses: added Seeed BCCA4011 cables, XT30UW-F connectors, JST GH housings/terminals,
+  Belden CAN cable and YAGEO terminators; custom harness and J47 remain qty 0.
+- Audited the selected links: corrected the old removed Seeed BCCA4009 cable, the withdrawn ENERprof charger and the
+  unreachable CANable OpenLight. The new charger remains a qty 0 candidate until ENERprof approves the interface.
+- Replaced the generic Danenergy battery with the direct link to the selected ENERprof pack; added alternative
+  Dan-Tech Energy softpack qty 0 with mandatory note Smart BMS + AS150U.
+- Removed the links to RS categories from the purchasable rows and made `umanoide` the active sheet when Excel opens.
+- Reaffirmed that Unitree G1 is the only baseline: K-Bot remains only a secondary open hardware note for packaging and
+  wiring, it must not be used to size geometries, ankle or motors.
+- Clarified the ankle: the two orthogonal 12 mm diameter pins per ankle are exclusively rotation axes of the
+  foot-shin joint; the transverse 8 mm diameter pin instead receives the two heads of the M8 pushrods. Six pushrods
+  in total remain selected, four M8 at the ankles and two M10 at the waist.
+- Added `qty 0` examples of standard SKF and igus Q2 plain bushings and three custom specimens printed in iglidur `i150`,
+  `i190` and `J260-PF`; the final choice remains subject to CAD and tests on the real pin.
+- Clarified the structure of the ankle supports: 12 mm diameter pin fixed in the lugs, radial support in the moving central
+  piece, dedicated axial thrust washer adjusted per side, flanged metal insert fixed in the lugs as a
+  replaceable counterface. Added `qty 0` alternatives igus `Q2FM`, `GTM`, SKF `HK`, `NKI`, `AXK`, `AS`, shim
+  DIN 988 and Elesa+Ganter family `DIN 172`; do not activate any variant before the CAD dimensions.
+- Documented the first clamping stack for the simple variant `NKI 12/16`: wide washers, integrated shoulders
+  of the lugs that clamp only the inner ring, moving part excluded from the compression and RS PRO shoulder bolt
+  `292-417` `12 x 60 mm` as preliminary `qty 0` reference. Recovered in the BOM the catalogues for pins and retainers.
+- 2026-06-03: closed the ankle FINAL DECISION (see dedicated block in "Legs, phase 1"). Plain-bearing architecture, the
+  simplest: ISO 7379 shoulder screw `Ø12-M10` as pin/race (integral with the lugs via axial clamping, not
+  press fit), two igus `GFM-1214` flanged bushings pressed into the moving piece with the flange taking the axial load (eliminated
+  separate thrust washers, sleeve/column and thrust bearing), M10 nut + wide washer. Flanged metal bush in the lug
+  (`DIN 172-B12-20`) made OPTIONAL as an anti-wear upgrade if the igus flange wears the PA-CF. NKI 12/16 and
+  sleeve/column archived as alternatives. Added multiple verified suppliers. PRIMARY bushing = PRINTED
+  multi-material J260+PA-CF integral with the moving piece (filament already purchased), `GFM-1214` purchased as fallback;
+  axial starting point with PA-CF shoulder of the lugs that slides on the printed igus flange. Aligned the ankle BOM
+  rows (tags SCELTO/PRIMARIO/FALLBACK/ARCHIVIATO/OPZIONALE) and regenerated the Excel. Section drawings no longer maintained.
+- 2026-06-04: waist yaw downgraded from RS04 to RS03 (user choice) -> BOM 8 RS04 + 7 RS03, total EUR 16.228,27, mass
+  40,355 kg. Added "CAD 3D" column with the Seeed links (downloadable STEP) for each motor. Extracted and logged the exact
+  positions of the 29 G1 joints from the URDF (`g1_joints.csv` + `g1_29dof_mode_11.urdf` in the workspace). Documented the RobStride vs Unitree
+  torque density issue: leg motors (RS04 vs RS06) to be decided with the user depending on the ambition.
+- 2026-06-05: added and then corrected the Onshape skeleton rule. The `G1 joints CAD` sheet contains `exact_*`, `cad_*`
+  and `pose_down_*`: `cad_x` is brought to zero, `cad_y` is aligned in the vertical chains to `hip_roll` for the leg
+  and `shoulder_yaw` for the arm, `cad_z` remains the G1 dimension. The rotation axes are not simplified. `pose_down_*`
+  remains only a visual aid for arms along the body. The dash `-` means "same as the reference", not zero.
+- 2026-06-05: the workbook was cleaned of useless tabs. The generator now intentionally deletes `ARTES4.0@Olbia_`,
+  `Speso-Impegnato`, `pivot-finali`, `Acquisti` and `Budget`; `umanoide` is inserted after `ARTES4.0@Olbia_NoIVA` and
+  `G1 joints CAD` right after `umanoide`.
+- 2026-06-05 (AI): consolidation of the backlog of several rounds.
+  (1) ARM MOTORS: wrist now 3 UNIFORM axes RS02 (was roll RS02 + pitch/yaw RS05; Unitree makes the wrist uniform).
+  Shoulder yaw remains RS06 (lighter than the pitch/roll RS03, reduced distal mass). BOM = 8 RS04, 8 RS06, 7 RS03, 6 RS02,
+  2 RS05 = 31 axes; total EUR 16.399,07; mass 41,211 kg. Grey reserves [SECONDA SCELTA qty0]: RS03 uniform shoulder-yaw,
+  RS06 powerful wrist, RS05 light wrist pitch/yaw.
+  (2) SIMPLIFIED AXES: added column `axis_cad_semplif` to the `G1 joints CAD` sheet (hip_roll->X, hip_yaw->Z,
+  shoulder_pitch->Y, rest principal) at the user's request. CAD skeleton = `cad_*` positions + `axis_cad_semplif` axes
+  (consistent, orthogonal). Supersedes the earlier AI note "axes not simplified".
+  (3) G1 VERIFICATION (5-agent workflow): positions/axes/mass SOLID, triple-confirmed (<0,1 mm; total mass 33,340 kg;
+  thigh 336,6 / shin 317,6 / leg 654,2 mm; hip cant 10,021 deg). Torques: they match the `mode_11` file but DIVERGE
+  from the public URDF `unitree_rl_gym` on 3 joints: hip pitch/roll mode_11=139 vs rl_gym=88; ankle 35 vs 50; waist roll/pitch
+  35 vs 50. Knee 139 in both. wrist pitch/yaw=5 confirmed (the "8" found by the user was wrong). To size the
+  motors use the HIGHEST value (139 hip/knee, 50 ankle/waist) with margin. True bottleneck = KNEE (139,
+  RS04 14% below). Ankle 2xRS06 confirmed correct (real ~50, not 35). The positions are identical between the two releases.
+  (4) COMPUTE: recommended G1-style architecture = small real-time controller (uC or RT-Linux SBC) for policy + CAN loop
+  + safety, PLUS AI computer (Orin NX class, NOT Thor) added LATER for vision. The RL policy for walking is tiny:
+  Thor is not needed for the bring-up. Reconsider/remove Thor from the baseline; do not let the CAD be conditioned by its size.
+  (5) POSE and LIMITS: draw and assemble with ARMS ALONG THE BODY (home); the pose is only the default config in sim, it is not
+  engraved in the geometry (link lengths pose-independent). Joint limits = SOFTWARE, derived from one's own CAD
+  (self-collision by rotating the joints in the assembly + cable wrap for the yaws), not copied from the G1. Physical stops only
+  where critical for safety. Motor CAD: downloadable from the Seeed pages ("CAD 3D" column in the BOM) or AIFITLAB (STEP per model).
+- 2026-06-05 (AI): leg hip yaw downgraded from RS04 to RS03 (user choice: in CAD the RS04 turn out to be too
+  big/heavy). Pitch, roll and knee remain RS04 — roll is the axis of lateral balance (critical) and the robot
+  at 41 kg is heavier than the G1 (33 kg), so it is not downgraded. BOM now: 6 RS04 + 9 RS03 + 8 RS06 + 6 RS02 + 2 RS05 = 31
+  axes; total EUR 16.330,75; mass 40,131 kg (-1,08 kg). Hip yaw RS03 = 60 Nm peak vs G1 88: acceptable because yaw
+  is the least loaded hip axis (does not fight gravity, low real demand).
+- 2026-06-05 (AI): shoulder pitch/roll downgraded from RS03 to RS06 (shoulder now all uniform RS06), VERIFIED by calculation
+  (not only G1): arm 3.26 kg, CoM 0.236 m -> static 7.5 Nm, peak on a fast gesture ~22 Nm. RS06 (36/11) covers with 1.6x
+  on the peak and holds the outstretched arm continuously (7.5 < 11 nom); RS02 too weak (does not hold the outstretched arm, heats up); RS03 was
+  2.7x = oversized. BOM now: 6 RS04 + 5 RS03 + 12 RS06 + 6 RS02 + 2 RS05 = 31 axes; total EUR 16.296,59; mass
+  39,095 kg. WAIST instead NOT reduced (verified by calculation): it carries the whole upper body ~15-20 kg; pitch/roll ~32-64 Nm
+  at the JOINT (gravity + dynamic, depending on torso inclination and battery position) and they pass through the 2 pushrods (motor torque
+  != joint torque, lever geometry from the CAD is needed) -> remains RS03, not to be touched. Waist yaw ~9-31 Nm (inertial only): in
+  theory RS06 but margin too thin (single motor, balance role) -> kept RS03, review after CAD + battery.
+- 2026-06-05 (AI): shoulder yaw downgraded from RS06 to RS02, verified with the PAYLOAD in the real posture. User
+  clarification: the load is held with the arm BENT (humerus vertical, forearm at 90 degrees), not outstretched. Consequences by
+  calculation: (a) the shoulder yaw has the axis of the humerus vertical -> gravity 0, inertia only -> ~4-11 Nm even with 3 kg in hand ->
+  RS02 (17 peak) is enough with margin; (b) shoulder pitch/roll and elbow hold the load at the lever of the FOREARM ~0.20 m
+  (not 0.37 m of outstretched arm) -> RS06 holds ~4.3 kg with bent arm, so RS03 on the shoulder is NOT needed (remains RS06) and
+  the elbow RS06 is fine as it is. The arm carries ~4 kg in load posture. BOM: 6 RS04 + 5 RS03 + 10 RS06 + 8 RS02 + 2 RS05
+  = 31 axes; total EUR 16.137,99; mass 38,663 kg [snapshot 06-05, SUPERSEDED as of 2026-06-08, see below]. The reductions
+  verified by calculation (shoulder pitch/roll, hip yaw, shoulder yaw) removed ~2,5 kg while staying above the real requirements.
+- Set Thor-only as the initial baseline; the separate low-level computer remains a `qty 0` option to be activated only
+  if measurements show jitter, insufficient buses or the need for isolation from crashes of the AI software.
+- Consolidated the documentation into this single file; `STATO.md` deleted.
+- 2026-06-08 (AI): complete motor review with the REAL RobStride specifications (table verified via Seeed/AIFITLAB/
+  OpenELAB). Wrist 3 axes RS02->RS00 (dual encoder, 57 mm, 5 nom/14 peak, holds 2 kg in hand). Shoulder yaw RS02->RS00.
+  Shoulder pitch/roll RS06->RS02 and elbow RS06->RS02 -- NOT RS01: found that RS01 has a SINGLE encoder (36V only, no IP),
+  RS02 has DUAL encoder (output-side feedback, needed for RL/manipulation); RS01 discarded everywhere. Leg hip yaw RS03->RS06;
+  waist yaw and waist pitch/roll RS03->RS06 (vertical axes / low dynamic demand, non-acrobatic robot, verif ~28 Nm <
+  36 peak). Ankle remains 2x RS06: user correction -> ankle and waist pitch/roll are LINKAGES, the joint torque is
+  fixed by the load but the motor torque depends on the crank ratio (in CAD); RS06 = safe ceiling. BOM now: 6 RS04 + 9 RS06
+  + 6 RS02 + 8 RS00 + 2 RS05 = 31 axes (all RS03 and RS01 gone from the active ones). Total EUR 15.434,05; mass 35,312 kg
+  (-3,35 kg on the motors vs 06-05). py source + MEMORY updated; Excel regenerated and CONFIRMED: complete 15.434,05,
+  Phase1 10.519,00, Phase2 1.465,45, Phase3 3.449,60, mass 35,312 kg, 31 motors (RS00x8, RS02x6, RS04x6, RS05x2, RS06x9).
+- 2026-06-08 (AI): complete TORQUE VERIFICATION post-downsizing (method + numbers in the dedicated section above). Outcome:
+  no motor rejected for non-acrobatic use; RS04 legs (not downgraded) hold standing and walking. 3 recoverable
+  WARNINGS: knee (no held deep squat, it is the max motor), waist pitch (low battery + linkage),
+  elbow (<=1.5 kg comfortable / 2 kg only at moderate speed). 2 CAD checks: ankle and waist crank ratio >=1:1.
+  Wrote the calculation METHOD (static g*Sum(m*b), dynamic I*alpha bang-bang, yaw=inertia only, linkages) + inputs
+  (motor masses as lever arms, G1 joint positions, outstretched arm) so the other AI session can redo the calculations.
+- 2026-06-09 (two AI sessions): cross-check by the other AI session on the SHOULDER -> the other AI session is right, the AI's number was optimistic. The AI's error:
+  it had used hand 0,30 kg; in reality it is 0,50 kg with the CoM beyond the wrist (~0,48 m). Corrected: arm OUTSTRETCHED horizontal
+  ~7,8-8,6 Nm > 6 rated -> RS02 does NOT hold the outstretched arm CONTINUOUSLY (ok only a few s below the 17 peak); 2 kg at
+  full reach exceeds even the peak. With BENT elbow instead ok (~2,6 without payload / ~6,9 with 2 kg). The other AI session also
+  raised the real MASS: it uses ~46 kg (PA-CF frame ~10 kg included), this AI session had verified at 35 (without frame). At 46 kg
+  the RS04 LEGS (already the max) go ABOVE the rated value while walking (~45 vs 40) -> the lever is the MASS, not the motor.
+  Conclusions: keep arms light (no shoulder upsize, it would make the legs worse) + CONTROL the mass (frame target
+  ~6 kg, robot ~40 kg). Open decisions: role of the arm (bent only vs holding outstretched) and frame mass target.
+- 2026-06-09 (user) [SUPERSEDED in part 2026-06-27: ankle and waist have new active hardware]: pushrod hardware swap. Ankle AND waist pushrods -> ALUMINIUM M8 rod-ends adjustable in various
+  lengths (AliExpress 1005008935554718), on Ø8xM6 pins. BLACK AliExpress shoulder screws (set of all sizes,
+  1005007481484485) used for EVERYTHING: Ø12xM10 for the rotation axes (ankle + waist gimbal), Ø8xM6 for the pins where
+  the pushrods push (ankle + waist). RS PRO 292-417 demoted to alternative. Lengths at CAD. Regen: complete
+  15.425,51 EUR, mass 35,012 kg.
+- 2026-06-09 (user) [SUPERSEDED in part 2026-06-27: current = Ø8/M6 x45 ankle gimbal, KARM right qty2 + KALM left qty2, no waist gimbal]: defined the joint ASSEMBLY. ANKLE (pitch+roll) = cross-shaped 3D printed central piece with integral
+  igus (cylindrical pitch hole at the top, perpendicular roll hole at the bottom), 2 Ø12xM10 shoulder screws as axes +
+  black M10 nuts that clamp the lugs; central piece with slight play. igus fallback: separately printed flanged
+  cylinders -> purchased flanged igus bushings. Foot PUSHROD PIN = transverse Ø8xM6 shoulder screw + 1 black M6 nut,
+  2 rod-end heads of the pushrods + 3D printed central part. Black nylock nuts added to the BOM (Amazon B0C8ZCR6B1, set
+  M3-M16): M6 (pushrod pins) and M10 (ankle+waist axes). CRITICAL NOTE (AI): the rod-ends must remain FREE to
+  oscillate (the ankle does 2 DOF, roll requires the spherical joint) -> the Ø8 shoulder must BOTTOM OUT so that the nut
+  preloads on metal and does NOT crush the balls; the printed central part acts only as a spacer (the shoulder carries the
+  load, so it does not creep). Alu OD13 spacers discarded: OD too large, they would touch the rod-end body.
+- 2026-06-09 (AI+user): parallel ankle KINEMATICS. G1 (from URDF): pitch -50/+30 = 80 deg, ROLL only +/-15 = 30
+  deg. Rod-end: the PITCH (80 deg) uses the UNLIMITED rotation around the pin (pins along the pitch/transverse axis) ->
+  zero misalignment; the ROLL (+/-15) uses the TILT of the ball, LIMITED. Required tilt ~ order of the roll angle
+  but REDUCIBLE with geometry (LONG pushrods + attachment close to the plane of the roll axis). Cheap rod-ends ~+/-12-16 deg
+  -> marginal at +/-15; use high-misalignment (+/-20-25) or verify the real tilt in CAD. LEVERS: roll = small motion,
+  pushrod stays ~perpendicular -> ratio ~CONSTANT, design crank=foot for 1:1; pitch = large motion, sweep ->
+  ratio VARIES (nonlinear ~1.5-2x), size for the worst case. CRANK/motor horn = MOST LOADED part
+  (~1+ kN rod force at short lever): make it STOCKY or in METAL, not thin printed. Stacked motors (one up/one down) ->
+  rods of different lengths + pitch/roll coupling (non-diagonal matrix); side-by-side same height = cleaner.
+- 2026-06-09 (AI): WHAT IS IN THE URDF for the pushrod joints. The URDF is a serial TREE: the ankle is 2 VIRTUAL
+  revolute joints (ankle_pitch + ankle_roll, effort 35 Nm each), the waist 3 (yaw 88, roll 35, pitch 35). There are NO
+  motor positions, rods, cranks, nor mimic/transmission/loop (verified with grep). The sim does NOT simulate the transmission: it moves
+  ideal joints, the RL commands torques at the virtual JOINTS; the motor masses are included in the inertia of the parent link
+  (shin), not as separate bodies. The joint-torque -> motor-torque map (Jacobian of the linkage) lives in the
+  robot CONTROLLER, NOT in the URDF. Consequence: the G1 lever arms CANNOT be derived from the URDF. Useful distinction:
+  DIRECT joints (hip/knee/yaw/shoulders/elbow) -> URDF effort = MOTOR torque (usable directly); LINKAGE joints
+  (ankle, waist roll/pitch) -> URDF effort = JOINT torque, the motor torque = joint/ratio, ratio = your choice.
+  The linkage is sized to deliver the JOINT torque from one's own motors: ankle target ~46 Nm (robot 46 kg, more
+  than the G1 33 kg which asks for 35!), 2x RS06 = 72 Nm at 1:1 -> covered with margin. Do NOT copy the 35 of the G1 (it is lighter).
+- 2026-06-09 (user): BOM organization. (1) Row text color AUTOMATIC: BLACK if qty>0 or tag [SCELTO];
+  GREY (A6A6A6) if alternative/catalog/archived at qty0. No bold. Logic in build_umanoide_tab.py
+  (is_active = unita>0 or "[SCELTO" in nome). (2) ALL the mechanical hardware of the joints (pins, shoulder screws,
+  nuts, rod-ends, bearings) lives in section "1 - PROTOTIPIA MECCANICA", including that of the WAIST (moved from 2b);
+  the motor sections contain ONLY motors. The waist hardware keeps fase=Fase 3 (correct cost), only
+  the visual position changes. Totals unchanged 15.425,51 EUR / 35,012 kg.
+- 2026-06-11 (AI+user): STUDY of other robots + premium motors (budget potentially relaxed, "maximum quality",
+  will make a virtual prototype). ARCHITECTURE: (a) WAIST -> [SUPERSEDED on 2026-06-14: the R1 in series was DISCARDED for
+  geometry, we stay on the G1 PUSHRODS yaw+pitch+roll; see bullet 2026-06-14] the hypothesis was the UNITREE R1 scheme = yaw +
+  roll (NO pitch), 2 direct motors. R1 confirmed yaw +-150 / roll +-30. Tesla: ~2 DOF torso, axes not public (the AI
+  had gone out on a limb saying 'yaw only', retracted). Figure: no torso pitch (patent WO2025213141A1), it HAS
+  leg-twist/hip-yaw canted low down (it does NOT remove the hip yaw). Asimov (35kg twin, github asimovinc/asimov-1): 6
+  DOF/leg WITH hip yaw, waist yaw only.
+  -> CONCLUSION: KEEP hip yaw (everyone has it), waist = direct SERIAL yaw+roll (see 2026-06-16, the waist pushrods SUPERSEDED), hip pitch OUTSIDE (G1/R1) not inside (Figure) because
+  the big QDDs (Ø88-107) collide in the groin and block adduction. (b) Premium MOTORS: CubeMars AKE90-8 (170 Nm,
+  1.4 kg, 9 arcmin, ~$484 bare) beats the G1 on the legs (goodbye to the 0.86x). BUT the WEIGHT is cut by ENCOS, not CubeMars:
+  Encos EC-A4310-P2-36 = 36 Nm in 377 g vs RS06 621 g -> -244 g/motor. CubeMars more AVAILABLE (retail) and
+  cheaper, Encos LIGHTER but by quotation (Foxtech). Specs: AKE80-8 30Nm/570g/Ø87x32/$340; AK10-9 53Nm/dual
+  enc/$699; Encos A10020 150Nm/1.35kg/$2250, A13715 320Nm/$2250. Encos/CubeMars > RobStride in density but RobStride
+  remains the lightest BELOW ~20 Nm (RS00 310g, RS05 191g) -> on the small ones RobStride is kept even in the premium option.
+  Created 2nd Excel sheet "MOTORI premium" (optimal mix: AKE90-8 legs + Encos A4310 on the 36Nm + small RobStride):
+  16.14 kg vs 18.21 RobStride = -2.07 kg (ALL from Encos), ~$8504 + 1824 EUR (30 axes, serial waist, RS00 arm).
+  It sits alongside the RobStride BOM, it does not replace it.
+- 2026-06-16 (AI+user): LOWER-BODY LOCKED for the CAD, after study of Tien Kung 2.0/3.0, Unitree H2, ToddlerBot.
+  (a) WAIST = DIRECT SERIAL yaw(bottom) + roll(top above the yaw, X axis), NO pitch, NO pushrods. SUPERSEDES the
+  pushrods of 2026-06-14. Reason: RL-FRIENDLY (Unitree itself moved from the G1 pushrods to serial Z-Y-X on the H2,
+  "more RL-friendly"; we do RL in Isaac Lab; parallel mechanisms = closed chain + rod-end play = sim-to-real
+  gap). 2 DOF stack ~130-150 mm accepted (Tien Kung 3.0 does it). Torso pitch is done by the HIPS. -1 RS06 ->
+  30 motors. Totals (after RS02->RS00 point d AND ankle->RS00 point e): complete 14.594,69 EUR (Fase1 10.113,96 /
+  Fase3 3.015,28), mass 32,227 kg, lineup RS00x18 / RS04x6 / RS05x2 / RS06x4 (RS06 only hip-yaw+waist; RS02 ELIMINATED).
+  (b) HIP = orthogonal F-A-R (Flexion-Abduction-Rotation, like H2), pitch in the PELVIS towards the OUTSIDE (G1/R1), clean
+  orthogonal axes, NO canting. User idea "60° star" (canting the leg pitches) evaluated in depth and discarded BUT
+  with honesty: if you cant BOTH axes the two motors ADD UP on pure pitch (DIAMOND-shaped torque region: pure pitch
+  up to 2*tau*cos(phi), e.g. 208 Nm at 30deg, > orthogonal; but the combined pitch+roll falls inside the diamond, worse than the
+  orthogonal square). The sizing case = stance leg = pitch+roll TOGETHER -> orthogonal wins. And we
+  are torque-starved (RS04 0.86x), we cannot gamble; the H2 cants because it has 360 Nm of surplus, we do not. To
+  kill the bottleneck of the 139 the clean way = bigger motor (AKE90-8 170 Nm), not canting. TO BE
+  VALIDATED in sim: log the torque trajectory (pitch,roll) at the hip; if the gaits turn out pitch-dominant, the
+  canting question reopens. For now orthogonal CAD (reversible: only the orientation of the motor seats changes).
+  (c) ANKLE = PARALLEL, motors IN THE SHIN. Motor = RS00 at reduction ~2:1 [UPDATED 2026-06-16, see point e:
+  earlier the AI had put RS06 1:1 "for the power", but the REQUIREMENT is only WALKING + 1 kg/arm, NO jumps/running ->
+  modest ankle power, RS00 is enough; the RS06 Ø88 stacked below the knee reached almost to the ground]. Strong
+  precedent: RoboEra ~70 kg uses small motors with reduction ~2:1 roll / ~1.5:1 pitch and it JUMPS. At ~2:1 the 2 RS00 add up:
+  2x14x2=56 Nm peak (ok 33-40 kg; at 46 kg ~2.5:1->70). RS06 1:1 remains alt qty0 IF dynamic gaits/jumps are needed. Motor
+  axis along X (G1 style), user choice. Rod-end: with the SPHERICAL ones already chosen (igubal ±35°) it is enough to orient the pin so that the
+  large PITCH = FREE rotation about the pin (unlimited) and the small ROLL (±15°) = tilt within ±35°. Do NOT make
+  pure revolute-revolute heads (it binds = spatial overconstraint); safe recipe = RSU (Revolute-Spherical-Universal,
+  like the IIT paper), keep at least one spherical/universal joint. Pushrod length locking: thin jam nut
+  (half thickness M8 ~4 mm) + Loctite 243; if space is lacking, tune with the adjustable one then REPLACE it with a FIXED rod
+  cut to length (stiffer, less play -> better sim-to-real). Hybrid "direct roll in the foot" = Plan B only if
+  the sim-to-real of the parallel 2-DOF turns out to be a nightmare (and in that case roll with a light Encos 377 g motor).
+  (d) RS02 ELIMINATED from the whole BOM (user choice 2026-06-16). User insight (CORRECT): in the RobStride range the RS02
+  is DOMINATED. Dimensions: RS00 Ø57 / 5 rated-14 peak / 310 g; RS02 Ø78.5 / 6 rated-17 peak / 405 g; RS06 Ø88 / 11 rated-36
+  peak / 621 g. From RS00->RS02 you pay +21.5 mm of Ø for only +3 Nm peak; from RS02->RS06 you pay only +9.5 mm for +19 Nm
+  (2x). So RS02 is almost as big as RS06 but with half the torque: RULE = "if RS00 is enough use RS00 (much
+  smaller), otherwise jump to RS06; never RS02". Applied: ARM all RS00 (shoulder pitch/roll + elbow downgraded from RS02;
+  shoulder yaw + wrist already RS00). Tien Kung (70 kg) has motors ~Ø60 = the SIZE of an RS00 but they are DENSE ENCOS (~36 Nm), NOT
+  an RS00 (14 Nm): size != torque. ANKLE: RS00 NO (POWER joint) -> stays RS06 at 1:1 (torque multiplies
+  with the reduction, POWER does not: a small motor + reduction gives a lot of torque but at low speed, and at toe-off
+  torque AND speed are needed together = power, which only a physically larger motor -RS06- or a dense one -Encos- has). For
+  a compact AND powerful ankle = Encos A4310 premium (the Tien Kung way). Shoulder with RS00 OK: it is a SLOW joint, only
+  the torque matters, and RS00 (14 peak) covers the dynamic ~12; the continuous horizontal hold was not achieved even by the RS02
+  (6<6.8 rated). Elbow: RS00 ~1.2 kg continuous / 2 kg peak (slightly less than the RS02); RS06 only if 2 kg continuous is needed.
+  Final lineup: see point (e).
+  (e) ANKLE -> RS00 at ~2:1 + ENCOS CATALOG + MIXING (2026-06-16). REQUIREMENT confirmed by the user: normal walking
+  + standing stably + 1 kg per arm, NO jumps/running. With this the ankle is NOT a high-power
+  joint -> RS00 at reduction ~2:1 is enough (see point c). FINAL LINEUP: RS00x18 (arm 14 + ankle 4) / RS04x6
+  (legs) / RS05x2 (neck) / RS06x4 (ONLY hip-yaw 2 + waist 2). 30 motors, 32,227 kg, 14.594,69 EUR.
+  ENCOS CATALOG combed through (Foxtech): the smallest is the EC-A4310-P2-36 (36 Nm, 377 g, ~Ø60, frame Ø43). Below
+  43 mm Encos has NOTHING -> for wrist/arm (5-14 Nm) no Encos: the A4310 would be overkill, heavier
+  than the RS00 (377 vs 310 g) and ~6x the price. The other Encos are all BIGGER: A6408 (Ø64), A8112 (Ø81, ~94 Nm,
+  830 g), A10020 (Ø100, ~150 Nm), A13715/A13720 (Ø137, ~320 Nm). So the ONLY useful Encos = A4310, and only where there is
+  the RS06 (hip-yaw/waist) or for a DYNAMIC ankle. CASCADE: with "walking only" the ankle goes to RS00 (310 g,
+  lighter AND cheaper than the A4310 377 g/$700) -> the Encos loses its best application (the distal mass of the
+  ankle). What remains is hip-yaw+waist (4 motors): -244 g x4 = ~1 kg, but ~$2800 + 3rd brand. So for OUR use the
+  Encos premium option is of little interest. MIXING Encos+RobStride: FEASIBLE (both CAN), but non-zero SOFTWARE cost =
+  2 protocol drivers + 2 actuator models in sim + 2 calibrations + different connectors; ~FREE in sim (different
+  parameters per joint are enough), it weighs only on the real HW. "All the same" is clearly simpler for build and
+  sim-to-real (1 driver, 1 model, uniform spares). Conclusion: all RobStride (RS00/04/05/06) -> no mixing,
+  problem avoided. Premium sheet: added DIMENSIONS column for all motors (user request).
+- 2026-06-14 (AI+user) [SUPERSEDED on 2026-06-16: waist now direct SERIAL, NO longer pushrods - see bullet below]: WAIST - R1 in series EVALUATED and DISCARDED, we stay on the PUSHRODS (G1 scheme). Geometric
+  reason (real numbers from the BOM): the waist roll is an RS06 Ø88; in series roll-below-yaw the Ø88 DIAMETER eats
+  height -> torso/yaw base at ~190 mm above the hip axis = torso cut short for battery+compute. R1 can afford it only
+  because it has tiny motors, we do not. Also discarded the Figure-style "bomb at the back" (it lowers the yaw but gives only
+  ROLL, no pitch, and the cantilevered bracket carries the whole bending moment of the torso). PUSHRODS = right choice for
+  large motors: same logic as the ankle (heavy motors LOW in the pelvis, transverse axis, zero vertical
+  stack, mass down for CoM) and in addition the torso PITCH is regained (bending over/picking up from the ground; R1 does not
+  have it). Cost: waist stays at 3 motors (yaw + 2 pushrods), 31 axes total, 35,012 kg. BOM and premium sheet already
+  re-aligned to the pushrods. NB: also confirmed hip pitch in the pelvis towards the OUTSIDE (G1/R1 scheme, not Figure).
+- 2026-06-10 (AI+user): ankle rod-end MISALIGNMENT BUDGET (from photos of X-Humanoid joints ~±45° and RobotEra ~±30°,
+  which however use automotive BALL-STUDS, not rod-ends). Physics: the foot pin ROLLS with the foot -> the tilt required of the
+  FOOT-SIDE eyes is ~1:1 with the roll (+~3 margin); the pitch costs 0 (rotation about the pin); the upper eyes
+  (crank arm) ~0-2. CORRECTION: long pushrods remove only the out-of-plane part (~1-2 deg), not the main
+  component. Cheap AliExpress rod-ends: typical tilt ±12-15 (MEASURE on arrival with an inclinometer). Plan: (1) start
+  with roll limit ±12 in the end stops and in the URDF (flat walking uses ±5-10 -> enough); (2) almost free upgrade =
+  high-misalignment conical spacers on the 2 foot-side eyes -> ±20-25, covers G1 target ±15 with margin, compatible with the
+  M6 through bolt; (3) extreme upgrade = ball-stud (vertical tapered pin in the foot, local redesign) -> ±30-45, not now.
+- 2026-06-10 (AI): SUPERSEDED point (3) above — found in the igus catalog the igubal **KBRM-08 CL** (2nd gen, hexagonal
+  body + jam nut): **pivot ±35 degrees**, ball bore Ø8 E10, female thread M8, 8.6 g, loads 2.1 kN short-term /
+  1.05 kN continuous (our rods ~0.6-1.2 kN short peak -> OK). TOTAL drop-in: same M8 aluminium rods + same pin
+  (shoulder screw Ø8xM6), to be fitted only on the 2 FOOT-SIDE eyes (crank-arm side tilt ~0-2 -> stays standard). It matches the
+  RobotEra ball-studs (±30) while staying catalog; KBLM-08 CL = left-hand thread. Note 2026-06-27: the current BOM instead uses
+  **KARM-08 CL / KARM_08_CL_1 male M8 right-hand qty2 + KALM-08 CL male M8 left-hand qty2**; this old note remains
+  only as history of the selection. The old qty0 path was: conical spacers M8->M6 (Competition Supplies/McGill, ±20-25)
+  on the metal rod-ends. Side discovery: the
+  industrial angle joints DIN 71802 only do 15-18 degrees, they are NOT the joints in the RobotEra/X-Humanoid photos.
+  Ankle roll ladder: ±13 stock -> ±20-25 spacers -> ±35 igubal CL. igubal note: it is igumid G plastic, verify
+  price from the configurator and no high temperatures.
+- 2026-06-10 (AI+user): final PUSHROD ARCHITECTURE (questions: pin at 10? threaded rod as body?).
+  (a) The PIN stays Ø8xM6: it is not the weak link (bending ~70-90 MPa vs >900 yield 12.9; the limit is the
+  igubal plastic head). Going up to Ø10 does NOT strengthen the head and forces M10 threads -> heavier M10 rod body.
+  Reserve: KARM-10 CL (2.5 kN short-term, ±35) only if the CAD keeps minimal foot lever arms and the worst case exceeds 1.2 kN.
+  (b) NO threaded rod as the pushrod body: M8 threaded steel (core ~6.5) at 250 mm has Pcr ~2.7 kN -> SF
+  ~2.3 on the peak 1.15 kN, BUT it is 4x less stiff in bending than the aluminium hex (EI 1.7e7 vs 7.1e7 Nmm2) = 'wobbly'
+  (vibrates/flexes), thread = fatigue notch, similar weight. The RIGHT body is the ALUMINIUM hex of the AliExpress kit
+  (female M8 RH+LH, Pcr ~10+ kN, SF ~9-18): we keep that one.
+  (c) Foot-side head = igubal KARM-08 CL MALE M8 (±35, 1.7 kN short-term / 0.85 continuous, 6.2 g): it screws into the aluminium
+  body in place of the stock metal head. Crank-arm side = stock head (tilt ~0-2), which also serves as the left-hand
+  side for adjustment (KALM CL 'in preparation' in the catalog, availability to be verified). BOM updated
+  2026-06-27: `2 x KARM-08 CL` male right-hand + `2 x KALM-08 CL` male left-hand, with `4 x` thin jam nuts DIN
+  439 M8. KBRM/KBLM female remains only a historical/catalog variant and must not be used without changing the pushrod body.
 
-## Punti aperti da criticare prima degli acquisti
+## Open points to criticize before the purchases
 
-1. Disegnare la caviglia in CAD e calcolare la matrice tra coppie motori RS06 e coppie virtuali pitch/roll. Se il margine
-   non basta provare RS03; se invece il rapporto crank da' riduzione si puo' scendere a RS02 (caviglia piu lenta, asta ~1
-   kN). La taglia caviglia esce dal rapporto crank reale, non dal carico (che fissa solo la coppia GIUNTO). Baseline corrente:
-   giunto gimbal caviglia stampato con due shoulder screws Ø8/M6 x 45 mm impilati in Z (pitch sopra, roll sotto) e
-   quattro pivot puntoni Ø8/M6 x 16 mm; i rod-end attivi sono igus KARM-08 CL qty 2 destro + KALM-08 CL qty 2 sinistro.
-   Tenere volume aperto per un eventuale
-   Cardan piu pulito, ma il CAD/sim deve modellare l'offset reale finche esiste. Separare nel CAD i due assi piede-stinco
-   dai perni su cui spingono i puntoni. Per ciascun asse/perno quotare larghezza del pezzo centrale, spazio assiale,
-   volume spazzato dalle orecchie e dai rod-end, diametro esterno sede, lunghezza colletto, fit, boccole, antirotazione
-   e ritegno; solo allora scegliere eventuali boccole, inserti metallici e rasamenti finali.
-2. Disegnare la vita in CAD con roll sotto yaw: RS03 waist roll sotto, RS06 waist yaw sopra, nessun waist pitch e nessun
-   puntone/cardano vita nel CAD corrente. Verificare stack verticale, cavi, supporto del torso e momento flettente sul
-   roll; il vecchio 6002-2RS idle bearing e il pin Ø12/M10 sono disattivati qty0 e non vanno comprati salvo revisione CAD.
-3. Trovare una fonte fisica affidabile o misurare i motori collo G1-Comp. Fino ad allora RS05 x2 resta una scelta
-   provvisoria, non un dato G1 verificato.
-4. Polso tutto RS00 (5 nom/14 picco, dual encoder): verificare in CAD/uso che basti sul roll (G1 25 Nm, ma gravita ~0 e
-   payload sull'asse). Riserve qty0: RS02 (robusta) e RS05 (ultraleggera pitch/yaw).
-5. Ricostruire la geometria gambe dalle origini giunti e mesh ufficiali G1 `mode_11`, senza confondere mesh esterne e CAD
-   interno degli attuatori.
-6. Verificare fisicamente l'ingombro RS04 `120 x 120 x 56 mm` nelle anche e al ginocchio: la potenza e vicina al G1, ma
-   il packaging non e automaticamente equivalente.
-7. Progettare harness e strain relief. K-Scale segnala esplicitamente che il cablaggio e una delle parti meno affidabili.
-8. Chiedere a Bicycle Motor Works conferma di spedizione Italia, massa finita, connettori/charger, durata dei 100 A,
-   corrente di corto, limite di carica rigenerativa e soglie BMS; in parallelo chiedere a Tõuksi Vabrik un disegno del
-   fallback UE 60 A entro 165 x 102 x 76 mm. Confermare che il BF1 principale da 70 A sia coordinato col BMS.
-   Prima della camminata misurare correnti e temperature
-   e dimensionare energia/soglia del bleeder sulla frenata reale: quello selezionato e sufficiente solo per bring-up
-   progressivo finche non esistono misure dinamiche.
-9. Valutare se Thor e gia posseduto o se va mantenuto nel costo: per il solo bring-up e sovradimensionato.
+1. Draw the ankle in CAD and compute the matrix between RS06 motor torques and virtual pitch/roll torques. If the margin
+   is not enough try RS03; if instead the crank ratio gives reduction one can go down to RS02 (slower ankle, rod ~1
+   kN). The ankle size comes out of the real crank ratio, not from the load (which only fixes the JOINT torque). Current baseline:
+   printed ankle gimbal joint with two shoulder screws Ø8/M6 x 45 mm stacked in Z (pitch above, roll below) and
+   four pushrod pivots Ø8/M6 x 16 mm; the active rod-ends are igus KARM-08 CL qty 2 right-hand + KALM-08 CL qty 2 left-hand.
+   Keep volume open for a possible
+   cleaner Cardan, but the CAD/sim must model the real offset as long as it exists. Separate in the CAD the two foot-shin axes
+   from the pins on which the pushrods push. For each axis/pin dimension the width of the central part, axial space,
+   volume swept by the lugs and by the rod-ends, seat outer diameter, shoulder length, fit, bushings, anti-rotation
+   and retention; only then choose any bushings, metal inserts and final shims.
+2. Draw the waist in CAD with roll below yaw: RS03 waist roll below, RS06 waist yaw above, no waist pitch and no
+   waist pushrod/cardan in the current CAD. Verify vertical stack, cables, torso support and bending moment on the
+   roll; the old 6002-2RS idle bearing and the pin Ø12/M10 are deactivated qty0 and must not be bought unless there is a CAD revision.
+3. Find a reliable physical source or measure the G1-Comp neck motors. Until then RS05 x2 remains a provisional
+   choice, not a verified G1 datum.
+4. Wrist all RS00 (5 rated/14 peak, dual encoder): verify in CAD/use that it is enough on the roll (G1 25 Nm, but gravity ~0 and
+   payload on the axis). Reserves qty0: RS02 (robust) and RS05 (ultralight pitch/yaw).
+5. Rebuild the leg geometry from the joint origins and official G1 meshes `mode_11`, without confusing external meshes and internal
+   CAD of the actuators.
+6. Physically verify the RS04 envelope `120 x 120 x 56 mm` in the hips and at the knee: the power is close to the G1, but
+   the packaging is not automatically equivalent.
+7. Design harness and strain relief. K-Scale explicitly reports that the wiring is one of the least reliable parts.
+8. Ask Bicycle Motor Works for confirmation of shipping to Italy, finished mass, connectors/charger, duration of the 100 A,
+   short-circuit current, regenerative charge limit and BMS thresholds; in parallel ask Tõuksi Vabrik for a drawing of the
+   EU fallback 60 A within 165 x 102 x 76 mm. Confirm that the main 70 A BF1 is coordinated with the BMS.
+   Before walking measure currents and temperatures
+   and size the bleeder energy/threshold on the real braking: the selected one is sufficient only for progressive
+   bring-up as long as dynamic measurements do not exist.
+9. Assess whether Thor is already owned or whether it must be kept in the cost: for bring-up alone it is oversized.

@@ -1,8 +1,8 @@
 # MEMORY — Isaac Sim / Isaac Lab RL work log
 
 Scope: everything done on the Windows workstation from the first "install isaac sim and isaac lab"
-prompt (2026-07-18) through 2026-07-19. Written by AI. The project-wide source of truth remains
-`../MEMORY.md` and `../AI_HANDOFF.md`; this file is the Isaac/RL-specific history, including the
+prompt (2026-07-18) through 2026-07-19. Written by the AI session on that machine. The project-wide source of truth remains
+`../MEMORY.md` (in this repository: `docs/handoffs/ai-memory.md`) and the handoff of the other AI session on the workstation; this file is the Isaac/RL-specific history, including the
 mistakes, because several of them cost hours and must not be repeated.
 
 ---
@@ -44,7 +44,7 @@ Every element matters:
 - Convert: `scripts/tools/convert_urdf.py <urdf> usd/rl_full.usd --merge-joints --headless`
 - Merged body names that configs depend on: root = `root`, torso = `waist_yaw_link`
   (battery+Thor merged in), feet = `left/right_ankle_roll_link`.
-- AI separately built `humanoid_articulated_hands/` (TienKung-donor articulated hands, 24 finger
+- Another AI session separately built `humanoid_articulated_hands/` (TienKung-donor articulated hands, 24 finger
   DOFs, 0.540 kg/hand preserved). Used by the G1-whole-body tasks. It did **not** receive the foot
   collision fix below.
 
@@ -70,8 +70,8 @@ Every element matters:
 | Task id | Notes |
 |---|---|
 | `Isaac-Velocity-Flat-Robstride-v0` / `-Rough-` / `-Play` | base tasks, G1-derived rewards |
-| `Isaac-Velocity-Flat-Humanoid-G1WholeBody-v0` (+Play) | AI: 28 whole-body actions, articulated hands, 15° shoulder-roll clamp |
-| `Isaac-Velocity-Flat-Humanoid-TienKungPeriodic-v0` (+Play) | AI: TienKung 0.85 s gait clock |
+| `Isaac-Velocity-Flat-Humanoid-G1WholeBody-v0` (+Play) | other AI session: 28 whole-body actions, articulated hands, 15° shoulder-roll clamp |
+| `Isaac-Velocity-Flat-Humanoid-TienKungPeriodic-v0` (+Play) | other AI session: TienKung 0.85 s gait clock |
 | `Isaac-Velocity-Rough-Humanoid-G1WholeBody-v0` (+Play) | fine-tune target, height scan disabled so a flat checkpoint loads |
 
 Robot cfg: `isaaclab_assets/robots/robstride.py` → `ROBSTRIDE_HUMANOID_CFG`
@@ -365,4 +365,4 @@ interactive GUI on this machine. When the GUI stalls, render instead of fighting
 5. Articulated hands: palms currently face **down** (donor `hand_base_link` frame differs from the
    CAD placeholder; the mount transform itself is faithful). Fix with a corrective rotation in the
    wrist→hand fixed joint, then reconvert. Does not affect trained locomotion policies.
-6. Teleoperation / data collection track — see `../AI_HANDOFF.md`.
+6. Teleoperation / data collection track — see the handoff of the other AI session on the workstation; the teleoperation plan is in `docs/handoffs/teleop.md`.

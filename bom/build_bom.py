@@ -1938,6 +1938,272 @@ ROW_OVERRIDES = {
         "Pelvis IMU for orientation and acceleration feedback.",
         "",
     ),
+    # English text for the remaining candidate / archived rows (added 2026-09-21)
+    "[ALT qty0] SKF PCM 121420 E - boccola radente PTFE composito 12x14x20 mm": (
+        "[ALT qty0] SKF PCM 121420 E - PTFE composite plain bushing 12x14x20 mm",
+        "Real example of a thin plain bushing for a 12 mm diameter shaft of the foot-shin joint: bore 12 mm, outer diameter 14 mm, length 20 mm.",
+        "Exact SKU SKF PCM121420E. Price verified 2026-06-02: EUR 2.13 net (excluding VAT). Candidate alternative for slow oscillation; qty 0 until CAD, loads, pin-seat fit and axial control are defined.",
+    ),
+    "[ALT qty0] SKF PCM 121425 E - boccola radente PTFE composito 12x14x25 mm": (
+        "[ALT qty0] SKF PCM 121425 E - PTFE composite plain bushing 12x14x25 mm",
+        "Longer real example from the same family: bore 12 mm, outer diameter 14 mm, length 25 mm. It shows that a single 25 mm long bushing is a standard component.",
+        "Exact SKU SKF PCM121425E. Price verified 2026-06-02: EUR 2.94 net (excluding VAT). Qty 0: the greater length is not automatically better if it introduces misalignment or if the CAD does not provide a correct seat.",
+    ),
+    "[ALT qty0] igus iglidur Q2SM-1214-20 - boccola polimerica heavy-duty 12x14x20 mm": (
+        "[ALT qty0] igus iglidur Q2SM-1214-20 - heavy-duty polymer bushing 12x14x20 mm",
+        "Self-lubricating polymer example for a 12 mm diameter shaft: outer diameter 14 mm, length 20 mm. The Q2 material is developed for pivoting applications with dynamic loads, shocks and dirt.",
+        "Exact SKU igus Q2SM-1214-20. Price verified 2026-06-02: PLN 25.89 net (excluding VAT), about EUR 6.15. Qty 0: verify surface pressure, wear, seat and tolerances with the igus tool before selection.",
+    ),
+    "[ALT qty0] igus iglidur Q2FM-1214-12 - boccola flangiata heavy-duty 12x14x12 mm": (
+        "[ALT qty0] igus iglidur Q2FM-1214-12 - heavy-duty flanged bushing 12x14x12 mm",
+        "Example of a flanged plain bushing for a 12 mm diameter pin: it guides the radial load and provides an integrated axial stop. Dimensions: bore 12 mm, outer diameter 14 mm, length 12 mm, flange diameter 20 mm, 1 mm thick.",
+        "Exact SKU igus Q2FM-1214-12. Qty 0: useful if the CAD allows one bushing inserted from each side of the moving part; do not assume that two 12 mm pieces fit in the available width. Q2 is indicated by igus for high loads, shocks, dirt and heavily stressed pivoting applications.",
+    ),
+    "[ARCHIVIATO qty0] igus GTM-1224-015 - ralla separata (superata: assiale ora nella flangia) 12x24x1.5 mm": (
+        "[ARCHIVED qty0] igus GTM-1224-015 - separate thrust washer (superseded: axial now in the flange) 12x24x1.5 mm",
+        "Separate plain thrust washer to be located on the central moving part, between it and each outer lug, when the radial bushing has no flange. It puts the axial sliding on a surface designed for the purpose.",
+        "Exact SKU igus GTM-1224-015: bore 12 mm, outer diameter 24 mm, thickness 1.5 mm. Price verified 2026-06-02: EUR 1.49 VAT included at Conrad. Qty 0: do not leave it loose between two PA-CF faces. Provide a locating seat and a fixed, smooth, replaceable metal counterface in the lug; define the axial play in the CAD.",
+    ),
+    "[ARCHIVIATO qty0] SKF HK 1216.2RS - rullini senza anello interno (superato) 12x18x16 mm": (
+        "[ARCHIVED qty0] SKF HK 1216.2RS - needle roller bearing without inner ring (superseded) 12x18x16 mm",
+        "Compact rolling alternative for the radial load only of the 12 mm diameter pin. It must be housed either in the moving part or in the pair of lugs, not in both at the same time. It has no inner ring to clamp between the shoulders of the lugs.",
+        "Exact SKU SKF HK1216.2RS: bore 12 mm, outer diameter 18 mm, length 16 mm, seals on both sides. Availability verified 2026-06-02: 21 pieces, price on quotation. Qty 0: it requires the fixed pin to be a suitable hardened and ground inner raceway; do not automatically let the needle rollers run on a screw or a raw pin. It is not the first choice if you want to clamp shoulders against a true inner ring.",
+    ),
+    "[ARCHIVIATO qty0] SKF NKI 12/16 - rullini con anello interno (superato dal radente igus flangiato) 12x24x16 mm": (
+        "[ARCHIVED qty0] SKF NKI 12/16 - needle roller bearing with inner ring (superseded by the flanged igus plain bushing) 12x24x16 mm",
+        "First simple architecture to draw: bearing in the central moving part; separable inner ring clamped between the integrated shoulders of the two PA-CF lugs; outer ring seated in the moving centre. It carries the radial load without requiring metal caps in the lugs.",
+        "Exact SKU SKF NKI 12/16: bore 12 mm, outer diameter 24 mm, width 16 mm, inner ring included. Price verified 2026-06-02: EUR 22.15 net (excluding VAT) at Klium. Qty 0 until the CAD. The shoulders must clamp the inner ring without crushing the central moving part; the running clearance is between the moving part and the lugs, not between the shoulders and the inner ring. NKI is not a thrust bearing: if tests show axial contact, add located igus thrust washers or a separate thrust bearing.",
+    ),
+    "[ARCHIVIATO qty0] SKF AXK 1226 - reggispinta (superato: assiale ora nella flangia) 12x26x2 mm": (
+        "[ARCHIVED qty0] SKF AXK 1226 - thrust bearing (superseded: axial now in the flange) 12x26x2 mm",
+        "Rolling alternative for axial load: one thrust bearing cage for each side of the central moving part if the CAD requires very low axial friction.",
+        "Exact SKU SKF AXK 1226: bore 12 mm, outer diameter 26 mm, thickness 2 mm, dynamic load 9.15 kN and static 30 kN. Price verified 2026-06-02: EUR 4.10 net (excluding VAT) at RS Italia. Qty 0: between printed faces use two hardened AS 1226 washers for each cage.",
+    ),
+    "[ARCHIVIATO qty0] SKF AS 1226 - ralla temprata per AXK (superato) 12x26x1 mm": (
+        "[ARCHIVED qty0] SKF AS 1226 - hardened thrust washer for AXK (superseded) 12x26x1 mm",
+        "Hardened axial raceway for the AXK 1226 cage. With PA-CF or polymer faces do not use the printed part directly as the raceway for the needle rollers.",
+        "Exact SKU SKF AS1226: bore 12 mm, outer diameter 26 mm, thickness 1 mm. Price and stock verified 2026-06-02: EUR 1.86 net (excluding VAT), 13 pieces available. Qty 0: a complete solution per side takes up 1 + 2 + 1 = 4 mm: AS 1226 + AXK 1226 + AS 1226.",
+    ),
+    "[ARCHIVIATO qty0] HGI PS 12x18x1 DIN 988 - rasamento di registro (superato) ": (
+        "[ARCHIVED qty0] HGI PS 12x18x1 DIN 988 - adjustment shim washer (superseded) ",
+        "Metal shim washer to calibrate the residual axial play after choosing the thrust surface. It does not replace an igus plain thrust washer or a hardened raceway for AXK.",
+        "Exact SKU HGI12X18X1 / PS12X18X1: bore 12 mm, outer diameter 18 mm, thickness 1 mm. Price and stock verified 2026-06-02: EUR 0.48 net (excluding VAT), 57 pieces. Qty 0: choose the final combination only after measuring the assembly; DIN 988 also exists in finer thicknesses, for example 0.2 mm.",
+    ),
+    "[ALT DA DIMENSIONARE qty0] Inserti metallici flangiati fissi nelle orecchie caviglia - controfacce per asse diam. 12 mm": (
+        "[ALT TO SIZE qty0] Fixed flanged metal inserts in the ankle lugs - counterfaces for 12 mm diam. axis",
+        "Two cap-shaped inserts per axis, pressed or located in the outer PA-CF lugs: the inner bore guides or contains the fixed 12 mm diameter pin; the flange facing the central part provides a smooth metal axial counterface for the igus thrust washer.",
+        "Alternative to keep documented if the printed central igus bushing is used or if the PA-CF shoulders prove insufficient. Preliminary CAD reference: left lug about 20 mm + central moving part with bushing about 20 mm + right lug about 20 mm = about 60 mm of structural bodies. The caps go on both lugs. Caution: a protruding flange increases the stack; recess it into the lug if you want to stay close to 60 mm. The cap bore guides the pin but does not automatically make it integral with the lugs: also design anti-rotation and axial retention.",
+    ),
+    "[OPZIONALE UPGRADE qty0] Elesa+Ganter GN.12825 / DIN 172-B12-20-A - controfaccia metallica nell'orecchia, foro 12 L20": (
+        "[OPTIONAL UPGRADE qty0] Elesa+Ganter GN.12825 / DIN 172-B12-20-A - metal counterface in the lug, bore 12 L20",
+        "Standard candidate for each lug if the central igus bushing is printed: hardened cap-type guide bush, inner bore 12 mm F7, outer diameter 18 mm n6, flange diameter 22 mm, body 20 mm long and flange 4 mm thick.",
+        "Exact SKU Elesa+Ganter DIN172-B12-20-A / GN.12825, Verzolla code Y1137. Price and availability verified 2026-06-02: EUR 6.89 each, 5 available. Qty 0: expected quantity if used on both axes and on both ankles = 8 pieces, but activate only after CAD. To keep the about 60 mm reference, recess the 4 mm flange into the lug; also verify counterface, fit in the PA-CF and anti-rotation of the pin.",
+    ),
+    "[ALT FORNITORE qty0] Otto Ganter 172-B12-20-A - cappello metallico flangiato foro 12 mm, L20": (
+        "[ALT SUPPLIER qty0] Otto Ganter 172-B12-20-A - flanged metal cap, bore 12 mm, L20",
+        "Second supplier of the same standardized DIN 172-B12-20-A cap: steel, bore 12 mm, outer diameter 18 mm, flange 22 mm, body length 20 mm, flange 4 mm.",
+        "Exact product Ganter 172-B12-20-A. Price and delivery verified 2026-06-02: EUR 5.26 net (excluding VAT) each, indicated as shippable in 2-3 working days; B2B sales. Qty 0: sourcing alternative for the same Verzolla component.",
+    ),
+    "[ALT EQUIVALENTE qty0] KIPP K1022.A1200X20 - cappello metallico flangiato DIN 172 foro 12 mm, L20": (
+        "[ALT EQUIVALENT qty0] KIPP K1022.A1200X20 - flanged metal cap DIN 172, bore 12 mm, L20",
+        "DIN 172 form A equivalent from another manufacturer for the same preliminary sizing: steel cap-type bush with inner bore 12 mm and length 20 mm.",
+        "Exact SKU KIPP K1022.A1200X20. Price and availability verified 2026-06-02: EUR 4.50 net (excluding VAT) / EUR 5.36 VAT included each, indicated as available with delivery in 2-5 days. Qty 0: standard alternative to be verified dimensionally against the KIPP drawing before ordering.",
+    ),
+    "[SCHEDA qty0] Elesa+Ganter DIN 172-B12-20-A - pagina tecnica TME": (
+        "[DATASHEET qty0] Elesa+Ganter DIN 172-B12-20-A - TME technical page",
+        "Technical page of a further distributor for the same Ganter cap: hardened steel, inner bore 12 mm, outer diameter 18 mm, flange 22 mm, length 20 mm.",
+        "Exact SKU TME DIN172-B12-20-A. Verified 2026-06-02: USD 10.04 about EUR 9.27 each, but TME stock indicated as zero. Keep it as a technical catalogue and as a backup for availability requests, not as an immediate primary supplier.",
+    ),
+    "[ALT CUSTOM qty0] Boccola radente stampata 3D in igus iglidur i150": (
+        "[ALT CUSTOM qty0] 3D printed plain bushing in igus iglidur i150",
+        "First printable custom test piece for the 12 mm diameter axes of the foot-shin joint. It allows iterating on length, flange and play. i150 is the easiest igus tribofilament to process.",
+        "Material confirmed among those the user is purchasing for comparison. Qty 0: it is not yet the final choice. Validate surface pressure, wear, print orientation, pin finish, tolerances and play; do not automatically assume equivalence with injection-moulded Q2 or SKF metal/PTFE.",
+    ),
+    "[ALT CUSTOM qty0] Boccola radente stampata 3D in igus iglidur i190": (
+        "[ALT CUSTOM qty0] 3D printed plain bushing in igus iglidur i190",
+        "Second printable custom test piece for the 12 mm diameter axes of the foot-shin joint. i190 is the candidate to compare when greater mechanical strength and wear resistance are needed.",
+        "Material confirmed among those the user is purchasing for comparison. Qty 0: it is not yet the final choice. The filament is sensitive to moisture: follow igus drying and instructions. Validate surface pressure, wear, orientation, tolerances and play.",
+    ),
+    "[SCELTO PRIMARIO qty0] Boccola STAMPATA multimateriale J260+PA-CF integrale (radiale + flangia assiale)": (
+        "[CHOSEN PRIMARY qty0] PRINTED multi-material bushing J260+PA-CF, integral (radial + axial flange)",
+        "PRIMARY approach chosen: print the bushing directly integral with the PA-CF moving part in multi-material FDM, with J260 both on the bore (radial) and on the flange faces (axial). No purchase if the print holds up.",
+        "J260-PF filament already purchased by the user. igus indicates extrusion ~280 C, bed ~120 C, heated chamber preferable. To be validated specifically: adhesion at the J260/PA-CF interface (main risk of multi-material), print orientation for roundness and bore wear, finish and actual Ø (plan for reaming/calibration), surface pressure, play. Qty 0: handled by the filament, not by an SKU. i150 and i190 remain comparison test pieces.",
+    ),
+    "[SCELTO FALLBACK qty0] Boccola flangiata igus GFM-1214 (iglidur G) - radiale + assiale, acquistabile": (
+        "[CHOSEN FALLBACK qty0] igus GFM-1214 flanged bushing (iglidur G) - radial + axial, purchasable",
+        "PURCHASED version of the flanged bushing, fallback if the J260 multi-material print does not hold up: bore 12, outer diameter 14, flange about 20 x 1. The flange handles the axial load; two per axis, flanges facing outwards, press-fitted into the moving part. Drop-in with the same dimensions: Q2FM-1214 (heavy-duty shocks/dirt), JFM-1214 (low friction).",
+        "SKU family GFM-1214 iglidur G. Length b1 from the CAD (e.g. two of 9-10 mm in a 20 mm moving part). Multiple suppliers verified 2026-06-03: igus direct, RS, Misumi IT, Minetti, F.lli Bono, Solema, ERIKS. Qty 0 until the CAD gives the lengths; expected quantity 8 (2 per axis x 4 axes) only if they are bought instead of printed. Retention: interference in the seat + stop flange; never cyanoacrylate, at most Loctite 603/638. Price to be verified once the length is configured.",
+    ),
+    "[CATALOGO qty0] RS PRO 822-9316 - vite a colletto M10, spallamento diam. 12 x 20 mm": (
+        "[CATALOGUE qty0] RS PRO 822-9316 - shoulder screw M10, shoulder diam. 12 x 20 mm",
+        "Purchasable industrial example of a shoulder screw: M10 thread, shoulder diameter 12 mm, shoulder length 20 mm, black steel class 12.9.",
+        "Exact SKU RS PRO 822-9316. Price verified 2026-06-02: EUR 31.71 net (excluding VAT) per bag of four, EUR 7.928 each. Qty 0: the 20 mm length is only a catalogue reference; choose the actual length after the CAD.",
+    ),
+    "[ALT qty0] RS PRO 292-417 - vite a colletto ISO 7379 M10, gambo Ø12 x 60 mm (alternativa industriale al nero AliExpress)": (
+        "[ALT qty0] RS PRO 292-417 - shoulder screw ISO 7379 M10, shank Ø12 x 60 mm (industrial alternative to the black AliExpress one)",
+        "Reference close to the first ankle CAD stack of about 60 mm: ISO 7379 screw with a plain section of diameter 12 mm and length 60 mm, thread M10 x 16 mm, head diameter 18 x 8 mm, total length 84 mm.",
+        "Exact SKU RS PRO 292-417, ISO 7379 shank Ø12 x 60, thread M10 x 16, head Ø18 x 8. Industrial ALTERNATIVE (the chosen pin is now the black AliExpress shoulder screw Ø12xM10): it acts as the raceway on which the igus slides and as retention. Made integral with the lugs by clamping (M10 nut + Loctite 243), not by press-fitting; shank-to-lug-bore fit sliding-locked (snug), no strong interference in the PA-CF. Expected qty 4 (one axis each) + spares, but qty 0 until the CAD fixes the shoulder length (~60-70). Alternative suppliers ISO 7379-12-M10: Rubix GN.35185, Elesa, Puntoviti, Berardi, KIPP.",
+    ),
+    "[CATALOGO qty0] Motedis 12h6 - albero precisione diam. 12 mm h6 temprato e rettificato": (
+        "[CATALOGUE qty0] Motedis 12h6 - precision shaft diam. 12 mm h6 hardened and ground",
+        "Alternative to be cut to size when a headless cylindrical fixed pin is needed. Also useful as a hardened and ground raceway if an HK bearing without inner ring is being considered.",
+        "Motedis product code 12h6. Qty 0: price dependent on the cut length. Define length and retention; it does not automatically replace a shoulder screw.",
+    ),
+    "[CATALOGO qty0] Wurth DIN 6325 / ISO 8734 - spina cilindrica temprata diam. 12 mm": (
+        "[CATALOGUE qty0] Wurth DIN 6325 / ISO 8734 - hardened dowel pin diam. 12 mm",
+        "Industrial family of hardened and ground dowel pins, tolerance m6. The linked page shows the diameter 12 x 20 mm example; the family offers other lengths.",
+        "Catalogue useful for the CAD, qty 0. Wurth notes that DIN 6325 has been replaced by DIN EN ISO 8734. Do not choose 20 mm just because it is the linked variant: first measure the width of the assembly and design the retention.",
+    ),
+    "[DA DIMENSIONARE qty0] Ritegni perni e supporti giunto caviglia": (
+        "[TO SIZE qty0] Pin retainers and supports for the ankle joint",
+        "Removable retainers for the two rotation axes of the foot-shin joint.",
+        "Historical catalogue restored: assortment of internal/external circlips. Provide a printed shoulder or metal insert on one side and a removable retainer on the other. Do not assume M10 nut, circlip, collar or plate before the CAD: the system depends on the type of pin and on the actual seats.",
+    ),
+    "[SCELTO RITEGNO qty0] Dado autobloccante M10 NERO DIN 985 + Loctite 243 - serra assi Ø12xM10 (caviglia + cardano vita)": (
+        "[CHOSEN RETENTION qty0] BLACK M10 self-locking nut DIN 985 + Loctite 243 - clamps the Ø12xM10 axes (ankle + waist gimbal)",
+        "End retention of the Ø12xM10 rotation axes: the M10 nut clamps the thread of the shoulder screw and makes it integral with the lugs (4 ankle axes + 2 waist gimbal).",
+        "CHOSEN retention: BLACK M10 self-locking nut (DIN 985, nylock set M3-M16) + Loctite 243. Expected qty 6 (4 ankle + 2 waist gimbal) + spares; qty 0 until CAD. Clean variant: thread into a metal insert embedded in the far lug, so that the clamping reacts on metal and does not compress the PA-CF.",
+    ),
+    "[CATALOGO qty0] RS PRO 797-6254 - rondella larga M10 DIN 9021 inox, 10.5x30x2.5 mm": (
+        "[CATALOGUE qty0] RS PRO 797-6254 - large washer M10 DIN 9021 stainless steel, 10.5x30x2.5 mm",
+        "Large washer to be evaluated under the head and nut of the shoulder screw to distribute the clamping over the outer surfaces of the PA-CF lugs.",
+        "Exact SKU RS PRO 797-6254: bore 10.5 mm, outer diameter 30 mm, thickness 2.5 mm, stainless steel A2, DIN 9021. Qty 0: verify space and quantity after CAD. Do not use the clamping to significantly bend the lugs: the pin is held by axial clamping at nominal dimension.",
+    ),
+    "[CATALOGO qty0] Ruland MSP-12-F - collare split smontabile per perno diam. 12 mm": (
+        "[CATALOGUE qty0] Ruland MSP-12-F - removable split collar for pin diam. 12 mm",
+        "Two-piece collar for retention or axial adjustment of a 12 mm diameter cylindrical pin when the external space allows it. Outer diameter 28 mm, width 11 mm.",
+        "Exact SKU MSP-12-F. Price verified 2026-06-02: USD 9.39 about EUR 8.65. Qty 0: it is a purchasable reference, not the automatic choice; verify external envelope and axial loads.",
+    ),
+    "[ALT qty0] Testa a snodo SKF SA8E M8 destra, foro 8 mm": (
+        "[ALT qty0] SKF SA8E rod end M8 right-hand, bore 8 mm",
+        "Precision upgrade, foot side.",
+        "Use together with SAL8E and turnbuckle tube.",
+    ),
+    "[ALT qty0] Testa a snodo SKF SAL8E M8 sinistra, foro 8 mm": (
+        "[ALT qty0] SKF SAL8E rod end M8 left-hand, bore 8 mm",
+        "Precision upgrade, motor side.",
+        "Opposite right/left threads for adjustment.",
+    ),
+    "[ALT qty0] Tubo tenditore M8 DIN 1478": (
+        "[ALT qty0] Turnbuckle tube M8 DIN 1478",
+        "Pushrod body for the SKF upgrade.",
+        "",
+    ),
+    "[UPGRADE ROLL qty0] Spaziatori conici high-misalignment M8->M6 per rod-end metallici (coppia)": (
+        "[ROLL UPGRADE qty0] Conical high-misalignment spacers M8->M6 for metal rod-ends (pair)",
+        "Pair of stepped/conical bushings: cylindrical part in the Ø8 bore of the ball, narrow cone towards the lugs, M6 through bolt. The eye touches the cone instead of the wide face -> +8-12 degrees/side = ±20-25 total on standard metal rod-ends.",
+        "Low-cost alternative to the igubal CL to raise the roll of the CURRENT rod-ends: the pin goes from Ø8 shoulder to plain M6 (less cross-section, ok for ~1-2 kN). Sources: Competition Supplies 'High misalignment spacer M8 to M6' (pair, metric), McGill Motorsport pack 6/10, Midwest Control HMBZC-M8-M6 (USA). On AliExpress search for 'heim joint misalignment spacer 8mm'. Qty at CAD.",
+    ),
+    "[CATALOGO qty0] Motedis W8H6 - albero precisione diam. 8 mm h6 temprato e rettificato": (
+        "[CATALOGUE qty0] Motedis W8H6 - precision shaft diam. 8 mm h6 hardened and ground",
+        "Alternative to be cut to size for the 8 mm diameter foot cross pin on which the two M8 rod ends are mounted.",
+        "Motedis product code W8H6: CF53 steel hardened and ground, tolerance h6. Qty 0: price dependent on the cut length. Design spacers between the balls and lateral retainers.",
+    ),
+    "[CATALOGO qty0] Ruland MSP-8-F - collare split smontabile per perno diam. 8 mm": (
+        "[CATALOGUE qty0] Ruland MSP-8-F - removable split collar for pin diam. 8 mm",
+        "Two-piece collar to laterally retain the 8 mm diameter foot cross pin if the CAD leaves space. Outer diameter 18 mm, width 9 mm.",
+        "Exact SKU MSP-8-F. Price verified 2026-06-02: USD 8.33 about EUR 7.67. Qty 0: evaluate two collars or another retainer only after the foot has been defined.",
+    ),
+    "ISO 4762 socket-head cap screw M3 x 15 mm, steel, full thread": (
+        "ISO 4762 socket-head cap screw M3 x 15 mm, steel, full thread",
+        "Installed motor fasteners: 8 per RS06 x 11 actuators plus 12 per RS00 x 8 actuators = 184 screws. Thread length is 15 mm; head excluded.",
+        "Standard ISO 4762/DIN 912 size. Approximate single-screw mass 1.11 g. Mass is already included in the RS06 and RS00 CAD assembly masses; do not double-count it in the BOM mass total.",
+    ),
+    "ISO 4762 socket-head cap screw M4 x 15 mm, steel, full thread": (
+        "ISO 4762 socket-head cap screw M4 x 15 mm, steel, full thread",
+        "Installed motor fasteners: 6 per RS06 x 11 actuators + 15 per RS04 x 6 actuators + 15 per RS03 x 3 actuators = 201 screws. Thread length is 15 mm; head excluded.",
+        "Standard ISO 4762/DIN 912 size. Approximate single-screw mass 2.175 g. Mass is already included in the RS06, RS04 and RS03 CAD assembly masses; do not double-count it in the BOM mass total.",
+    ),
+    "RobStride 03 - leg hip yaw (1/leg)": (
+        "RobStride 03 - leg hip yaw (1/leg)",
+        "Axis: hip yaw, 1 per leg. RobStride PDF 2025-06-26 dimensions: OD 98 mm, length 54.1 mm. Weight: 0.900 kg. RobStride torque: 20 Nm rated, 60 Nm peak.",
+        "G1 mode_11 reference: hip yaw 88 Nm. This is a mostly vertical yaw axis, so gravity torque is near zero and demand is mainly dynamic. RS03 was chosen over RS06 because the estimated aggressive turn at ~45 kg mass was close to the RS06 36 Nm peak limit. WARNING 2026-07-18: the current CAD mounts RS06 (36 Nm peak) on hip yaw; this RS03 row remains the purchase intent until the SIM GATE decides: log of the hip-yaw torque while turning in Isaac at ~32+ kg; if it saturates at 36 Nm, RS03 is ordered and the CAD is adapted, otherwise this row is downgraded to RS06.",
+    ),
+    "[ALT qty0] RobStride 00 - spalla pitch/roll alleggerita (2/braccio)": (
+        "[ALT qty0] RobStride 00 - lightweight shoulder pitch/roll (2/arm)",
+        "Axes: lightweight shoulder pitch/roll alternative. Dimensions: 57 x 57 x 51 mm. Weight: 0.310 kg. RobStride torque: 5 Nm rated, 14 Nm peak.",
+        "G1 mode_11 reference: shoulder pitch/roll 25 Nm per axis. It would save 1.244 kg over the four joints but cannot continuously hold the arm horizontal with a 1 kg payload. Kept only as an alternative for very light arms and intermittent poses.",
+    ),
+    "[SECONDA SCELTA qty0] RobStride 06 - spalla yaw piu robusta (1/braccio)": (
+        "[SECOND CHOICE qty0] RobStride 06 - sturdier shoulder yaw (1/arm)",
+        "Axis: shoulder yaw, sturdier alternative. Dimensions: 88 x 88 x 49 mm. Weight: 0.621 kg. RobStride torque: 11 Nm rated, 36 Nm peak.",
+        "G1 mode_11 reference: shoulder yaw 25 Nm. Reactivate if the shoulder yaw has to move loads with the arm extended or more torque/stiffness is needed. Direct jump RS00->RS06 (RS02 eliminated: dominated, almost as big as RS06 but half the torque).",
+    ),
+    "[SECONDA SCELTA qty0] RobStride 06 - polso 3 assi (riserva piu robusta)": (
+        "[SECOND CHOICE qty0] RobStride 06 - 3-axis wrist (sturdier reserve)",
+        "Sturdy reserve for the 3 wrist axes. Dimensions: 88 x 88 x 49 mm. Weight: 0.621 kg. RobStride torque: 11 Nm rated, 36 Nm peak.",
+        "G1 mode_11 reference: wrist roll 25 Nm, pitch/yaw 5 Nm. Reserve in case much more torque/stiffness were needed at the wrist; jump RS00->RS06 (RS02 eliminated because dominated). For the wrist RS00 remains amply sufficient.",
+    ),
+    "[SECONDA SCELTA qty0] RobStride 05 - polso pitch/yaw ultraleggero (2/braccio)": (
+        "[SECOND CHOICE qty0] RobStride 05 - ultralight wrist pitch/yaw (2/arm)",
+        "Axes: wrist pitch/yaw, ultralight alternative. Dimensions: 46 x 46 x 44 mm. Weight: 0.191 kg. RobStride torque: 1.6 Nm rated, 5.5 Nm peak.",
+        "G1 mode_11 reference: wrist pitch/yaw 5 Nm: RS05 (5.5 peak) is the exact size and weighs only 0.191 kg. Alternative to the RS00 IF the payload in the hand stays <1 kg: rated 1.6 Nm limits the continuous load. Lighter but less sturdy and without the margin of the RS00.",
+    ),
+    "[DA PROGETTARE qty0] Cover isolante ventilata per PDU, fusibili e condensatori": (
+        "[TO DESIGN qty0] Ventilated insulating cover for PDU, fuses and capacitors",
+        "Non-conductive cover preventing accidental contact with the one distribution block, screw terminals, fuses and cable lugs of the 48 V panel.",
+        "Mandatory before full commissioning tests. Design it after the electrical panel layout; leave maintenance access and ventilation for the Regen Clamp and its resistor, which must be mounted on aluminium.",
+    ),
+    "[REMOVED qty0] Albright ED250B-1 manual battery disconnect": (
+        "[REMOVED qty0] Albright ED250B-1 manual battery disconnect",
+        "On-board manual disconnect switch on the battery positive for maintenance and emergency physical disconnection. It does not replace the SW80B-10 automatic contactor nor the XB5AS8442 mushroom button. Prudent CAD reserve 70 x 70 x 100 mm including handle space; BOM mass 0.468 kg.",
+        "Exact SKU ED250B-1. Price verified 2026-06-02: EUR 91 net (excluding VAT) / EUR 109.20 VAT included. Rating 250 A continuous, 96 VDC with blowouts. Use it as a no-load or emergency disconnect switch, not as an ordinary switch under load; verify the final outline from the Albright drawing before making the holes.",
+    ),
+    "[ALT qty0] Dan-Tech Energy Softpack 13S5P 48V 25Ah 100A - configurare Smart BMS + AS150U": (
+        "[ALT qty0] Dan-Tech Energy Softpack 13S5P 48V 25Ah 100A - configure Smart BMS + AS150U",
+        "Ready-made alternative in minimal heat-shrink format: 65 Samsung INR21700-50S cylindrical cells, 1200 Wh, 100 A continuous, 200 A peak, 280 x 80 x 130 mm, 5.2 kg.",
+        "Exact product page. Price visible 2026-06-02: EUR 741 VAT included for the base XT90 configuration without BMS; before ordering ask for the total of the Smart BMS + AS150U variant. Do not activate the row without BMS.",
+    ),
+    "[OPZIONE qty0] Computer low-level realtime separato per locomozione": (
+        "[OPTION qty0] Separate low-level realtime computer for locomotion",
+        "Deterministic supervisor between policy and actuators: reads IMU and joint feedback, sends RobStride setpoints on the CAN buses, applies limits, heartbeat, watchdog and safe transition to damping/stop. It does not replace the internal loops of the motors.",
+        "Do not buy initially: Thor-only prototype baseline with isolated realtime process, direct SocketCAN and independent hardware safety. Evaluate a separate controller only if tests show jitter, saturation/insufficient CAN interfaces, or if isolation from crashes of the AI software is needed. Do not choose Raspberry Pi, MCU or SBC before having measured loop frequency, latency and jitter.",
+    ),
+    "[DA PROGETTARE qty0] Harness custom RS03/RS04: XT30UW-F + GH1.25 CAN + strain relief": (
+        "[TO DESIGN qty0] Custom harness RS03/RS04: XT30UW-F + GH1.25 CAN + strain relief",
+        "Harness to be built after the CAD for RS04 legs, RS03 hip yaw and RS03 waist roll. It uses the purchasable connectors listed above, sized power cable and CAN twisted pair.",
+        "There is no link to a complete RobStride harness for this humanoid. The RS04 manual defines the cable-side terminals; K-Scale confirms that the wiring requires design and strain relief. For the JST GH micro-contacts, preferably commission crimping and testing to a cable assembler: the official JST YRS-1590 crimping tool is listed as a qty 0 option but is very expensive. This row stays qty 0 to avoid a fictitious cost.",
+    ),
+    "[DA PROGETTARE qty0] Cablaggio Thor J47 -> CANH/CANL per 2 bus nativi": (
+        "[TO DESIGN qty0] Wiring Thor J47 -> CANH/CANL for 2 native buses",
+        "Wiring from the J47 connector of the Thor dev kit to the two leg buses. The dev kit physically exposes CANH and CANL: an external SN65HVD230 is not needed.",
+        "The mating connector and the pinout of the wiring must be verified against the Thor documentation and the physical kit before purchase. Qty 0 row: do not invent an SKU.",
+    ),
+    "[REMOVED qty0] Klauke 704F10 lug for ED250B-1": (
+        "[REMOVED qty0] Klauke 704F10 lug for ED250B-1",
+        "Cable lugs for the two M10 terminals of the ED250B-1 disconnect switch on the 25 mm2 positive trunk. Two pieces installed and two spare.",
+        "Exact SKU Klauke 704F10. Designed for fine and extra-fine stranded conductors class 5 and 6, tinned EN13600 copper. Price verified 2026-06-02: GBP 1.75 net (excluding VAT) each about EUR 2.10.",
+    ),
+    "[OPZIONE qty0] JST YRS-1590 - pinza ufficiale per contatti GH SSHL-002T-P0.2": (
+        "[OPTION qty0] JST YRS-1590 - official crimping tool for GH contacts SSHL-002T-P0.2",
+        "Official tool for crimping the JST GH micro-contacts of the RS03/RS04 CAN harnesses. Not needed if the cable assembler supplies the harnesses already assembled and tested.",
+        "Exact SKU JST YRS-1590. DigiKey indicated USD 1736.95 about EUR 1595 on 2026-06-02. For fifteen motors it is normally more sensible to commission the harnesses to a cable assembler and request a pull test and continuity test, instead of buying the tool.",
+    ),
+    "[REF qty0] Unitree G1 mode_11 URDF ufficiale": (
+        "[REF qty0] Unitree G1 mode_11 official URDF",
+        "Geometric baseline and per-axis limits of the current G1 29 DOF.",
+        "Use joint origins and meshes as a reference. The URDF describes the virtual kinematics; it does not expose the internal CAD of the ankle linkage.",
+    ),
+    "[REF qty0] Unitree G1 description README ufficiale": (
+        "[REF qty0] Unitree G1 description official README",
+        "List of G1 models and updated/deprecated status.",
+        "mode_11 is the unlocked and up-to-date 29 DOF baseline.",
+    ),
+    "[REF qty0] Unitree G1-Comp pagina ufficiale - testa 2 DOF": (
+        "[REF qty0] Unitree G1-Comp official page - 2 DOF head",
+        "Official reference for adding two neck motors.",
+        "The page states Head 2 degrees of freedom = 2, but does not publish the torque of the two motors.",
+    ),
+    "[REF qty0] Unitree G1-EDU Waist Fastener manuale ufficiale": (
+        "[REF qty0] Unitree G1-EDU Waist Fastener official manual",
+        "Official reference for the optional G1 EDU waist that can be unlocked and locked.",
+        "Confirms the optional articulated waist; the internal detail of the linkage has to be reconstructed in CAD.",
+    ),
+    "[REF qty0] K-Scale K-Bot mechanical docs": (
+        "[REF qty0] K-Scale K-Bot mechanical docs",
+        "Open hardware reference to keep under observation.",
+        "K-Bot uses only RobStride but has 20 DOF and a direct single-axis ankle: do not copy its ankle for the G1 baseline.",
+    ),
 }
 
 hdr_font = Font(name="Arial", bold=True, color="FFFFFF")
